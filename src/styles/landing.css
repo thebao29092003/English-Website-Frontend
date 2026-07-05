@@ -1,0 +1,128 @@
+@layer utilities {
+  .glow-purple {
+    text-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+  }
+  .glow-blue {
+    text-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+  }
+  .bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  }
+  .blur-glow-purple {
+    filter: blur(80px);
+    background: radial-gradient(
+      circle,
+      rgba(139, 92, 246, 0.15) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+  }
+  .blur-glow-blue {
+    filter: blur(80px);
+    background: radial-gradient(
+      circle,
+      rgba(59, 130, 246, 0.15) 0%,
+      rgba(0, 0, 0, 0) 70%
+    );
+  }
+}
+
+@layer components {
+  /* Glassmorphism */
+  .glass-panel {
+    background: rgba(10, 8, 30, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-panel-hover:hover {
+    border-color: rgba(139, 92, 246, 0.3);
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Animated gradient text */
+  .gradient-text {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .button-primary {
+    @apply bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-full hover:shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 flex items-center gap-1.5 cursor-pointer;
+  }
+  .button-nav {
+    @apply text-sm font-medium transition-colors cursor-pointer text-slate-400 hover:text-white;
+  }
+  .button-nav-mobile {
+    @apply text-left py-3 px-4 rounded-xl text-base font-semibold border flex items-center justify-between cursor-pointer bg-white/5 text-white border-white/5;
+  }
+  .logo {
+    @apply w-8 h-8 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-all;
+  }
+  .text-statistic {
+    @apply text-xs font-medium font-mono uppercase tracking-wider mt-1 flex items-center justify-center gap-1 text-gray-400;
+  }
+}
+
+/* ==========================================================================
+   DARK THEME — Section-level background gradients
+   ========================================================================== */
+
+#landing-page-root.dark {
+  background-color: #030014;
+  color: #f3f4f6;
+}
+
+#landing-page-root.dark #hero {
+  background: #030014 !important;
+}
+
+#landing-page-root.dark #ai-sandbox-section {
+  background: linear-gradient(
+    180deg,
+    #030014 0%,
+    #06021f 50%,
+    #0c0533 100%
+  ) !important;
+}
+
+#landing-page-root.dark #features-section {
+  background: linear-gradient(
+    180deg,
+    #0c0533 0%,
+    #050221 50%,
+    #030014 100%
+  ) !important;
+}
+
+#landing-page-root.dark #comparison-section {
+  background: linear-gradient(
+    180deg,
+    #030014 0%,
+    #070326 50%,
+    #0f0642 100%
+  ) !important;
+}
+
+#landing-page-root.dark #pricing-section {
+  background: linear-gradient(
+    180deg,
+    #0f0642 0%,
+    #060221 50%,
+    #030014 100%
+  ) !important;
+}
+
+#landing-page-root.dark #faq-section {
+  background: linear-gradient(180deg, #030014 0%, #05021c 100%) !important;
+}
+
+#landing-page-root.dark #footer {
+  background-color: #02000d !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
