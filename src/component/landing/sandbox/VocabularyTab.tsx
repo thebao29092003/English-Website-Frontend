@@ -40,9 +40,9 @@ export default function VocabularyTab({
                 <button
                   id={`play-tts-vocab-${idx}`}
                   onClick={() => playTTS(v.betterSentence, `vocab-${idx}`)}
-                  className="absolute top-0 right-0 p-1 rounded hover:bg-white/10 transition-all text-purple-300 cursor-pointer"
+                  className="absolute top-0 right-[-5px] py-1 px-2 rounded hover:bg-white/10 transition-all text-purple-300 cursor-pointer"
                 >
-                  <Volume2 className="w-3.5 h-3.5" />
+                  <Volume2 size={18} />
                 </button>
               </p>
             </div>

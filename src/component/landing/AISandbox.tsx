@@ -11,18 +11,32 @@ import LoadingState from "./sandbox/LoadingState";
 import WelcomeState from "./sandbox/WelcomeState";
 import ScoreOverview from "./sandbox/ScoreOverview";
 import PronunciationTab from "./sandbox/PronunciationTab";
+import ConfidenceTab from "./sandbox/ConfidenceTab";
 import GrammarTab from "./sandbox/GrammarTab";
 import VocabularyTab from "./sandbox/VocabularyTab";
 import FluencyTab from "./sandbox/FluencyTab";
+
+type TabId = "pron" | "confidence" | "fluency" | "gram" | "vocab";
+
+interface TabDefinition {
+  id: TabId;
+  label: string;
+}
+
+const TABS: TabDefinition[] = [
+  { id: "pron", label: "Phát Âm" },
+  { id: "confidence", label: "Độ Dễ Hiểu" },
+  { id: "fluency", label: "Trôi Chảy" },
+  { id: "gram", label: "Ngữ Pháp" },
+  { id: "vocab", label: "Từ Vựng" },
+];
 
 export default function AISandbox() {
   const [transcript, setTranscript] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStatus, setAnalysisStatus] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    "pron" | "gram" | "vocab" | "fluency"
-  >("pron");
+  const [activeTab, setActiveTab] = useState<TabId>("pron");
   const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(
     null,
   );
@@ -159,50 +173,20 @@ export default function AISandbox() {
 
               {/* Tabs selection header */}
               <div className="flex bg-white/2 border-b border-white/5">
-                <button
-                  id="tab-pron"
-                  onClick={() => setActiveTab("pron")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "pron"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Phát Âm
-                </button>
-                <button
-                  id="tab-gram"
-                  onClick={() => setActiveTab("gram")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "gram"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Ngữ Pháp
-                </button>
-                <button
-                  id="tab-vocab"
-                  onClick={() => setActiveTab("vocab")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "vocab"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Từ Vựng
-                </button>
-                <button
-                  id="tab-fluency"
-                  onClick={() => setActiveTab("fluency")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "fluency"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Trôi Chảy
-                </button>
+                {TABS.map((tab) => (
+                  <button
+                    id={`tab-${tab.id}`}
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+                      activeTab === tab.id
+                        ? "border-purple-500 text-white bg-purple-500/5 font-bold"
+                        : "border-transparent text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
               {/* Tab content area */}
@@ -215,6 +199,16 @@ export default function AISandbox() {
                     selectedWord={selectedWord}
                     onSelectWord={setSelectedWord}
                     playTTS={playTTS}
+                  />
+                )}
+
+                {/* CONFIDENCE TAB */}
+                {activeTab === "confidence" && (
+                  <ConfidenceTab
+                    transcript={transcript}
+                    pronunciationFeedback={result.pronunciationFeedback}
+                    selectedWord={selectedWord}
+                    onSelectWord={setSelectedWord}
                   />
                 )}
 

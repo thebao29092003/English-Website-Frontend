@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Navbar from "../component/landing/Navbar";
 import Hero from "../component/landing/Hero";
 import AISandbox from "../component/landing/AISandbox";
@@ -18,15 +18,7 @@ export default function LandingPage() {
     setAuthOpen(true);
   };
 
-  const handleScrollToSandbox = () => {
-    const sandbox = document.getElementById("ai-sandbox-section");
-    if (sandbox) {
-      sandbox.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  const handlePlanSelect = (planId: string) => {
-    // If selecting a plan, prompt user to register or log in first
+  const handlePlanSelect = () => {
     handleOpenAuth("signup");
   };
 

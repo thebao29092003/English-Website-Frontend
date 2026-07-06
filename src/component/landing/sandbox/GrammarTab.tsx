@@ -37,10 +37,10 @@ export default function GrammarTab({
                 <button
                   id={`play-tts-grammar-${idx}`}
                   onClick={() => playTTS(g.corrected, `gram-${idx}`)}
-                  className="absolute top-2 right-2 p-1 rounded hover:bg-white/10 transition-all text-emerald-400 cursor-pointer"
+                  className="absolute top-1 right-1 py-1 px-2  rounded hover:bg-white/10 transition-all text-emerald-400 cursor-pointer"
                   title="Nghe phát âm chuẩn"
                 >
-                  <Volume2 className="w-3.5 h-3.5" />
+                  <Volume2 size={18} />
                 </button>
               </div>
             </div>
