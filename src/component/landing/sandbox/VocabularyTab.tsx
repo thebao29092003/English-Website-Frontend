@@ -21,20 +21,20 @@ export default function VocabularyTab({
             className="p-4 rounded-xl bg-white/1 border border-white/5 flex flex-col gap-3"
           >
             <div className="flex items-center gap-4">
-              <span className="text-xs py-1 px-2.5 rounded bg-red-500/15 border border-red-500/20 text-red-400 font-mono">
+              <span className="text-sm py-1 px-2.5 rounded bg-red-500/15 border border-red-500/20 text-red-400 font-mono">
                 {v.originalWord}
               </span>
               <ChevronRight className="w-4 h-4 text-gray-500" />
-              <span className="text-xs py-1 px-2.5 rounded bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center gap-1">
+              <span className="text-sm py-1 px-2.5 rounded bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 font-mono font-bold flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> {v.suggestedWord}
               </span>
             </div>
             <div className="bg-black/30 p-3.5 rounded-lg space-y-2">
-              <p className="text-xs text-gray-400">
+              <p className="text-sm text-gray-400">
                 <strong className="text-gray-300">Thay thế trong câu:</strong> "
                 {v.sentence}"
               </p>
-              <p className="text-xs text-purple-300 font-semibold relative group">
+              <p className="text-sm text-purple-300 font-semibold relative group">
                 <strong className="text-purple-400">Nói thành:</strong> "
                 {v.betterSentence}"
                 <button
@@ -46,7 +46,7 @@ export default function VocabularyTab({
                 </button>
               </p>
             </div>
-            <p className="text-xs text-gray-400 italic">
+            <p className="text-sm text-gray-400 italic">
               <strong className="text-gray-300 not-italic">
                 Lý do nâng cấp:
               </strong>{" "}
@@ -55,7 +55,7 @@ export default function VocabularyTab({
           </div>
         ))
       ) : (
-        <div className="text-center py-8 text-gray-500 text-xs italic">
+        <div className="text-center py-8 text-gray-500 text-sm italic">
           Không tìm thấy từ cần nâng cấp.
         </div>
       )}

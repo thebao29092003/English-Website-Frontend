@@ -22,15 +22,15 @@ export default function GrammarTab({
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {/* Original */}
-              <div className="bg-red-950/15 border border-red-900/20 p-3 rounded-lg text-xs text-red-300">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-wider block text-red-400/80 mb-1">
+              <div className="bg-red-950/15 border border-red-900/20 p-3 rounded-lg text-sm text-red-300">
+                <span className="font-mono text-sm font-bold uppercase tracking-wider block text-red-400/80 mb-1">
                   CÂU NÓI CỦA BẠN:
                 </span>
                 "{g.original}"
               </div>
               {/* Corrected */}
-              <div className="bg-emerald-950/15 border border-emerald-900/20 p-3 rounded-lg text-xs text-emerald-300 relative group">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-wider block text-emerald-400/80 mb-1">
+              <div className="bg-emerald-950/15 border border-emerald-900/20 p-3 rounded-lg text-sm text-emerald-300 relative group">
+                <span className="font-mono text-sm font-bold uppercase tracking-wider block text-emerald-400/80 mb-1">
                   GỢI Ý CỦA AI:
                 </span>
                 "{g.corrected}"
@@ -44,14 +44,14 @@ export default function GrammarTab({
                 </button>
               </div>
             </div>
-            <div className="p-3 bg-black/20 rounded-lg text-xs space-y-1">
+            <div className="p-3 bg-black/20 rounded-lg text-sm space-y-1">
               <p className="font-bold text-purple-300">{g.rule}</p>
               <p className="text-gray-400 mt-1 leading-relaxed">{g.explain}</p>
             </div>
           </div>
         ))
       ) : (
-        <div className="text-center py-8 text-emerald-400 text-xs font-semibold flex items-center justify-center gap-1.5">
+        <div className="text-center py-8 text-emerald-400 text-sm font-semibold flex items-center justify-center gap-1.5">
           <CheckCircle2 className="w-4.5 h-4.5" /> Không tìm thấy lỗi ngữ pháp
           nào! Rất tuyệt vời.
         </div>

@@ -89,7 +89,7 @@ export default function PronunciationTab({
         >
           <div className="flex justify-between items-center mb-3">
             <span
-              className={`text-xs uppercase tracking-wider font-bold font-mono flex items-center gap-2 ${
+              className={`text-sm uppercase tracking-wider font-bold font-mono flex items-center gap-2 ${
                 selectedWord.score !== undefined && selectedWord.score < 45
                   ? "text-red-400"
                   : selectedWord.score !== undefined && selectedWord.score < 75
@@ -97,9 +97,9 @@ export default function PronunciationTab({
                     : "text-emerald-400"
               }`}
             >
-              Lớp Hướng Dẫn Phát Âm IPA
+              Hướng Dẫn Phát Âm IPA
               {selectedWord.score !== undefined && (
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[11px] font-bold">
+                <span className="px-2 py-1 rounded bg-white/10 text-xs font-bold">
                   Điểm: {selectedWord.score}/100
                 </span>
               )}
@@ -109,7 +109,7 @@ export default function PronunciationTab({
               onClick={() =>
                 playTTS(selectedWord.word, `pron-${selectedWord.word}`)
               }
-              className={`py-1 px-2.5 border rounded-lg text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
+              className={`py-1 px-2.5 border rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 selectedWord.score !== undefined && selectedWord.score < 45
                   ? "bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-300"
                   : selectedWord.score !== undefined && selectedWord.score < 75
@@ -123,7 +123,7 @@ export default function PronunciationTab({
 
           <div className="grid grid-cols-2 gap-4 bg-black/40 p-4 rounded-xl mb-4 border border-white/5">
             <div>
-              <p className="text-[10px] font-mono text-gray-500 uppercase">
+              <p className="text-xs font-mono text-gray-500 uppercase">
                 Phát âm Chuẩn xác
               </p>
               <p className="text-lg font-black text-emerald-400 tracking-wide font-mono mt-0.5">
@@ -131,7 +131,7 @@ export default function PronunciationTab({
               </p>
             </div>
             <div>
-              <p className="text-[10px] font-mono text-gray-500 uppercase">
+              <p className="text-xs font-mono text-gray-500 uppercase">
                 Bạn đã phát âm
               </p>
               <p
@@ -151,21 +151,21 @@ export default function PronunciationTab({
 
           <div className="space-y-3">
             <div>
-              <p className="text-xs font-bold text-white">Vấn đề phát hiện:</p>
-              <p className="text-xs text-gray-300 mt-1">{selectedWord.issue}</p>
+              <p className="text-sm font-bold text-white">Vấn đề phát hiện:</p>
+              <p className="text-sm text-gray-300 mt-1">{selectedWord.issue}</p>
             </div>
             <div>
-              <p className="text-xs font-bold text-white">
+              <p className="text-sm font-bold text-white">
                 Bí quyết sửa giọng (Vocal Coach Tip):
               </p>
-              <p className="text-xs text-gray-300 mt-1 leading-relaxed">
+              <p className="text-sm text-gray-300 mt-1 leading-relaxed">
                 {selectedWord.tip}
               </p>
             </div>
           </div>
         </motion.div>
       ) : (
-        <div className="text-center py-8 text-gray-500 text-xs italic">
+        <div className="text-center py-8 text-gray-500 text-sm italic">
           Không phát hiện lỗi phát âm nghiêm trọng hoặc hãy nhấp vào các từ có
           màu để xem chi tiết.
         </div>

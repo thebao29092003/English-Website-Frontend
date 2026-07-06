@@ -11,7 +11,7 @@ export default function FluencyTab({ fluencyTimeline }: FluencyTabProps) {
         Nhận diện nhịp điệu & Điểm ngắt quãng:
       </h4>
       <div className="p-4 rounded-xl bg-white/1 border border-white/5 space-y-4">
-        <div className="flex justify-between text-xs text-gray-500 font-mono pb-2 border-b border-white/5">
+        <div className="flex justify-between text-sm text-gray-500 font-mono pb-2 border-b border-white/5">
           <span>Mốc thời gian</span>
           <span>Chi tiết sự cố</span>
           <span>Độ trễ</span>
@@ -20,16 +20,16 @@ export default function FluencyTab({ fluencyTimeline }: FluencyTabProps) {
           fluencyTimeline.map((item, idx) => (
             <div
               key={idx}
-              className="flex justify-between items-center text-xs gap-4"
+              className="flex justify-between items-center text-sm gap-4"
             >
-              <div className="font-mono text-purple-300 font-semibold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/15">
+              <div className="font-mono w-[68px] text-center text-purple-300 font-semibold bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/15">
                 {item.time}
               </div>
               <div className="flex-1 text-gray-300">
                 {item.type === "pause"
                   ? "Tạm ngừng quá lâu"
                   : "Ngập ngừng tìm từ"}{" "}
-                <span className="text-gray-500 text-[11px] font-mono block">
+                <span className="text-gray-500 text-xs font-mono block">
                   ({item.context})
                 </span>
               </div>
@@ -47,7 +47,7 @@ export default function FluencyTab({ fluencyTimeline }: FluencyTabProps) {
             </div>
           ))
         ) : (
-          <div className="text-center py-6 text-emerald-400 text-xs font-semibold flex items-center justify-center gap-1">
+          <div className="text-center py-6 text-emerald-400 text-sm font-semibold flex items-center justify-center gap-1">
             <CheckCircle2 className="w-4 h-4" /> Trôi chảy tuyệt vời, không có
             điểm ngập ngừng bất thường nào.
           </div>
