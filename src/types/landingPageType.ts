@@ -18,6 +18,7 @@ export interface PronunciationItem {
   actual: string;
   issue: string;
   tip: string;
+  score?: number;
 }
 
 export interface GrammarCorrection {
@@ -45,7 +46,6 @@ export interface FluencyTimelineItem {
 
 export interface AnalysisResult {
   overallScore: number;
-  bandScore: string;
   cefrLevel: string;
   levelName: string;
   skills: SkillsAnalysis;

@@ -2,7 +2,6 @@ import type { AnalysisResult } from "../../../types/landingPageType";
 
 export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
   overallScore: 82,
-  bandScore: "7.0",
   cefrLevel: "B2",
   levelName: "Upper-Intermediate",
   overallInsight: "Bạn có khả năng diễn đạt lưu loát và tự nhiên. Tuy nhiên, cần chú ý phát âm chính xác các phụ âm cuối và tránh một số lỗi ngữ pháp nhỏ về số nhiều.",
@@ -39,29 +38,33 @@ export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
       expected: "/həˈloʊ/",
       actual: "/həˈlo/",
       issue: "Phát âm nguyên âm đôi /oʊ/ chưa rõ ở cuối từ.",
-      tip: "Hãy kéo dài âm cuối ra một chút và khép miệng dần để tạo thành âm /ʊ/ nhẹ ở cuối."
+      tip: "Hãy kéo dài âm cuối ra một chút và khép miệng dần để tạo thành âm /ʊ/ nhẹ ở cuối.",
+      score: 65,
     },
     {
       word: "practice",
       expected: "/ˈpræktɪs/",
       actual: "/ˈpræktɪk/",
       issue: "Phát âm sai phụ âm cuối thành âm /k/ thay vì /s/.",
-      tip: "Chú ý đuôi 'ce' thường được phát âm là âm vô thanh /s/. Hãy thổi luồng hơi nhẹ qua kẽ răng."
+      tip: "Chú ý đuôi 'ce' thường được phát âm là âm vô thanh /s/. Hãy thổi luồng hơi nhẹ qua kẽ răng.",
+      score: 35,
     },
     {
       word: "English",
       expected: "/ˈɪŋɡlɪʃ/",
       actual: "/ˈɪŋɡlɪs/",
       issue: "Lẫn lộn giữa âm /ʃ/ và /s/ ở cuối từ.",
-      tip: "Chu môi về phía trước và đẩy hơi mạnh hơn để tạo ra âm /ʃ/ dày."
+      tip: "Chu môi về phía trước và đẩy hơi mạnh hơn để tạo ra âm /ʃ/ dày.",
+      score: 58,
     },
     {
       word: "spontaneously",
       expected: "/spɑːnˈteɪniəsli/",
       actual: "/spɑːnˈtæniəsli/",
       issue: "Phát âm sai nguyên âm chính /eɪ/ thành /æ/.",
-      tip: "Phát âm rõ nguyên âm đôi /eɪ/ (giống âm 'ây' trong tiếng Việt nhưng mượt hơn)."
-    }
+      tip: "Phát âm rõ nguyên âm đôi /eɪ/ (giống âm 'ây' trong tiếng Việt nhưng mượt hơn).",
+      score: 40,
+    },
   ],
   grammarFeedback: [
     {

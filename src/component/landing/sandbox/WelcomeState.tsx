@@ -14,9 +14,9 @@ export default function WelcomeState({ onStartDemo }: WelcomeStateProps) {
         Bảng Báo Cáo Phân Tích Kép
       </h3>
       <p className="text-gray-400 text-sm max-w-sm leading-relaxed mb-6">
-        Sau khi gửi câu nói tự do, AI của EngSteps sẽ phân tích và chấm
-        điểm phát âm IPA, từ vựng C1/C2, ngữ điệu và lỗi ngữ pháp cụ thể
-        ở đây.
+        Sau khi gửi câu nói tự do, AI của EngSteps sẽ phân tích và chấm điểm
+        phát âm IPA, dễ hiểu, trôi chảy, từ vựng và ngữ pháp qua bản demo dưới
+        đây.
       </p>
       <button
         id="demo-trigger-btn"
