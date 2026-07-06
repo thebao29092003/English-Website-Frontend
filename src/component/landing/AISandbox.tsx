@@ -4,7 +4,7 @@ import type {
   AnalysisResult,
   PronunciationItem,
 } from "../../types/landingPageType";
-import { MOCK_ANALYSIS_RESULT } from "./sandbox/MockData";
+import { MOCK_ANALYSIS_RESULT } from "./MockData";
 
 // Import modular sub-components from sandbox/
 import LoadingState from "./sandbox/LoadingState";

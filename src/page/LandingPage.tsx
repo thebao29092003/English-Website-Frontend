@@ -47,7 +47,7 @@ export default function LandingPage() {
         <AISandbox />
 
         {/* 5-Dimension metrics detailed descriptions */}
-        <Features />
+        <Features onOpenAuth={handleOpenAuth} />
 
         {/* Dynamic Pricing options */}
         <Pricing onPlanSelect={handlePlanSelect} />

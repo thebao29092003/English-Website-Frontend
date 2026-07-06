@@ -81,3 +81,14 @@ export interface GoalCard {
   image: string;
   gradient: string;
 }
+
+export interface DimensionDetail {
+  id: string;
+  title: string;
+  engTitle: string;
+  icon: any;
+  metricLabel: string;
+  metricVal: string;
+  description: string;
+  details: string[];
+}

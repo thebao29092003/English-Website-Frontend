@@ -90,7 +90,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
         >
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              99.2%
+              93.32%
             </p>
             <p className="text-xs font-medium font-mono uppercase tracking-wider mt-1 flex items-center justify-center gap-1 text-gray-400">
               <IconShieldCheck stroke={2} color="oklch(62.3% 0.214 259.815)" />{" "}
@@ -99,7 +99,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              500+
+              200+
             </p>
             <p className="text-statistic">
               <IconAward stroke={2} color="oklch(62.7% 0.265 303.9)" />
@@ -108,7 +108,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              1K+
+              100+
             </p>
             <p className="text-statistic">
               {" "}
@@ -118,7 +118,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              &lt; 6s
+              &lt; 8s
             </p>
             <p className="text-statistic">
               {" "}
