@@ -47,19 +47,16 @@ export default function ScoreOverview({ result }: ScoreOverviewProps) {
         </div>
         {/* Band levels descriptions */}
         <div className="text-center sm:text-left flex-1">
-          <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+          <div className="flex items-center justify-center gap-2 mb-2 sm:justify-end">
             <span className="text-xs uppercase font-bold tracking-widest font-mono text-blue-400">
               English Speaking Report
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           </div>
-          <h4 className="font-display text-2xl sm:text-3xl font-black text-white">
-            Band {result.bandScore}
-          </h4>
-          <p className="text-sm font-medium text-purple-300 mt-1">
+          <h4 className="font-display text-2xl sm:text-2xl font-black text-purple-300 mt-1">
             Cấp độ: {result.levelName}
-          </p>
-          <p className="text-xs text-gray-400 mt-3 font-mono border-l-2 border-purple-500/30 pl-3 italic">
+          </h4>
+          <p className="text-sm text-gray-400 mt-3 font-mono border-l-2 border-purple-500/30 pl-3 italic">
             "{result.overallInsight}"
           </p>
         </div>
