@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { IconX,IconMenu2, IconBolt, IconArrowUpRight } from "@tabler/icons-react";
+import {
+  IconX,
+  IconMenu2,
+  IconBolt,
+  IconArrowUpRight,
+} from "@tabler/icons-react";
 
 interface NavbarProps {
   onOpenAuth: (tab: "login" | "signup") => void;
@@ -48,7 +53,9 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
             <span className="font-display text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white to-slate-400">
               EngSteps
             </span>
-            <span className="px-1.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-[9px] font-mono font-medium text-purple-300 tracking-wider">AI</span>
+            <span className="px-1.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-[9px] font-mono font-medium text-purple-300 tracking-wider">
+              AI
+            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -63,14 +70,14 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
               onClick={() => scrollToSection("features-section")}
               className="button-nav"
             >
-              5 Chiều Đánh Giá
+              Mục Tiêu Của Bạn
             </button>
-            <button
+            {/* <button
               onClick={() => scrollToSection("pricing-section")}
               className="button-nav"
             >
               Bảng Giá
-            </button>
+            </button> */}
             <button
               onClick={() => scrollToSection("faq-section")}
               className="button-nav"
@@ -112,7 +119,11 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-1.5 rounded-lg transition-all focus:outline-none cursor-pointer bg-white/5 text-gray-400 hover:text-white"
             >
-              {mobileMenuOpen ? <IconX className="w-6 h-6" /> : <IconMenu2 className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <IconX className="w-6 h-6" />
+              ) : (
+                <IconMenu2 className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -129,20 +140,21 @@ export default function Navbar({ onOpenAuth }: NavbarProps) {
               onClick={() => scrollToSection("ai-sandbox-section")}
               className="button-nav-mobile"
             >
-              Thử Nghiệm AI <IconBolt className="w-4 h-4 text-purple-400 shrink-0" />
+              Thử Nghiệm AI{" "}
+              <IconBolt className="w-4 h-4 text-purple-400 shrink-0" />
             </button>
             <button
               onClick={() => scrollToSection("features-section")}
               className="button-nav-mobile"
             >
-              5 Chiều Đánh Giá
+              Mục Tiêu Của Bạn
             </button>
-            <button
+            {/* <button
               onClick={() => scrollToSection("pricing-section")}
               className="button-nav-mobile"
             >
               Bảng Giá
-            </button>
+            </button> */}
             <button
               onClick={() => scrollToSection("faq-section")}
               className="button-nav-mobile"

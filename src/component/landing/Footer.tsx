@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -83,17 +83,17 @@ export default function Footer() {
                   href="#features-section"
                   className="hover:text-purple-400 transition-colors"
                 >
-                  5 Chiều Đánh Giá
+                  Mục Tiêu Của Bạn
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   href="#pricing-section"
                   className="hover:text-purple-400 transition-colors"
                 >
                   Bảng Giá Đăng Ký
                 </a>
-              </li>
+              </li> */}
               <li>
                 <a
                   href="#comparison-section"
@@ -112,14 +112,20 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm text-gray-500">
               <li>
-                <a href="#" className="hover:text-purple-400 transition-colors">
+                <Link
+                  to="/terms"
+                  className="hover:text-purple-400 transition-colors"
+                >
                   Điều Khoản Sử Dụng
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-purple-400 transition-colors">
+                <Link
+                  to="/privacy"
+                  className="hover:text-purple-400 transition-colors"
+                >
                   Chính Sách Bảo Mật
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-purple-400 transition-colors">
@@ -137,14 +143,7 @@ export default function Footer() {
 
         {/* Bottom divider bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
-          <p>© {currentYear} EngSteps. Phát triển bởi AI Studio Build.</p>
-          {/* <button
-            id="back-to-top-btn"
-            onClick={scrollToTop}
-            className="flex items-center gap-1 py-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all group"
-          >
-            Lên đầu trang <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
-          </button> */}
+          <p>© {currentYear} EngSteps. Phát triển bởi EngSteps Studio.</p>
         </div>
       </div>
     </footer>

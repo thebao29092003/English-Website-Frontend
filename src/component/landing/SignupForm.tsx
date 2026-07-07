@@ -35,7 +35,10 @@ const step1Schema = yup.object().shape({
     .required("Vui lòng nhập email"),
   agree: yup
     .boolean()
-    .oneOf([true], "Bạn phải đồng ý với Điều Khoản Dịch Vụ")
+    .oneOf(
+      [true],
+      "Bạn phải đồng ý với Điều Khoản Dịch Vụ Và Chính Sách Bảo Mật",
+    )
     .required(),
 });
 
@@ -197,7 +200,7 @@ export default function SignupForm({
 
               {/* Consent checkbox */}
               <div className="flex flex-col gap-1.5 pt-1">
-                <label className="flex items-start gap-2.5 cursor-pointer">
+                <label className="flex items-start gap-1.5 cursor-pointer">
                   <input
                     id="signup-agree-checkbox"
                     type="checkbox"
@@ -211,8 +214,22 @@ export default function SignupForm({
                   />
                   <span className="text-sm text-gray-400 select-none">
                     Tôi đồng ý với{" "}
-                    <a href="#" className="hover:underline text-blue-400">
+                    <a
+                      href="/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline text-blue-400 cursor-pointer"
+                    >
                       Điều Khoản Dịch Vụ
+                    </a>{" "}
+                    và{" "}
+                    <a
+                      href="/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline text-blue-400 cursor-pointer"
+                    >
+                      Chính Sách Bảo Mật
                     </a>
                   </span>
                 </label>
@@ -229,7 +246,7 @@ export default function SignupForm({
                 id="signup-next-btn"
                 type="submit"
                 isDisabled={loading}
-                className="w-full h-12 mt-4 rounded-xl bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
+                className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
               >
                 {loading ? (
                   <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
@@ -330,7 +347,7 @@ export default function SignupForm({
               </TextField>
 
               {/* Password Rules Indicators */}
-              <div className="p-3 rounded-xl mt-2 grid grid-cols-2 gap-2 text-[11px] font-mono border bg-white/[0.02] border-white/5">
+              <div className="p-3 rounded-xl mt-2 grid grid-cols-2 gap-2 text-[11px] font-mono border bg-white/2 border-white/5">
                 <div className="flex items-center gap-1.5">
                   <div
                     className={`w-3.5 h-3.5 rounded-full flex items-center justify-center border text-[9px] ${
@@ -461,7 +478,7 @@ export default function SignupForm({
                   isDisabled={countdown > 0}
                   className={`h-12 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1.5 transition-all ${
                     countdown > 0
-                      ? "bg-white/[0.02] border-white/5 text-gray-500 cursor-not-allowed"
+                      ? "bg-white/2 border-white/5 text-gray-500 cursor-not-allowed"
                       : "bg-white/5 border-white/10 hover:bg-white/10 text-white cursor-pointer"
                   }`}
                 >
@@ -476,7 +493,7 @@ export default function SignupForm({
                   id="signup-submit-btn"
                   type="submit"
                   isDisabled={loading}
-                  className="h-12 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
+                  className="h-12 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
                 >
                   {loading ? (
                     <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

@@ -44,36 +44,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #312e81;
 }
-
-/* ==========================================================================
-   GLOBAL ANIMATIONS
-   ========================================================================== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(-40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-fadeInRight {
-  animation: fadeInRight 0.8s ease-out forwards;
-}

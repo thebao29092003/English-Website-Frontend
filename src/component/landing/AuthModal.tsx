@@ -55,7 +55,7 @@ export default function AuthModal({
           className="relative w-full max-w-md overflow-hidden rounded-3xl backdrop-blur-md p-8 text-left shadow-2xl z-10 transition-all duration-300 bg-[#030014]/85 border border-white/10 text-white"
         >
           {/* Top glowing bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-blue-500 via-purple-500 to-pink-500" />
 
           {/* Close button */}
           <button
@@ -119,7 +119,7 @@ export default function AuthModal({
                   onClick={() => setTab("signup")}
                   className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all cursor-pointer ${
                     tab === "signup"
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                      ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg"
                       : "text-gray-400 hover:text-white"
                   }`}
                 >

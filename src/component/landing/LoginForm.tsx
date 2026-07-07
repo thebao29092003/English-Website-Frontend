@@ -26,6 +26,8 @@ const loginSchema = yup.object().shape({
   password: yup.string().required("Vui lòng nhập mật khẩu"),
 });
 
+// nó dịch ngược từ schema của yup thành type trong typescript, khi thay đổi schema thì type
+// nó thay đổi theo
 type LoginValues = yup.InferType<typeof loginSchema>;
 
 export default function LoginForm({
@@ -128,7 +130,7 @@ export default function LoginForm({
         id="login-submit-btn"
         type="submit"
         isDisabled={loading}
-        className="w-full h-12 mt-4 rounded-xl bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
+        className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
       >
         {loading ? (
           <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

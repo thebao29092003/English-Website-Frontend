@@ -35,7 +35,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold mb-6 w-fit backdrop-blur-sm transition-all border-violet-500/30 bg-violet-500/10 text-violet-400"
         >
           <IconAnalyze className="w-4.5 h-4.5 text-purple-500 animate-pulse" />
-          <span>✨ NEXT-GEN AI EVALUATION — CÔNG NGHỆ MỚI NHẤT 2026</span>
+          <span>✨ NEXT-GEN AI EVALUATION — CÔNG NGHỆ MỚI 2026</span>
         </motion.div>
 
         {/* Headline */}

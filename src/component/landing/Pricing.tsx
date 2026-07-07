@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Check, Sparkles, HelpCircle, Flame } from "lucide-react";
 import type { Plan } from "../../types/landingPageType";
 
@@ -99,7 +99,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
         <div className="text-center mb-10">
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
             Đầu Tư Cho{" "}
-            <span className="gradient-text bg-gradient-to-r from-blue-400 to-purple-400">
+            <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400">
               Giọng Nói
             </span>{" "}
             Của Bạn
@@ -159,7 +159,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
               >
                 {/* Popular Badge overlay */}
                 {plan.isPopular && (
-                  <div className="absolute top-0 right-6 -translate-y-1/2 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 text-[10px] font-mono font-bold py-1 px-3 rounded-full text-white uppercase tracking-widest shadow-lg flex items-center gap-1">
+                  <div className="absolute top-0 right-6 -translate-y-1/2 bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 text-[10px] font-mono font-bold py-1 px-3 rounded-full text-white uppercase tracking-widest shadow-lg flex items-center gap-1">
                     <Flame className="w-3.5 h-3.5 text-orange-300 fill-orange-300/10" />
                     Được đăng ký nhiều nhất
                   </div>
@@ -187,7 +187,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                     {plan.description}
                   </p>
 
-                  <div className="h-[1px] bg-white/5 my-6" />
+                  <div className="h-px bg-white/5 my-6" />
 
                   {/* Feature Checklist */}
                   <div className="space-y-3">
@@ -213,7 +213,7 @@ export default function Pricing({ onPlanSelect }: PricingProps) {
                   onClick={() => onPlanSelect(plan.id)}
                   className={`w-full py-3.5 mt-8 rounded-xl font-bold text-xs transition-all tracking-wide flex items-center justify-center gap-1 cursor-pointer ${
                     plan.isPopular
-                      ? "bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white shadow-md shadow-purple-500/10"
+                      ? "bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white shadow-md shadow-purple-500/10"
                       : "bg-white/5 hover:bg-white/10 text-gray-200 hover:text-white border border-white/5"
                   }`}
                 >

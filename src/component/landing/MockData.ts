@@ -1,38 +1,44 @@
-import type { AnalysisResult, GoalCard, DimensionDetail } from "../../types/landingPageType";
+import type {
+  AnalysisResult,
+  GoalCard,
+  DimensionDetail,
+} from "../../types/landingPageType";
 import { Award, Languages, Sliders, Volume2, Activity } from "lucide-react";
-import {Image} from "../../assets/image/imgs.js";
+import { Image } from "../../assets/image/imgs.js";
+import type { FAQItem } from "../../types/landingPageType";
 
 export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
   overallScore: 82,
   cefrLevel: "B2",
   levelName: "Upper-Intermediate",
-  overallInsight: "Bạn có khả năng diễn đạt lưu loát và tự nhiên. Tuy nhiên, cần chú ý phát âm chính xác các phụ âm cuối và tránh một số lỗi ngữ pháp nhỏ về số nhiều.",
+  overallInsight:
+    "Bạn có khả năng diễn đạt lưu loát và tự nhiên. Tuy nhiên, cần chú ý phát âm chính xác các phụ âm cuối và tránh một số lỗi ngữ pháp nhỏ về số nhiều.",
   skills: {
     pronunciation: {
       score: 78,
       grade: "B+",
-      details: "Tốt nhưng cần cải thiện phụ âm cuối."
+      details: "Tốt nhưng cần cải thiện phụ âm cuối.",
     },
     fluency: {
       score: 85,
       grade: "A-",
-      details: "Nói trôi chảy, nhịp điệu tự nhiên."
+      details: "Nói trôi chảy, nhịp điệu tự nhiên.",
     },
     comprehensibility: {
       score: 88,
       grade: "A",
-      details: "Người bản xứ dễ dàng hiểu được đại ý."
+      details: "Người bản xứ dễ dàng hiểu được đại ý.",
     },
     grammar: {
       score: 80,
       grade: "B",
-      details: "Sử dụng tốt các thì nhưng có lỗi chia động từ số ít/nhiều."
+      details: "Sử dụng tốt các thì nhưng có lỗi chia động từ số ít/nhiều.",
     },
     vocabulary: {
       score: 84,
       grade: "A-",
-      details: "Từ vựng khá phong phú, có sử dụng một số từ nâng cao."
-    }
+      details: "Từ vựng khá phong phú, có sử dụng một số từ nâng cao.",
+    },
   },
   pronunciationFeedback: [
     {
@@ -73,14 +79,18 @@ export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
       original: "I want to practice speaking English freely.",
       corrected: "I want to practice speaking English fluently.",
       rule: "Word Choice / Phù hợp ngữ cảnh",
-      explain: "Mặc dù 'freely' không sai hoàn toàn về ngữ pháp, nhưng trong ngữ cảnh luyện nói học thuật, dùng 'fluently' (trôi chảy) hoặc 'freely' (tự do) cần được làm rõ. Đề xuất dùng 'fluently' để làm nổi bật mục tiêu học tập."
+      explain:
+        "Mặc dù 'freely' không sai hoàn toàn về ngữ pháp, nhưng trong ngữ cảnh luyện nói học thuật, dùng 'fluently' (trôi chảy) hoặc 'freely' (tự do) cần được làm rõ. Đề xuất dùng 'fluently' để làm nổi bật mục tiêu học tập.",
     },
     {
-      original: "expressing random thoughts spontaneously is one of the best ways",
-      corrected: "expressing random thoughts spontaneously is one of the best ways",
+      original:
+        "expressing random thoughts spontaneously is one of the best ways",
+      corrected:
+        "expressing random thoughts spontaneously is one of the best ways",
       rule: "Subject-Verb Agreement / Sự hòa hợp chủ vị",
-      explain: "Chủ ngữ danh động từ 'expressing' đi với động từ số ít 'is' là hoàn toàn chính xác."
-    }
+      explain:
+        "Chủ ngữ danh động từ 'expressing' đi với động từ số ít 'is' là hoàn toàn chính xác.",
+    },
   ],
   vocabularyFeedback: [
     {
@@ -88,15 +98,17 @@ export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
       suggestedWord: "aspire",
       sentence: "I want to practice speaking English...",
       betterSentence: "I aspire to practice speaking English...",
-      reason: "Dùng từ 'aspire' (khao khát/mong muốn) sẽ tạo cảm giác học thuật và mạnh mẽ hơn so với từ 'want' thông dụng."
+      reason:
+        "Dùng từ 'aspire' (khao khát/mong muốn) sẽ tạo cảm giác học thuật và mạnh mẽ hơn so với từ 'want' thông dụng.",
     },
     {
       originalWord: "best",
       suggestedWord: "most effective",
       sentence: "...is one of the best ways to improve...",
       betterSentence: "...is one of the most effective ways to improve...",
-      reason: "Dùng 'most effective' thay cho 'best' để tăng tính thuyết phục và chuyên nghiệp trong bài nói."
-    }
+      reason:
+        "Dùng 'most effective' thay cho 'best' để tăng tính thuyết phục và chuyên nghiệp trong bài nói.",
+    },
   ],
   fluencyTimeline: [
     {
@@ -104,17 +116,17 @@ export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
       type: "hesitation",
       duration: "0.8s",
       severity: "minor",
-      context: "I want to... practice"
+      context: "I want to... practice",
     },
     {
       time: "00:10",
       type: "pause",
       duration: "1.5s",
       severity: "medium",
-      context: "thoughts spontaneously... is one"
-    }
+      context: "thoughts spontaneously... is one",
+    },
   ],
-  wordsPerMinute: 135
+  wordsPerMinute: 135,
 };
 
 export const GOALS: GoalCard[] = [
@@ -123,7 +135,7 @@ export const GOALS: GoalCard[] = [
     title: "Giao Tiếp Hàng Ngày",
     subtitle:
       "Tự tin bắt chuyện, hỏi đường, gọi món khi đi du lịch nước ngoài hoặc giao lưu cơ bản với bạn bè quốc tế.",
-    image:`${Image.Communication}`,
+    image: `${Image.Communication}`,
     gradient: "from-blue-500/20 to-indigo-500/10",
   },
   {
@@ -131,8 +143,7 @@ export const GOALS: GoalCard[] = [
     title: "Phục Vụ Công Việc",
     subtitle:
       "Tự tin trả lời phỏng vấn cơ bản, viết email ngắn gọn, và trao đổi các chủ đề quen thuộc với đồng nghiệp.",
-    image:
-      `${Image.Interview}`,
+    image: `${Image.Interview}`,
     gradient: "from-indigo-500/20 to-purple-500/10",
   },
   {
@@ -140,8 +151,7 @@ export const GOALS: GoalCard[] = [
     title: "Giải Trí & Sở Thích",
     subtitle:
       "Hiểu nội dung video ngắn, nghe nhạc tiếng Anh, và cập nhật nhanh chóng các xu hướng trên mạng xã hội.",
-    image:
-      `${Image.UnderstandShortVideo}`,
+    image: `${Image.UnderstandShortVideo}`,
     gradient: "from-purple-500/20 to-pink-500/10",
   },
 ];
@@ -160,7 +170,7 @@ export const DIMENSIONS: DimensionDetail[] = [
       "Kiểm tra đầy đủ các âm tiết.",
       "Đối chiếu trực quan khẩu hình miệng và âm học của người bản xứ.",
       "Hướng dẫn cụ thể cách phát âm tự nhiên.",
-    ], 
+    ],
   },
   {
     id: "confidence",
@@ -175,7 +185,7 @@ export const DIMENSIONS: DimensionDetail[] = [
       "Đánh giá mức độ tròn vành rõ chữ của bạn.",
       "Đưa ra điểm số cụ thể cho từng từ.",
       "AI được đào tạo tên 12.5 triệu giờ dữ liệu âm thanh thực tế.",
-    ],  
+    ],
   },
   {
     id: "fluency",
@@ -221,5 +231,41 @@ export const DIMENSIONS: DimensionDetail[] = [
       "Giải thích lý do lựa chọn từ vựng thay thế phù hợp với ngữ cảnh.",
       "Chấm điểm độ đa dạng từ vựng giúp bạn mở rộng vốn từ nhanh chóng.",
     ],
+  },
+];
+
+export const FAQ_DATA: FAQItem[] = [
+  {
+    id: "tech",
+    question:
+      "Công nghệ AI chấm điểm giọng nói của EngSteps hoạt động thế nào?",
+    answer:
+      "EngSteps sử dụng công nghệ chuyển đổi âm học (acoustic models) kết hợp với các mô hình ngôn ngữ lớn tiên tiến nhất từ Google để phân tích âm thanh giọng nói của bạn. Khi bạn nói, AI sẽ đối chiếu dữ liệu sóng âm của bạn với hàng nghìn giờ nói chuẩn giọng bản xứ Mỹ, Anh. Hệ thống sẽ bóc tách và phân tích đồng thời 5 khía cạnh cốt lõi: phát âm từng ký tự IPA, độ trôi chảy (lưu lượng từ ngắt quãng), kết cấu ngữ pháp câu, dải từ vựng học thuật và độ dễ hiểu tổng quan.",
+  },
+  {
+    id: "ielts",
+    question: "Tôi có thể sử dụng EngSteps để luyện thi IELTS Speaking không?",
+    answer:
+      "Cực kỳ hiệu quả! Các tiêu chí chấm của EngSteps (Pronunciation, Fluency, Grammar, Lexical Resource) trùng khớp 100% với 4 tiêu chí chấm điểm chính thức của kỳ thi IELTS Speaking. Báo cáo chấm điểm của EngSteps quy đổi tương đương sang thang điểm IELTS Band (ví dụ Band 6.5, 7.0, 7.5) cùng với ước lượng thang đo CEFR giúp bạn theo dõi sát sao sự tiến bộ mỗi ngày.",
+  },
+  {
+    id: "accent",
+    question:
+      "EngSteps có nhận dạng tốt giọng của người Việt mới bắt đầu học không?",
+    answer:
+      "Có. AI của EngSteps được tối ưu huấn luyện đặc biệt dựa trên dữ liệu phát âm của người học Châu Á và người Việt Nam. Hệ thống hiểu rõ các thói quen lỗi phát âm phổ biến của người Việt (như nuốt âm đuôi, phát âm sai phụ âm ghép, đặt sai trọng âm từ), từ đó đưa ra các mẹo sửa khẩu hình bằng Tiếng Việt cực kỳ dễ hiểu và trực quan.",
+  },
+  {
+    id: "mic",
+    question:
+      "Nếu thiết bị của tôi không kết nối được Micro thì có luyện tập được không?",
+    answer:
+      "Được. Nếu thiết bị của bạn bị hỏng micro hoặc trình duyệt chặn quyền ghi âm, bạn vẫn có thể nhập văn bản hoặc click vào các mẫu câu có sẵn để trải nghiệm đầy đủ giao diện chấm điểm trực quan của AI. Ngoài ra, bạn cũng có thể mở EngSteps trên điện thoại di động vì hệ thống tương thích tốt với mọi loại micro trên điện thoại.",
+  },
+  {
+    id: "pricing",
+    question: "Tôi có được thay đổi hoặc hủy bỏ gói cước giữa chừng không?",
+    answer:
+      "Hoàn toàn linh hoạt. Bạn có thể tự do nâng cấp, hạ cấp hoặc hủy bỏ gói dịch vụ hằng tháng bất kỳ lúc nào trực tiếp trong trang quản lý tài khoản của mình mà không tốn thêm bất kỳ chi phí phát sinh nào. Chúng tôi cam kết hoàn tiền 100% trong vòng 3 ngày đầu tiên nếu bạn không hài lòng với sản phẩm.",
   },
 ];
