@@ -230,7 +230,10 @@ export default function AISandbox() {
 
                 {/* FLUENCY TIMELINE TAB */}
                 {activeTab === "fluency" && (
-                  <FluencyTab fluencyTimeline={result.fluencyTimeline} />
+                  <FluencyTab
+                    fluencyTimeline={result.fluencyTimeline}
+                    wordsPerMinute={result.wordsPerMinute}
+                  />
                 )}
               </div>
             </motion.div>

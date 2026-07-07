@@ -7,20 +7,20 @@ import Pricing from "../component/landing/Pricing";
 import FAQ from "../component/landing/FAQ";
 import Footer from "../component/landing/Footer";
 import AuthModal from "../component/landing/AuthModal";
+import ScrollToTop from "../utility/ScrollToTop";
 
 export default function LandingPage() {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "signup">("login");
-  const isDark = true;
 
   const handleOpenAuth = (tab: "login" | "signup") => {
     setAuthTab(tab);
     setAuthOpen(true);
   };
 
-  const handlePlanSelect = () => {
-    handleOpenAuth("signup");
-  };
+  // const handlePlanSelect = () => {
+  //   handleOpenAuth("signup");
+  // };
 
   return (
     <div
@@ -42,7 +42,8 @@ export default function LandingPage() {
         <Features onOpenAuth={handleOpenAuth} />
 
         {/* Dynamic Pricing options */}
-        <Pricing onPlanSelect={handlePlanSelect} />
+        {/* TẠM THỜI BỎ QUA */}
+        {/* <Pricing onPlanSelect={handlePlanSelect} /> */}
 
         {/* FAQs */}
         <FAQ />
@@ -56,8 +57,10 @@ export default function LandingPage() {
         isOpen={authOpen}
         onClose={() => setAuthOpen(false)}
         initialTab={authTab}
-        isDark={isDark}
       />
+
+      {/* Scroll-to-top floating button */}
+      <ScrollToTop />
     </div>
   );
 }

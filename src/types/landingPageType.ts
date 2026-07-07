@@ -54,6 +54,7 @@ export interface AnalysisResult {
   vocabularyFeedback: VocabularyUpgrade[];
   overallInsight: string;
   fluencyTimeline: FluencyTimelineItem[];
+  wordsPerMinute?: number;
 }
 
 export interface Plan {

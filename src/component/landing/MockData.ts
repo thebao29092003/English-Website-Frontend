@@ -113,7 +113,8 @@ export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
       severity: "medium",
       context: "thoughts spontaneously... is one"
     }
-  ]
+  ],
+  wordsPerMinute: 135
 };
 
 export const GOALS: GoalCard[] = [
