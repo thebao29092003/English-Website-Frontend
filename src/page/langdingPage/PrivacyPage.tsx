@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 
-import ScrollToTop from "../utility/ScrollToTop";
+import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function PrivacyPage() {
   const handleBackToHome = () => {

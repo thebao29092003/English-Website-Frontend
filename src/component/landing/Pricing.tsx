@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Sparkles, HelpCircle, Flame } from "lucide-react";
+import { Check, Sparkles, Flame } from "lucide-react";
 import type { Plan } from "../../types/landingPageType";
 
 const PLANS: Plan[] = [

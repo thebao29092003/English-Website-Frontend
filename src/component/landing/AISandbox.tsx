@@ -44,7 +44,9 @@ export default function AISandbox() {
 
   const runAnalysis = (overrideTranscript?: string) => {
     const textToAnalyze =
-      overrideTranscript.trim() !== undefined ? overrideTranscript : transcript;
+      overrideTranscript?.trim() !== undefined
+        ? overrideTranscript
+        : transcript;
     if (!textToAnalyze) return;
 
     setIsAnalyzing(true);

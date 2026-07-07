@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Navbar from "../component/landing/Navbar";
-import Hero from "../component/landing/Hero";
-import AISandbox from "../component/landing/AISandbox";
-import Features from "../component/landing/Features";
-import FAQ from "../component/landing/FAQ";
-import Footer from "../component/landing/Footer";
-import AuthModal from "../component/landing/AuthModal";
-import ScrollToTop from "../utility/ScrollToTop";
+import Navbar from "../../component/landing/Navbar";
+import Hero from "../../component/landing/Hero";
+import AISandbox from "../../component/landing/AISandbox";
+import Features from "../../component/landing/Features";
+import FAQ from "../../component/landing/FAQ";
+import Footer from "../../component/landing/Footer";
+import AuthModal from "../../component/landing/AuthModal";
+import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function LandingPage() {
   const [authOpen, setAuthOpen] = useState(false);

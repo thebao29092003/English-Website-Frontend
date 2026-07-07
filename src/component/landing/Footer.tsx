@@ -51,15 +51,19 @@ export default function Footer() {
             </p>
 
             {/* Social icons */}
+            {/* TẠM THỜI CHƯA XÀI */}
             {/* <div className="flex items-center gap-3 pt-2">
-              <a href="#" className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                <Github className="w-4.5 h-4.5" />
+              <a
+                href="#"
+                className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+              >
+                <IconBrandYoutube className="w-4.5 h-4.5" />
               </a>
-              <a href="#" className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                <Youtube className="w-4.5 h-4.5" />
-              </a>
-              <a href="#" className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all">
-                <Twitter className="w-4.5 h-4.5" />
+              <a
+                href="#"
+                className="p-2 rounded-lg bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+              >
+                <IconBrandFacebook className="w-4.5 h-4.5" />
               </a>
             </div> */}
           </div>
@@ -94,14 +98,6 @@ export default function Footer() {
                   Bảng Giá Đăng Ký
                 </a>
               </li> */}
-              <li>
-                <a
-                  href="#comparison-section"
-                  className="hover:text-purple-400 transition-colors"
-                >
-                  So Sánh Vượt Trội
-                </a>
-              </li>
             </ul>
           </div>
 
@@ -128,14 +124,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-purple-400 transition-colors">
-                  Trung Tâm Trợ Giúp
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-purple-400 transition-colors">
-                  Liên Hệ Đóng Góp
-                </a>
+                <Link
+                  to="/contact"
+                  className="hover:text-purple-400 transition-colors"
+                >
+                  Liên Hệ Với Chúng Tôi
+                </Link>
               </li>
             </ul>
           </div>

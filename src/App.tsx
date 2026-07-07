@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./page/LandingPage";
-import TermsPage from "./page/TermsPage";
-import PrivacyPage from "./page/PrivacyPage";
+import LandingPage from "./page/langdingPage/LandingPage";
+import TermsPage from "./page/langdingPage/TermsPage";
+import PrivacyPage from "./page/langdingPage/PrivacyPage";
+import ContactPage from "./page/langdingPage/ContactPage";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </BrowserRouter>
   );

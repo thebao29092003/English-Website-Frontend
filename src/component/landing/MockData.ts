@@ -4,7 +4,7 @@ import type {
   DimensionDetail,
 } from "../../types/landingPageType";
 import { Award, Languages, Sliders, Volume2, Activity } from "lucide-react";
-import { Image } from "../../assets/image/imgs.js";
+import { Image } from "../../assets/image/imgs";
 import type { FAQItem } from "../../types/landingPageType";
 
 export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
@@ -240,32 +240,33 @@ export const FAQ_DATA: FAQItem[] = [
     question:
       "Công nghệ AI chấm điểm giọng nói của EngSteps hoạt động thế nào?",
     answer:
-      "EngSteps sử dụng công nghệ chuyển đổi âm học (acoustic models) kết hợp với các mô hình ngôn ngữ lớn tiên tiến nhất từ Google để phân tích âm thanh giọng nói của bạn. Khi bạn nói, AI sẽ đối chiếu dữ liệu sóng âm của bạn với hàng nghìn giờ nói chuẩn giọng bản xứ Mỹ, Anh. Hệ thống sẽ bóc tách và phân tích đồng thời 5 khía cạnh cốt lõi: phát âm từng ký tự IPA, độ trôi chảy (lưu lượng từ ngắt quãng), kết cấu ngữ pháp câu, dải từ vựng học thuật và độ dễ hiểu tổng quan.",
+      "EngSteps sử dụng công nghệ AI được huấn luyện từ hơn 12.5 triệu giờ để nhận dạng giọng nói, chuyển đổi văn bản sang âm vị và đối chiếu với âm vị của người đọc từ âm thanh (audio). Nhờ áp dụng thuật toán học sâu, hệ thống bóc tách và phân tích đồng thời 5 khía cạnh cốt lõi: phát âm từng ký tự IPA, độ trôi chảy (lưu lượng từ ngắt quãng), kết cấu ngữ pháp câu, dải từ vựng học thuật và độ dễ hiểu tổng quan.",
   },
   {
     id: "ielts",
-    question: "Tôi có thể sử dụng EngSteps để luyện thi IELTS Speaking không?",
+    question:
+      "Tôi có thể sử dụng EngSteps để luyện thi Speaking nói chung không?",
     answer:
-      "Cực kỳ hiệu quả! Các tiêu chí chấm của EngSteps (Pronunciation, Fluency, Grammar, Lexical Resource) trùng khớp 100% với 4 tiêu chí chấm điểm chính thức của kỳ thi IELTS Speaking. Báo cáo chấm điểm của EngSteps quy đổi tương đương sang thang điểm IELTS Band (ví dụ Band 6.5, 7.0, 7.5) cùng với ước lượng thang đo CEFR giúp bạn theo dõi sát sao sự tiến bộ mỗi ngày.",
+      "Tất nhiên rồi! EngSteps hỗ trợ luyện thi Speaking cho các kỳ thi chứng chỉ nói chung. AI sẽ đánh giá chi tiết bài nói của bạn theo các tiêu chí chuẩn quốc tế như phát âm, độ trôi chảy, ngữ pháp và từ vựng, giúp bạn chuẩn bị tốt nhất cho kỳ thi mà không bị giới hạn bởi một loại chứng chỉ cụ thể.",
   },
   {
     id: "accent",
     question:
-      "EngSteps có nhận dạng tốt giọng của người Việt mới bắt đầu học không?",
+      "EngSteps có nhận dạng tốt giọng của người Việt ở các cấp độ khác nhau không?",
     answer:
-      "Có. AI của EngSteps được tối ưu huấn luyện đặc biệt dựa trên dữ liệu phát âm của người học Châu Á và người Việt Nam. Hệ thống hiểu rõ các thói quen lỗi phát âm phổ biến của người Việt (như nuốt âm đuôi, phát âm sai phụ âm ghép, đặt sai trọng âm từ), từ đó đưa ra các mẹo sửa khẩu hình bằng Tiếng Việt cực kỳ dễ hiểu và trực quan.",
+      "Có. AI của EngSteps có khả năng nhận dạng tốt giọng đọc của người Việt từ người mới bắt đầu học cho đến khi thành thạo. Hệ thống hiểu rõ các thói quen lỗi phát âm phổ biến của người Việt (như nuốt âm đuôi, phát âm sai phụ âm ghép), từ đó đưa ra các mẹo sửa khẩu hình cực kỳ dễ hiểu và trực quan.",
   },
   {
     id: "mic",
     question:
-      "Nếu thiết bị của tôi không kết nối được Micro thì có luyện tập được không?",
+      "Nếu thiết bị của tôi không có Micro ghi âm trực tiếp thì có luyện tập được không?",
     answer:
-      "Được. Nếu thiết bị của bạn bị hỏng micro hoặc trình duyệt chặn quyền ghi âm, bạn vẫn có thể nhập văn bản hoặc click vào các mẫu câu có sẵn để trải nghiệm đầy đủ giao diện chấm điểm trực quan của AI. Ngoài ra, bạn cũng có thể mở EngSteps trên điện thoại di động vì hệ thống tương thích tốt với mọi loại micro trên điện thoại.",
+      "Được. Nếu thiết bị của bạn không kết nối được micro hoặc trình duyệt chặn quyền ghi âm trực tiếp, bạn hoàn toàn có thể tải lên file âm thanh có sẵn từ máy để hệ thống phân tích và chấm điểm. Ngoài ra, bạn cũng có thể mở EngSteps trên điện thoại di động vì hệ thống tương thích tốt với mọi loại micro trên điện thoại.",
   },
-  {
-    id: "pricing",
-    question: "Tôi có được thay đổi hoặc hủy bỏ gói cước giữa chừng không?",
-    answer:
-      "Hoàn toàn linh hoạt. Bạn có thể tự do nâng cấp, hạ cấp hoặc hủy bỏ gói dịch vụ hằng tháng bất kỳ lúc nào trực tiếp trong trang quản lý tài khoản của mình mà không tốn thêm bất kỳ chi phí phát sinh nào. Chúng tôi cam kết hoàn tiền 100% trong vòng 3 ngày đầu tiên nếu bạn không hài lòng với sản phẩm.",
-  },
+  // {
+  //   id: "pricing",
+  //   question: "Tôi có được thay đổi hoặc hủy bỏ gói cước giữa chừng không?",
+  //   answer:
+  //     "Hoàn toàn linh hoạt. Bạn có thể tự do nâng cấp, hạ cấp hoặc hủy bỏ gói dịch vụ hằng tháng bất kỳ lúc nào trực tiếp trong trang quản lý tài khoản của mình mà không tốn thêm bất kỳ chi phí phát sinh nào. Chúng tôi cam kết hoàn tiền 100% trong vòng 3 ngày đầu tiên nếu bạn không hài lòng với sản phẩm.",
+  // },
 ];

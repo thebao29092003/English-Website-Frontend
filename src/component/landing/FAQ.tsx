@@ -23,7 +23,7 @@ export default function FAQ() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight mb-4 flex items-center justify-center gap-2">
-            <span className="gradient-text bg-gradient-to-r from-blue-400 to-purple-400">
+            <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400">
               Câu Hỏi
             </span>{" "}
             Thường Gặp
