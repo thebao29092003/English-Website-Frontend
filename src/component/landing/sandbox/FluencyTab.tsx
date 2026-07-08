@@ -1,5 +1,5 @@
 import { Flame, CheckCircle2 } from "lucide-react";
-import type { FluencyTimelineItem } from "../../../types/landingPageType";
+import type { FluencyTimelineItem } from "../../../types/landingPage.type";
 
 interface FluencyTabProps {
   fluencyTimeline: FluencyTimelineItem[];

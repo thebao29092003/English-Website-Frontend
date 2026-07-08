@@ -1,4 +1,4 @@
-import type { AnalysisResult } from "../../../types/landingPageType";
+import type { AnalysisResult } from "../../../types/landingPage.type";
 interface ScoreOverviewProps {
   result: AnalysisResult;
 }

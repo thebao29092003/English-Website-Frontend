@@ -1,5 +1,5 @@
 import { CheckCircle2, Volume2 } from "lucide-react";
-import type { GrammarCorrection } from "../../../types/landingPageType";
+import type { GrammarCorrection } from "../../../types/landingPage.type";
 interface GrammarTabProps {
   grammarFeedback: GrammarCorrection[];
   playTTS: (text: string, id: string) => void;

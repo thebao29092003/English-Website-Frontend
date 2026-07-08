@@ -61,7 +61,7 @@ export default function Features({ onOpenAuth }: FeaturesProps) {
               <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mb-4 flex-1">
                 {goal.subtitle}
               </p>
-              <p className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1.5 mt-auto group/link">
+              <p className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center mt-auto group/link">
                 Luyện nói ngay bây giờ
                 <ChevronRight className="w-4.5 h-4.5 group-hover/link:translate-x-0.5 transition-transform" />
               </p>

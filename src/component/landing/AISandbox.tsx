@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 import type {
   AnalysisResult,
   PronunciationItem,
-} from "../../types/landingPageType";
+} from "../../types/landingPage.type";
 import { MOCK_ANALYSIS_RESULT } from "./MockData";
 
 // Import modular sub-components from sandbox/

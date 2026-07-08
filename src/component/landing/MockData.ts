@@ -2,10 +2,10 @@ import type {
   AnalysisResult,
   GoalCard,
   DimensionDetail,
-} from "../../types/landingPageType";
+} from "../../types/landingPage.type";
 import { Award, Languages, Sliders, Volume2, Activity } from "lucide-react";
 import { Image } from "../../assets/image/imgs";
-import type { FAQItem } from "../../types/landingPageType";
+import type { FAQItem } from "../../types/landingPage.type";
 
 export const MOCK_ANALYSIS_RESULT: AnalysisResult = {
   overallScore: 82,

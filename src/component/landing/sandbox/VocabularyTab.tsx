@@ -1,5 +1,5 @@
 import { Award, ChevronRight, Sparkles, Volume2 } from "lucide-react";
-import type { VocabularyUpgrade } from "../../../types/landingPageType";
+import type { VocabularyUpgrade } from "../../../types/landingPage.type";
 interface VocabularyTabProps {
   vocabularyFeedback: VocabularyUpgrade[];
   playTTS: (text: string, id: string) => void;

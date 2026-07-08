@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { MessageSquare, Volume2 } from "lucide-react";
-import type { PronunciationItem } from "../../../types/landingPageType";
+import type { PronunciationItem } from "../../../types/landingPage.type";
 
 interface PronunciationTabProps {
   transcript: string;
