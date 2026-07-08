@@ -1,8 +1,14 @@
 import { apiConfigNoHeader } from "../apiConfig/apiConfigNoHeader";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequestStep2,
+} from "../types/authApi.type";
+import type { BaseResponse } from "../types/baseResponse";
 
 export const authApi = apiConfigNoHeader.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
+    login: builder.mutation<LoginResponse, LoginRequest>({
       query: (emailPw) => ({
         url: "/api/auth/login",
         method: "POST",
@@ -10,7 +16,7 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
       }),
     }),
 
-    getOtp: builder.query({
+    getOtp: builder.query<BaseResponse<null>, string>({
       query: (email) => ({
         url: "/api/auth/register",
         method: "GET",
@@ -20,16 +26,15 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
       }),
     }),
 
-    register: builder.mutation({
-      query: (email) => ({
+    register: builder.mutation<BaseResponse<null>, RegisterRequestStep2>({
+      query: (params) => ({
         url: "/api/auth/register",
         method: "POST",
-        params: {
-          email,
-        },
+        body: params,
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useGetOtpQuery } = authApi;
+export const { useLoginMutation, useGetOtpQuery, useRegisterMutation } =
+  authApi;

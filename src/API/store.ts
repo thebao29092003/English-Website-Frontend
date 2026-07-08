@@ -1,13 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import authReducer from "./auth/authSlice";
+import { apiConfigNoHeader } from "./apiConfig/apiConfigNoHeader";
+import { apiConfig } from "./apiConfig/apiConfig";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    [apiConfigNoHeader.reducerPath]: apiConfigNoHeader.reducer,
+    [apiConfig.reducerPath]: apiConfig.reducer,
   },
 
-  middleware: (getdefaultMiddleware) => getdefaultMiddleware().concat(),
+  middleware: (getdefaultMiddleware) =>
+    getdefaultMiddleware().concat(
+      apiConfigNoHeader.middleware,
+      apiConfig.middleware,
+    ),
 });
 
 // 1. Suy luận kiểu dữ liệu 'RootState' từ chính hàm getState của store

@@ -1,34 +1,22 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, CheckCircle } from "lucide-react";
+import { X } from "lucide-react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialTab?: "login" | "signup";
+  tab: "login" | "signup";
+  setTab: (tab: "login" | "signup") => void;
 }
 
 export default function AuthModal({
   isOpen,
   onClose,
-  initialTab = "login",
+  tab,
+  setTab,
 }: AuthModalProps) {
-  const [tab, setTab] = useState<"login" | "signup">(initialTab);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSuccess = () => {
-    setIsSuccess(true);
-    setTimeout(() => {
-      setIsSuccess(false);
-      onClose();
-    }, 1800);
-  };
-
   if (!isOpen) return null;
-
   return (
     <AnimatePresence>
       <div
@@ -66,83 +54,54 @@ export default function AuthModal({
             <X className="w-5 h-5" />
           </button>
 
-          {isSuccess ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center justify-center py-12 text-center"
-            >
-              <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/30 mb-4 animate-pulse">
-                <CheckCircle className="w-10 h-10 text-emerald-400" />
-              </div>
-              <h3 className="font-display text-2xl font-bold mb-2 text-white">
-                {tab === "login"
-                  ? "Đăng nhập thành công!"
-                  : "Đăng ký thành công!"}
-              </h3>
-              <p className="text-sm max-w-xs text-gray-400">
-                {tab === "login"
-                  ? "Chào mừng bạn quay trở lại với EngSteps. Đang tải trang điều khiển..."
-                  : "Tài khoản của bạn đã được thiết lập. Hãy bắt đầu chinh phục tiếng Anh!"}
+          <>
+            {/* Header */}
+            <div className="mb-8 text-center">
+              <h2
+                id="auth-modal-title"
+                className="font-display text-3xl font-extrabold tracking-tight mb-2 text-white"
+              >
+                Eng<span className="text-purple-600">Steps</span>
+              </h2>
+              <p className="text-xs uppercase tracking-widest font-mono text-gray-400">
+                AI-Powered Speech Assessor
               </p>
-            </motion.div>
-          ) : (
-            <>
-              {/* Header */}
-              <div className="mb-8 text-center">
-                <h2
-                  id="auth-modal-title"
-                  className="font-display text-3xl font-extrabold tracking-tight mb-2 text-white"
-                >
-                  Eng<span className="text-purple-600">Steps</span>
-                </h2>
-                <p className="text-xs uppercase tracking-widest font-mono text-gray-400">
-                  AI-Powered Speech Assessor
-                </p>
-              </div>
+            </div>
 
-              {/* Tabs */}
-              <div className="flex p-1 rounded-lg mb-6 border bg-white/5 border-white/10">
-                <button
-                  id="tab-login"
-                  onClick={() => setTab("login")}
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all cursor-pointer ${
-                    tab === "login"
-                      ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Đăng Nhập
-                </button>
-                <button
-                  id="tab-signup"
-                  onClick={() => setTab("signup")}
-                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all cursor-pointer ${
-                    tab === "signup"
-                      ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Đăng Ký
-                </button>
-              </div>
+            {/* Tabs */}
+            <div className="flex p-1 rounded-lg mb-6 border bg-white/5 border-white/10">
+              <button
+                id="tab-login"
+                onClick={() => setTab("login")}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all cursor-pointer ${
+                  tab === "login"
+                    ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                Đăng Nhập
+              </button>
+              <button
+                id="tab-signup"
+                onClick={() => setTab("signup")}
+                className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all cursor-pointer ${
+                  tab === "signup"
+                    ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                Đăng Ký
+              </button>
+            </div>
 
-              {/* Render appropriate form */}
-              {tab === "login" ? (
-                <LoginForm
-                  onSuccess={handleSuccess}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              ) : (
-                <SignupForm
-                  onSuccess={handleSuccess}
-                  loading={loading}
-                  setLoading={setLoading}
-                />
-              )}
-            </>
-          )}
+            {/* Render appropriate form */}
+            {tab === "login" ? (
+              <LoginForm />
+            ) : (
+              // <></>
+              <SignupForm />
+            )}
+          </>
         </motion.div>
       </div>
     </AnimatePresence>

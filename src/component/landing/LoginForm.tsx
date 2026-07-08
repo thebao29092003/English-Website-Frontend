@@ -11,12 +11,15 @@ import {
   Button,
 } from "@heroui/react";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
-
-interface LoginFormProps {
-  onSuccess: () => void;
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
-}
+import { useLoginMutation } from "../../API/auth/authApi";
+import { useAppDispatch, useAppSelector } from "../../API/hooks/hooks";
+import { selectCurrentUser, setCredentials } from "../../API/auth/authSlice";
+import type { LoginRequest, User } from "../../API/types/authApi.type";
+import { jwtDecode } from "jwt-decode";
+import {
+  showErrorMessage,
+  showSuccessMessage,
+} from "../../utility/notification";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -30,12 +33,10 @@ const loginSchema = yup.object().shape({
 // nó thay đổi theo
 type LoginValues = yup.InferType<typeof loginSchema>;
 
-export default function LoginForm({
-  onSuccess,
-  loading,
-  setLoading,
-}: LoginFormProps) {
+export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  const [login, { isLoading, error }] = useLoginMutation();
 
   const {
     register,
@@ -49,14 +50,21 @@ export default function LoginForm({
     },
   });
 
-  const onSubmit = (_data: LoginValues) => {
-    setLoading(true);
-
-    // Simulate login API call
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess();
-    }, 1500);
+  const onSubmit = async (data: LoginValues) => {
+    const response = await login({
+      username: data.email,
+      password: data.password,
+    }).unwrap();
+    console.log("result", response);
+    if (response.success) {
+      const decodedToken = jwtDecode(response.value);
+      dispatch(
+        setCredentials({
+          user: decodedToken as User,
+          token: response.value,
+        }),
+      );
+    }
   };
 
   return (
@@ -129,10 +137,10 @@ export default function LoginForm({
       <Button
         id="login-submit-btn"
         type="submit"
-        isDisabled={loading}
+        isDisabled={isLoading}
         className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
       >
-        {loading ? (
+        {isLoading ? (
           <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
         ) : null}
         Đăng Nhập Ngay

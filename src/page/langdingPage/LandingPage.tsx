@@ -47,7 +47,8 @@ export default function LandingPage() {
       <AuthModal
         isOpen={authOpen}
         onClose={() => setAuthOpen(false)}
-        initialTab={authTab}
+        tab={authTab}
+        setTab={setAuthTab}
       />
 
       {/* Scroll-to-top floating button */}

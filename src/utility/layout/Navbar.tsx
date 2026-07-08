@@ -56,6 +56,12 @@ export default function Navbar() {
     setAuthTab(type);
   };
 
+  const handleMobileForm = (type: "login" | "signup") => {
+    setAuthOpen(true);
+    setMobileMenuOpen(false);
+    setAuthTab(type);
+  };
+
   return (
     <>
       <header
@@ -197,20 +203,14 @@ export default function Navbar() {
               <div className="flex flex-col gap-3">
                 <button
                   id="mobile-nav-login"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setAuthTab("login");
-                  }}
+                  onClick={() => handleMobileForm("login")}
                   className="w-full h-12 rounded-xl border border-white/10 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 font-semibold cursor-pointer transition-all"
                 >
                   Đăng Nhập
                 </button>
                 <button
                   id="mobile-nav-signup"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    setAuthTab("signup");
-                  }}
+                  onClick={() => handleMobileForm("signup")}
                   className="w-full h-12 rounded-xl text-center font-bold text-white bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <span>Đăng Ký Miễn Phí</span>
@@ -224,7 +224,8 @@ export default function Navbar() {
       <AuthModal
         isOpen={authOpen}
         onClose={() => setAuthOpen(false)}
-        initialTab={authTab}
+        tab={authTab}
+        setTab={setAuthTab}
       />
     </>
   );

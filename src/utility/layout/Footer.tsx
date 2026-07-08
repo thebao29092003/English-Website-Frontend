@@ -163,7 +163,8 @@ export default function Footer() {
       <AuthModal
         isOpen={authOpen}
         onClose={() => setAuthOpen(false)}
-        initialTab={authTab}
+        tab={authTab}
+        setTab={setAuthTab}
       />
     </>
   );

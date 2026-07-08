@@ -21,12 +21,6 @@ import {
   IconAlertCircle,
 } from "@tabler/icons-react";
 
-interface SignupFormProps {
-  onSuccess: () => void;
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
-}
-
 // Schema for Step 1 (Removed Full Name "name" field)
 const step1Schema = yup.object().shape({
   email: yup
@@ -65,11 +59,7 @@ const step2Schema = yup.object().shape({
 type Step1Values = yup.InferType<typeof step1Schema>;
 type Step2Values = yup.InferType<typeof step2Schema>;
 
-export default function SignupForm({
-  onSuccess,
-  loading,
-  setLoading,
-}: SignupFormProps) {
+export default function SignupForm() {
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState<Partial<Step1Values & Step2Values>>(
     {},
@@ -129,28 +119,10 @@ export default function SignupForm({
   }, [countdown]);
 
   // Handle Step 1 Submit (Move to Step 2)
-  const onStep1Submit = (data: Step1Values) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setFormData(data);
-      setStep(2);
-      // Start 40s countdown
-      setCountdown(40);
-      setOtpSentMessage(`Mã OTP đã được gửi thành công tới ${data.email}`);
-      // Clear toast after 5s
-      setTimeout(() => setOtpSentMessage(""), 5000);
-    }, 1000);
-  };
+  const onStep1Submit = (data: Step1Values) => {};
 
   // Handle Step 2 Submit (Finalize Registration)
-  const onStep2Submit = (_data: Step2Values) => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess();
-    }, 1500);
-  };
+  const onStep2Submit = (_data: Step2Values) => {};
 
   // Handle Resend OTP Click (40s cooling)
   const handleResendOtp = () => {
@@ -245,17 +217,11 @@ export default function SignupForm({
               <Button
                 id="signup-next-btn"
                 type="submit"
-                isDisabled={loading}
+                // isDisabled={loading}
                 className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
               >
-                {loading ? (
-                  <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                ) : (
-                  <>
-                    Tiếp tục nhận mã OTP
-                    <IconArrowRight className="w-4.5 h-4.5" />
-                  </>
-                )}
+                Tiếp tục nhận mã OTP
+                <IconArrowRight className="w-4.5 h-4.5" />
               </Button>
             </Form>
           </motion.div>
@@ -487,19 +453,14 @@ export default function SignupForm({
                   />
                   {countdown > 0 ? `Gửi lại (${countdown}s)` : "Gửi lại OTP"}
                 </Button>
-
                 {/* Final Register Button */}
                 <Button
                   id="signup-submit-btn"
                   type="submit"
-                  isDisabled={loading}
+                  // isDisabled={loading}
                   className="h-12 rounded-xl bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
-                >
-                  {loading ? (
-                    <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                  ) : null}
-                  Hoàn Tất Đăng Ký
-                </Button>
+                ></Button>
+                Hoàn Tất Đăng Ký
               </div>
             </Form>
           </motion.div>

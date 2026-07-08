@@ -22,3 +22,12 @@ export interface LoginRequest {
 
 // Định nghĩa dữ liệu trả về khi Login thành công (Response)
 export interface LoginResponse extends BaseResponse<string> {}
+
+export interface RegisterRequestStep2 {
+  username: string;
+  password: string;
+  repeatPassword: string;
+  otp: string;
+}
+
+export interface RefreshResponse extends BaseResponse<string> {}
