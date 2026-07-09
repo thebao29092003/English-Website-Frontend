@@ -19,9 +19,9 @@ export default function Hero({ onOpenAuth }: HeroProps) {
       className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden transition-colors duration-500 bg-[#030014]"
     >
       {/* Background Glows from Design HTML */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-all duration-500 bg-violet-600/20" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-all duration-500 bg-blue-600/20" />
-      <div className="absolute top-[20%] right-[10%] w-[300px] h-[300px] rounded-full blur-[100px] pointer-events-none transition-all duration-500 bg-indigo-500/10" />
+      <div className="glow-orb top-[-10%] left-[-10%] w-[500px] h-[500px] blur-[120px] transition-all duration-500 bg-violet-600/20" />
+      <div className="glow-orb bottom-[-10%] right-[-10%] w-[500px] h-[500px] blur-[120px] transition-all duration-500 bg-blue-600/20" />
+      <div className="glow-orb top-[20%] right-[10%] w-[300px] h-[300px] blur-[100px] transition-all duration-500 bg-indigo-500/10" />
 
       {/* Grid Overlay */}
       <div className="absolute inset-0 bg-grid-pattern pointer-events-none transition-opacity opacity-40" />
@@ -86,13 +86,13 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl border backdrop-blur-md transition-all duration-500 border-white/10 bg-white/5 shadow-2xl"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl border glass-card shadow-2xl transition-all duration-500"
         >
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
               93.32%
             </p>
-            <p className="text-xs font-medium font-mono uppercase tracking-wider mt-1 flex items-center justify-center gap-1 text-gray-400">
+            <p className="text-statistic">
               <IconShieldCheck stroke={2} color="oklch(62.3% 0.214 259.815)" />{" "}
               AI ĐỘ CHÍNH XÁC
             </p>

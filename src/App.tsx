@@ -5,6 +5,7 @@ import PrivacyPage from "./page/langdingPage/PrivacyPage";
 import ContactPage from "./page/langdingPage/ContactPage";
 import ForgotPasswordStep1 from "./component/forgotPassword/ForgotPasswordStep1";
 import ForgotPasswordStep2 from "./component/forgotPassword/ForgotPasswordStep2";
+import HomePage from "./page/homePage/HomePage";
 import LayoutUser from "./utility/layout/LayoutUser";
 import ErrorPage from "./utility/ErrorPage";
 import { ToastContainer } from "react-toastify";
@@ -22,9 +23,11 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPasswordStep1 />} />
           <Route path="/reset-password" element={<ForgotPasswordStep2 />} />
         </Route>
+        <Route path="/home" element={<HomePage />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer />
     </>
   );
 }
+

@@ -6,7 +6,7 @@ interface WelcomeStateProps {
 
 export default function WelcomeState({ onStartDemo }: WelcomeStateProps) {
   return (
-    <div className="backdrop-blur-md bg-white/5 border border-white/10 p-12 rounded-3xl shadow-2xl flex flex-col items-center justify-center text-center min-h-[500px]">
+    <div className="glass-card p-12 rounded-3xl shadow-2xl flex flex-col items-center justify-center text-center min-h-[500px]">
       <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 text-purple-400 mb-6">
         <Flame className="w-8 h-8 animate-pulse" />
       </div>

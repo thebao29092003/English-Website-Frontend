@@ -33,9 +33,9 @@ export interface RegisterRequestStep2 {
 export interface RefreshResponse extends BaseResponse<string> {}
 
 export interface ResetPasswordRequest {
-  username: string;
+  email: string;
   otp: string;
-  password: string;
-  repeatPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
 }
 

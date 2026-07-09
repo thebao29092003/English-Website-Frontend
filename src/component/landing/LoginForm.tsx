@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -12,9 +12,9 @@ import {
 } from "@heroui/react";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { useLoginMutation } from "../../API/auth/authApi";
-import { useAppDispatch, useAppSelector } from "../../API/hooks/hooks";
-import { selectCurrentUser, setCredentials } from "../../API/auth/authSlice";
-import type { LoginRequest, User } from "../../API/types/authApi.type";
+import { useAppDispatch } from "../../API/hooks/hooks";
+import { setCredentials } from "../../API/auth/authSlice";
+import type { User } from "../../API/types/authApi.type";
 import { jwtDecode } from "jwt-decode";
 import {
   showErrorMessage,
@@ -29,7 +29,7 @@ export default function LoginForm({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const {
     register,
@@ -43,22 +43,25 @@ export default function LoginForm({
     },
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginValues) => {
     try {
       const response = await login({
         username: data.email,
         password: data.password,
       }).unwrap();
-      if (response.success) {
-        const decodedToken = jwtDecode(response.value);
+      if (response.success && response.value) {
+        const decodedToken = jwtDecode<User>(response.value);
         dispatch(
           setCredentials({
-            user: decodedToken as User,
+            user: decodedToken,
             token: response.value,
           }),
         );
         showSuccessMessage("Đăng nhập thành công");
         setAuthOpen(false);
+        navigate("/home");
       }
     } catch (error) {
       showErrorMessage("Đăng nhập thất bại");
@@ -79,18 +82,14 @@ export default function LoginForm({
         isInvalid={!!errors.email}
         className="flex flex-col w-full"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-          Địa chỉ Email
-        </Label>
+        <Label className="form-label">Địa chỉ Email</Label>
         <Input
           id="login-email-input"
           placeholder="name@company.com"
-          className="w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500"
+          className="form-input"
           {...register("email")}
         />
-        <FieldError className="text-sm text-rose-500 mt-1 block">
-          {errors.email?.message}
-        </FieldError>
+        <FieldError className="form-error">{errors.email?.message}</FieldError>
       </TextField>
 
       {/* Password input */}
@@ -100,27 +99,25 @@ export default function LoginForm({
         isInvalid={!!errors.password}
         className="flex flex-col w-full relative"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-          Mật khẩu
-        </Label>
+        <Label className="form-label">Mật khẩu</Label>
 
-        <div className="relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center">
+        <div className="form-password-wrapper">
           <Input
             id="login-password-input"
             type={showPassword ? "text" : "password"}
             placeholder="••••••••"
-            className="w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none"
+            className="form-password-input"
             {...register("password")}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none"
+            className="form-password-toggle"
           >
             {showPassword ? <IconEyeOff size={20} /> : <IconEye size={20} />}
           </button>
         </div>
-        <FieldError className="text-sm text-rose-500 mt-1 block">
+        <FieldError className="form-error">
           {errors.password?.message}
         </FieldError>
       </TextField>
@@ -139,9 +136,7 @@ export default function LoginForm({
         isDisabled={isLoading}
         className="w-full h-12 mt-4 button-primary"
       >
-        {isLoading ? (
-          <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-        ) : null}
+        {isLoading ? <span className="spinner" /> : null}
         Đăng Nhập Ngay
       </Button>
     </Form>

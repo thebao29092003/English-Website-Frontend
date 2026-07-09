@@ -52,6 +52,22 @@
     background-clip: text;
   }
 
+  /* Gradient text shorthand (gradient-text + optional glow) */
+  .gradient-text-purple {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+  }
+  .gradient-text-purple-no-glow {
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===================== Buttons ===================== */
   .button-primary {
     @apply rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer;
   }
@@ -66,6 +82,75 @@
   }
   .text-statistic {
     @apply text-xs font-medium font-mono uppercase tracking-wider mt-1 flex items-center justify-center gap-1 text-gray-400;
+  }
+
+  /* ===================== Section Layout ===================== */
+  .landing-section {
+    @apply py-20 bg-[#030014] relative overflow-hidden;
+  }
+  .landing-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10;
+  }
+  .landing-heading {
+    @apply font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4;
+  }
+  .landing-description {
+    @apply text-gray-400 text-sm sm:text-base max-w-xl mx-auto;
+  }
+
+  /* ===================== Background Glow Orbs ===================== */
+  .glow-orb {
+    @apply absolute rounded-full pointer-events-none;
+  }
+
+  /* ===================== Glass Card ===================== */
+  .glass-card {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+
+  /* ===================== Form Elements ===================== */
+  .form-label {
+    @apply text-sm font-semibold font-mono text-gray-400 mb-1.5 block;
+  }
+  .form-input {
+    @apply w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500;
+
+    /* Override HeroUI's .input hover styles that set white bg via CSS variables */
+    @media (hover: hover) {
+      &:hover:not(:focus):not(:focus-visible),
+      &[data-hovered="true"]:not([data-focused="true"]):not(
+          [data-focus-visible="true"]
+        ) {
+        background-color: transparent !important;
+        border-color: rgba(168, 85, 247, 0.5) !important;
+      }
+    }
+  }
+  .form-error {
+    @apply text-sm text-rose-500 mt-1 block;
+  }
+  .form-password-wrapper {
+    @apply relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center;
+  }
+  .form-password-input {
+    @apply w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none;
+    @media (hover: hover) {
+      &:hover:not(:focus):not(:focus-visible),
+      &[data-hovered="true"]:not([data-focused="true"]):not(
+          [data-focus-visible="true"]
+        ) {
+        background-color: transparent !important;
+        border-color: rgba(168, 85, 247, 0.5) !important;
+      }
+    }
+  }
+  .form-password-toggle {
+    @apply text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none;
+  }
+
+  /* ===================== Loading Spinner ===================== */
+  .spinner {
+    @apply animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent;
   }
 }
 

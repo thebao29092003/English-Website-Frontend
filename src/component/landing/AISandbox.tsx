@@ -141,23 +141,23 @@ export default function AISandbox() {
   return (
     <section
       id="ai-sandbox-section"
-      className="py-20 bg-[#030014] relative overflow-hidden"
+      className="landing-section"
     >
       {/* Background Glows */}
-      <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-[40%] right-[20%] w-[350px] h-[350px] bg-violet-500/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="glow-orb top-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 blur-[130px]" />
+      <div className="glow-orb bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/10 blur-[120px]" />
+      <div className="glow-orb top-[40%] right-[20%] w-[350px] h-[350px] bg-violet-500/10 blur-[100px]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="landing-container">
         {/* Section Heading */}
         <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
+          <h2 className="landing-heading">
             Bảng Chấm Điểm{" "}
-            <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400 glow-purple">
+            <span className="gradient-text-purple">
               AI Tiên Tiến
             </span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+          <p className="landing-description">
             Khám phá tính năng phân tích kết quả 5 bước của EngSteps. Trải
             nghiệm thử bảng điểm chi tiết phân tích phát âm IPA, dễ hiểu, trôi
             chảy, từ vựng và ngữ pháp qua bản demo dưới đây.
@@ -180,7 +180,7 @@ export default function AISandbox() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="backdrop-blur-md bg-white/5 border border-white/10 rounded-3xl shadow-2xl overflow-hidden"
+              className="glass-card rounded-3xl shadow-2xl overflow-hidden"
             >
               {/* Result Hero Header: Circular Gauge + Metrics Grid */}
               <ScoreOverview result={result} />

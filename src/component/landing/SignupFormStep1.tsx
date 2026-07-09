@@ -54,18 +54,14 @@ export default function SignupFormStep1({
         isInvalid={!!errors.email}
         className="flex flex-col w-full"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-          Địa chỉ Email
-        </Label>
+        <Label className="form-label">Địa chỉ Email</Label>
         <Input
           id="signup-email-input"
           placeholder="name@company.com"
-          className="w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500"
+          className="form-input"
           {...register("email")}
         />
-        <FieldError className="text-sm text-rose-500 mt-1 block">
-          {errors.email?.message}
-        </FieldError>
+        <FieldError className="form-error">{errors.email?.message}</FieldError>
       </TextField>
 
       {/* Consent checkbox */}
@@ -118,9 +114,7 @@ export default function SignupFormStep1({
         isDisabled={isLoading}
         className="w-full h-12 mt-4 button-primary"
       >
-        {isLoading ? (
-          <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-        ) : null}
+        {isLoading ? <span className="spinner" /> : null}
         Tiếp tục nhận mã OTP
         <IconArrowRight className="w-4.5 h-4.5" />
       </Button>

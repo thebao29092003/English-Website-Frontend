@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   IconX,
@@ -8,6 +8,9 @@ import {
 } from "@tabler/icons-react";
 import AuthModal from "../../component/landing/AuthModal";
 import { URL_FRONT_END } from "../../API/urlBase";
+import { useAppDispatch, useAppSelector } from "../../API/hooks/hooks";
+import { selectCurrentUser, logout } from "../../API/auth/authSlice";
+import { showSuccessMessage } from "../../utility/notification";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,6 +20,25 @@ export default function Navbar() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectCurrentUser);
+
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target as Node)
+      ) {
+        setProfileDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +82,12 @@ export default function Navbar() {
     setAuthOpen(true);
     setMobileMenuOpen(false);
     setAuthTab(type);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    showSuccessMessage("Đăng xuất thành công");
+    navigate("/");
   };
 
   return (
@@ -124,32 +152,107 @@ export default function Navbar() {
 
             {/* User actions */}
             <div className="hidden lg:flex items-center gap-4">
-              <button
-                id="nav-login-btn"
-                onClick={() => handleForm("login")}
-                className="text-sm font-medium text-slate-400 hover:text-white bg-transparent hover:bg-white/5 border-none h-10 px-4 rounded-xl transition-all cursor-pointer"
-              >
-                Đăng Nhập
-              </button>
-              <button
-                id="nav-signup-btn"
-                onClick={() => handleForm("signup")}
-                className="text-sm font-semibold text-white h-10 px-6 button-primary"
-              >
-                {/* <IconSparkles className="w-4 h-4 text-purple-200 shrink-0" /> */}
-                <span>Đăng Ký Miễn Phí</span>
-              </button>
+              {currentUser ? (
+                <>
+                  <button
+                    onClick={() => navigate("/home")}
+                    className="text-sm font-semibold text-slate-300 hover:text-white bg-white/5 border border-white/10 hover:border-purple-500/50 h-10 px-4 rounded-xl transition-all cursor-pointer"
+                  >
+                    Bản ghi của tôi
+                  </button>
+                  <div className="relative" ref={profileDropdownRef}>
+                    <button
+                      onClick={() =>
+                        setProfileDropdownOpen(!profileDropdownOpen)
+                      }
+                      className="transition-transform border border-purple-500/50 rounded-full w-9 h-9 shrink-0 cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md select-none focus:outline-none"
+                    >
+                      {currentUser?.email?.substring(0, 2)?.toUpperCase()}
+                    </button>
+                    {profileDropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-56 bg-[#0c0a24] border border-white/10 rounded-xl p-1 shadow-2xl text-white z-50">
+                        <div className="h-14 gap-1 px-3 py-2 border-b border-white/5 flex flex-col justify-center">
+                          <p className="font-semibold text-slate-500 text-[10px] uppercase tracking-wider font-mono">
+                            Đang đăng nhập bằng
+                          </p>
+                          <p className="font-bold text-white text-xs truncate mt-0.5">
+                            {currentUser.email}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigate("/home");
+                            setProfileDropdownOpen(false);
+                          }}
+                          className="w-full text-left py-2.5 px-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-all cursor-pointer"
+                        >
+                          Bản ghi âm của tôi
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigate("/");
+                            setProfileDropdownOpen(false);
+                          }}
+                          className="w-full text-left py-2.5 px-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-all cursor-pointer"
+                        >
+                          Trang chủ Landing
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setProfileDropdownOpen(false);
+                          }}
+                          className="w-full text-left py-2.5 px-3 hover:bg-rose-500/10 text-rose-400 rounded-lg text-sm font-semibold transition-all cursor-pointer"
+                        >
+                          Đăng xuất
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    id="nav-login-btn"
+                    onClick={() => handleForm("login")}
+                    className="text-sm font-medium text-slate-400 hover:text-white bg-transparent hover:bg-white/5 border-none h-10 px-4 rounded-xl transition-all cursor-pointer"
+                  >
+                    Đăng Nhập
+                  </button>
+                  <button
+                    id="nav-signup-btn"
+                    onClick={() => handleForm("signup")}
+                    className="text-sm font-semibold text-white h-10 px-6 button-primary"
+                  >
+                    {/* <IconSparkles className="w-4 h-4 text-purple-200 shrink-0" /> */}
+                    <span>Đăng Ký Miễn Phí</span>
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Trigger */}
             <div className="lg:hidden flex items-center gap-3">
-              <button
-                id="nav-mobile-signup-btn"
-                onClick={() => handleMobileForm("signup")}
-                className="text-xs font-bold text-white h-8 px-3 rounded-lg bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all cursor-pointer"
-              >
-                Dùng Thử AI
-              </button>
+              {currentUser ? (
+                <button
+                  id="nav-mobile-home-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/home");
+                  }}
+                  className="text-xs font-bold text-white h-8 px-3 rounded-lg bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all cursor-pointer"
+                >
+                  Bản Ghi Âm
+                </button>
+              ) : (
+                <button
+                  id="nav-mobile-signup-btn"
+                  onClick={() => handleMobileForm("signup")}
+                  className="text-xs font-bold text-white h-8 px-3 rounded-lg bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all cursor-pointer"
+                >
+                  Dùng Thử AI
+                </button>
+              )}
               <button
                 id="mobile-menu-toggle"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -200,23 +303,59 @@ export default function Navbar() {
 
               <div className="h-px my-4 bg-white/10" />
 
-              <div className="flex flex-col gap-3">
-                <button
-                  id="mobile-nav-login"
-                  onClick={() => handleMobileForm("login")}
-                  className="w-full h-12 rounded-xl border border-white/10 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 font-semibold cursor-pointer transition-all"
-                >
-                  Đăng Nhập
-                </button>
-                <button
-                  id="mobile-nav-signup"
-                  onClick={() => handleMobileForm("signup")}
-                  className="w-full h-12 rounded-xl text-center font-bold text-white bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <span>Đăng Ký Miễn Phí</span>
-                  <IconArrowUpRight className="w-4 h-4 shrink-0" />
-                </button>
-              </div>
+              {currentUser ? (
+                <div className="flex flex-col gap-3">
+                  <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
+                      {currentUser.email.substring(0, 2).toUpperCase()}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-bold text-white truncate">
+                        {currentUser.email.split("@")[0]}
+                      </p>
+                      <p className="text-[10px] font-mono text-slate-500 truncate mt-0.5">
+                        {currentUser.email}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate("/home");
+                    }}
+                    className="w-full h-12 rounded-xl text-center font-bold text-white bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    Vào Kho Bản Ghi
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full h-12 rounded-xl border border-rose-500/20 hover:border-rose-500/40 text-rose-400 hover:bg-rose-500/10 font-semibold cursor-pointer transition-all"
+                  >
+                    Đăng Xuất
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <button
+                    id="mobile-nav-login"
+                    onClick={() => handleMobileForm("login")}
+                    className="w-full h-12 rounded-xl border border-white/10 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 font-semibold cursor-pointer transition-all"
+                  >
+                    Đăng Nhập
+                  </button>
+                  <button
+                    id="mobile-nav-signup"
+                    onClick={() => handleMobileForm("signup")}
+                    className="w-full h-12 rounded-xl text-center font-bold text-white bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <span>Đăng Ký Miễn Phí</span>
+                    <IconArrowUpRight className="w-4 h-4 shrink-0" />
+                  </button>
+                </div>
+              )}
             </nav>
           </div>
         )}

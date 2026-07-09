@@ -37,7 +37,7 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
 
     forgotPasswordSendOtp: builder.query<BaseResponse<null>, string>({
       query: (email) => ({
-        url: "/api/auth/forgot-password/send-otp",
+        url: "/api/forget-password/send-otp",
         method: "GET",
         params: {
           email,
@@ -47,7 +47,7 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
 
     resetPassword: builder.mutation<BaseResponse<null>, ResetPasswordRequest>({
       query: (params) => ({
-        url: "/api/auth/forgot-password/reset",
+        url: "/api/forget-password/reset",
         method: "POST",
         body: params,
       }),
