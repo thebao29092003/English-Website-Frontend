@@ -107,7 +107,7 @@ export default function ForgotPasswordStep2() {
         showSuccessMessage("Đặt lại mật khẩu thành công!");
         navigate("/");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       showErrorMessage("Đặt lại mật khẩu thất bại");
       navigate("/");
     }
@@ -122,7 +122,7 @@ export default function ForgotPasswordStep2() {
         setOtpSentMessage("Một mã OTP mới đã được gửi tới email của bạn.");
         setTimeout(() => setOtpSentMessage(""), 5000);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       showErrorMessage("Lỗi khi gửi mã OTP");
     }
   };
@@ -163,7 +163,7 @@ export default function ForgotPasswordStep2() {
         {/* Back Button */}
         <button
           onClick={() => navigate("/forgot-password")}
-          className="mb-4 flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group w-fit hover:translate-x-[-2px] transition-transform duration-200 font-mono"
+          className="mb-4 flex items-center gap-2 text-sm text-gray-400 hover:text-white cursor-pointer group w-fit hover:translate-x-[-2px] transition-all duration-200 font-mono"
         >
           <IconArrowLeft className="w-4 h-4" /> Quay lại Bước 1
         </button>
@@ -175,9 +175,7 @@ export default function ForgotPasswordStep2() {
 
           {/* Header */}
           <div className="mb-6 text-center">
-            <h2 className="forgot-password-title">
-              Đặt Lại Mật Khẩu
-            </h2>
+            <h2 className="forgot-password-title">Đặt Lại Mật Khẩu</h2>
             <p className="forgot-password-subtitle">
               Nhập mã OTP được gửi tới{" "}
               <span className="text-purple-400 font-semibold">{email}</span>
@@ -205,9 +203,7 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.otp}
               className="flex flex-col w-full"
             >
-              <Label className="form-label">
-                Nhập Mã OTP
-              </Label>
+              <Label className="form-label">Nhập Mã OTP</Label>
               <Input
                 id="reset-otp-input"
                 maxLength={6}
@@ -227,9 +223,7 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.password}
               className="flex flex-col w-full"
             >
-              <Label className="form-label">
-                Mật khẩu mới
-              </Label>
+              <Label className="form-label">Mật khẩu mới</Label>
               <div className="form-password-wrapper">
                 <Input
                   id="reset-password-input"
@@ -349,9 +343,7 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.confirmPassword}
               className="flex flex-col w-full"
             >
-              <Label className="form-label">
-                Nhập lại Mật khẩu
-              </Label>
+              <Label className="form-label">Nhập lại Mật khẩu</Label>
               <div className="form-password-wrapper">
                 <Input
                   id="reset-confirm-password-input"
@@ -412,9 +404,7 @@ export default function ForgotPasswordStep2() {
                 isDisabled={isResetLoading}
                 className="h-12 button-primary"
               >
-                {isResetLoading ? (
-                  <span className="spinner" />
-                ) : null}
+                {isResetLoading ? <span className="spinner" /> : null}
                 Hoàn Tất Đặt Lại
               </Button>
             </div>

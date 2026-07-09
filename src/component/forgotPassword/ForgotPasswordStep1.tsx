@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   forgotPasswordStep1Schema as step1Schema,
@@ -14,7 +13,7 @@ import {
   FieldError,
   Button,
 } from "@heroui/react";
-import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { useLazyForgotPasswordSendOtpQuery } from "../../API/auth/authApi";
 import {
   showErrorMessage,
@@ -45,7 +44,7 @@ export default function ForgotPasswordStep1() {
         showSuccessMessage("Mã OTP đã được gửi tới email của bạn.");
         navigate("/reset-password", { state: { email: data.email } });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       showErrorMessage("Lỗi khi gửi email");
     }
   };
@@ -69,9 +68,7 @@ export default function ForgotPasswordStep1() {
 
           {/* Header */}
           <div className="mb-10 text-center">
-            <h2 className="forgot-password-title">
-              Quên Mật Khẩu
-            </h2>
+            <h2 className="forgot-password-title">Quên Mật Khẩu</h2>
             <p className="forgot-password-subtitle">
               Bước 1: Nhập email để nhận mã xác thực OTP.
             </p>

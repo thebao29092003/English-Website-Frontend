@@ -129,11 +129,11 @@ export default function Sidebar({
               className="flex items-center gap-3 overflow-hidden cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <div className="w-8 h-8 shrink-0 bg-gradient-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="w-8 h-8 shrink-0 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
                 <span className="font-black text-xs italic text-white">ES</span>
               </div>
               {!isCollapsed && (
-                <span className="font-display text-lg font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent truncate">
+                <span className="font-display text-lg font-bold tracking-tight bg-linear-to-r from-white to-slate-400 bg-clip-text text-transparent truncate">
                   EngSteps <span className="text-purple-400 text-xs">AI</span>
                 </span>
               )}
@@ -176,7 +176,7 @@ export default function Sidebar({
                     ${item.disabled ? "opacity-40 cursor-not-allowed" : ""}
                     ${
                       isActive
-                        ? "bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-l-3 border-purple-500 text-white shadow-md shadow-purple-500/5 font-semibold"
+                        ? "bg-linear-to-r from-blue-500/10 to-purple-500/10 border-l-3 border-purple-500 text-white shadow-md shadow-purple-500/5 font-semibold"
                         : "text-slate-400 hover:text-white hover:bg-white/5"
                     }
                   `}
@@ -207,7 +207,7 @@ export default function Sidebar({
             <div className="flex flex-col items-center gap-4 py-2">
               <div
                 title={`${getUserDisplayName()} (${currentUser?.email || "Học viên"})`}
-                className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 cursor-pointer select-none"
+                className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 cursor-pointer select-none"
               >
                 {getUserDisplayName().substring(0, 2).toUpperCase()}
               </div>
@@ -222,7 +222,7 @@ export default function Sidebar({
           ) : (
             <div className="flex flex-col gap-3 py-2">
               <div className="flex items-center gap-3 p-1.5 rounded-xl bg-white/2 border border-white/5">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
+                <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
                   {getUserDisplayName().substring(0, 2).toUpperCase()}
                 </div>
                 <div className="flex-1 overflow-hidden">

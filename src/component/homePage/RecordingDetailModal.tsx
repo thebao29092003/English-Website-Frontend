@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Mic } from "lucide-react";
-import type {
-  PronunciationItem,
-} from "../../types/landingPage.type";
+import type { PronunciationItem } from "../../types/landingPage.type";
 import type { Recording } from "../../types/recording.type";
 
 // Import sandbox parts
@@ -36,7 +34,9 @@ export default function RecordingDetailModal({
   recording,
 }: RecordingDetailModalProps) {
   const [activeTab, setActiveTab] = useState<TabId>("pron");
-  const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(null);
+  const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(
+    null,
+  );
   const [isTtsPlaying, setIsTtsPlaying] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -161,7 +161,7 @@ export default function RecordingDetailModal({
                 <ScoreOverview result={analysisResult} />
 
                 {/* Tabs Selection Header */}
-                <div className="flex bg-white/2 border-b border-white/5 sticky top-0 bg-[#06041c] z-20">
+                <div className="flex bg-[#06041c] border-b border-white/5 sticky top-0  z-20">
                   {TABS.map((tab) => (
                     <button
                       key={tab.id}
@@ -183,7 +183,9 @@ export default function RecordingDetailModal({
                   {activeTab === "pron" && (
                     <PronunciationTab
                       transcript={transcript}
-                      pronunciationFeedback={analysisResult.pronunciationFeedback}
+                      pronunciationFeedback={
+                        analysisResult.pronunciationFeedback
+                      }
                       selectedWord={selectedWord}
                       onSelectWord={setSelectedWord}
                       playTTS={playTTS}
@@ -194,7 +196,9 @@ export default function RecordingDetailModal({
                   {activeTab === "confidence" && (
                     <ConfidenceTab
                       transcript={transcript}
-                      pronunciationFeedback={analysisResult.pronunciationFeedback}
+                      pronunciationFeedback={
+                        analysisResult.pronunciationFeedback
+                      }
                       selectedWord={selectedWord}
                       onSelectWord={setSelectedWord}
                     />
