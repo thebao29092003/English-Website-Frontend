@@ -24,7 +24,7 @@
   scroll-behavior: smooth;
 }
 
-body {
+html, body {
   background-color: #030014;
   color: #f3f4f6;
   font-family: var(--font-sans);

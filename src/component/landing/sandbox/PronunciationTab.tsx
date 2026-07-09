@@ -113,7 +113,7 @@ export default function PronunciationTab({
             >
               Hướng Dẫn Phát Âm IPA
               {selectedWord.score !== undefined && (
-                <span className="px-2 py-1 rounded bg-white/10 text-xs font-bold">
+                <span className="px-2 py-1.5 rounded bg-white/10 text-xs font-bold mr-2">
                   Điểm: {selectedWord.score}/100
                 </span>
               )}
@@ -138,7 +138,7 @@ export default function PronunciationTab({
           <div className="grid grid-cols-2 gap-4 bg-black/40 p-4 rounded-xl mb-4 border border-white/5">
             <div>
               <p className="text-xs font-mono text-gray-500 uppercase">
-                Phát âm Chuẩn xác
+                Phát âm Chuẩn
               </p>
               <p className="text-lg font-black text-emerald-400 tracking-wide font-mono mt-0.5">
                 {selectedWord.expected}
@@ -146,7 +146,7 @@ export default function PronunciationTab({
             </div>
             <div>
               <p className="text-xs font-mono text-gray-500 uppercase">
-                Bạn đã phát âm
+                Phát âm gốc
               </p>
               <p
                 className={`text-lg font-black tracking-wide font-mono mt-0.5 ${

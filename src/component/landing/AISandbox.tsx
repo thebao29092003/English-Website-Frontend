@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import type {
   AnalysisResult,
@@ -41,6 +41,15 @@ export default function AISandbox() {
     null,
   );
   const [isTtsPlaying, setIsTtsPlaying] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
 
   const runAnalysis = (overrideTranscript?: string) => {
     const textToAnalyze =
@@ -82,41 +91,44 @@ export default function AISandbox() {
     }, 700);
   };
 
-  // Play audio sample using standard Web Speech Synthesis
+  // Play audio sample using Youdao TTS
   const playTTS = (text: string, id: string) => {
-    if (!window.speechSynthesis) return;
-
     // Stop any running speech
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
 
     if (isTtsPlaying === id) {
       setIsTtsPlaying(null);
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
+    const url = `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(text)}`;
+    const audio = new Audio(url);
+    audioRef.current = audio;
 
-    // Try to find a premium English voice
-    const voices = window.speechSynthesis.getVoices();
-    const premiumVoice = voices.find(
-      (v) =>
-        v.lang.startsWith("en") &&
-        (v.name.includes("Google") || v.name.includes("Natural")),
-    );
-    if (premiumVoice) {
-      utterance.voice = premiumVoice;
-    }
-
-    utterance.onend = () => {
-      setIsTtsPlaying(null);
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
     };
-    utterance.onerror = () => {
-      setIsTtsPlaying(null);
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
     };
 
     setIsTtsPlaying(id);
-    window.speechSynthesis.speak(utterance);
+    audio.play().catch((error) => {
+      console.error("Audio playback error:", error);
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
+    });
   };
 
   const handleStartDemo = () => {

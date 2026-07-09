@@ -72,7 +72,7 @@ const baseQueryWithReauth: BaseQueryFn<
       if (!refreshData?.value) {
         api.dispatch(logout());
         // chuyển về trang chủ
-        window.location.href = "/";
+        window.location.replace("/");
         return;
       }
 
@@ -90,7 +90,7 @@ const baseQueryWithReauth: BaseQueryFn<
         result = await baseQuery(args, api, extraOptions);
       } else {
         api.dispatch(logout());
-        window.location.href = "/";
+        window.location.replace("/");
       }
     } catch (error) {
       console.log("refreshResult error", error);

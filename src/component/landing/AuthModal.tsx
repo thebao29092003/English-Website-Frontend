@@ -96,10 +96,10 @@ export default function AuthModal({
 
             {/* Render appropriate form */}
             {tab === "login" ? (
-              <LoginForm />
+              <LoginForm setAuthOpen={onClose} />
             ) : (
               // <></>
-              <SignupForm />
+              <SignupForm setAuthOpen={onClose} />
             )}
           </>
         </motion.div>

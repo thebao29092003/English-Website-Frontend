@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Form,
@@ -20,20 +20,13 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { loginSchema, type LoginValues } from "./schema/langdingSchema";
 
-const loginSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Địa chỉ email không hợp lệ")
-    .required("Vui lòng nhập email"),
-  password: yup.string().required("Vui lòng nhập mật khẩu"),
-});
-
-// nó dịch ngược từ schema của yup thành type trong typescript, khi thay đổi schema thì type
-// nó thay đổi theo
-type LoginValues = yup.InferType<typeof loginSchema>;
-
-export default function LoginForm() {
+export default function LoginForm({
+  setAuthOpen,
+}: {
+  setAuthOpen: (open: boolean) => void;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
   const [login, { isLoading, error }] = useLoginMutation();
@@ -51,19 +44,24 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginValues) => {
-    const response = await login({
-      username: data.email,
-      password: data.password,
-    }).unwrap();
-    console.log("result", response);
-    if (response.success) {
-      const decodedToken = jwtDecode(response.value);
-      dispatch(
-        setCredentials({
-          user: decodedToken as User,
-          token: response.value,
-        }),
-      );
+    try {
+      const response = await login({
+        username: data.email,
+        password: data.password,
+      }).unwrap();
+      if (response.success) {
+        const decodedToken = jwtDecode(response.value);
+        dispatch(
+          setCredentials({
+            user: decodedToken as User,
+            token: response.value,
+          }),
+        );
+        showSuccessMessage("Đăng nhập thành công");
+        setAuthOpen(false);
+      }
+    } catch (error) {
+      showErrorMessage("Đăng nhập thất bại");
     }
   };
 
@@ -126,19 +124,20 @@ export default function LoginForm() {
           {errors.password?.message}
         </FieldError>
       </TextField>
-      <a
-        href="#"
+      <Link
+        to="/forgot-password"
+        onClick={() => setAuthOpen(false)}
         className="flex justify-center text-sm text-blue-400 mt-[-4px] hover:underline"
       >
         Quên mật khẩu?
-      </a>
+      </Link>
 
       {/* Submit button */}
       <Button
         id="login-submit-btn"
         type="submit"
         isDisabled={isLoading}
-        className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer"
+        className="w-full h-12 mt-4 button-primary"
       >
         {isLoading ? (
           <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

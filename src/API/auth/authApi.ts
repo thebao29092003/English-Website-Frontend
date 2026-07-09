@@ -3,6 +3,7 @@ import type {
   LoginRequest,
   LoginResponse,
   RegisterRequestStep2,
+  ResetPasswordRequest,
 } from "../types/authApi.type";
 import type { BaseResponse } from "../types/baseResponse";
 
@@ -18,7 +19,7 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
 
     getOtp: builder.query<BaseResponse<null>, string>({
       query: (email) => ({
-        url: "/api/auth/register",
+        url: "/api/auth/register/send-otp",
         method: "GET",
         params: {
           email,
@@ -33,8 +34,32 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
         body: params,
       }),
     }),
+
+    forgotPasswordSendOtp: builder.query<BaseResponse<null>, string>({
+      query: (email) => ({
+        url: "/api/auth/forgot-password/send-otp",
+        method: "GET",
+        params: {
+          email,
+        },
+      }),
+    }),
+
+    resetPassword: builder.mutation<BaseResponse<null>, ResetPasswordRequest>({
+      query: (params) => ({
+        url: "/api/auth/forgot-password/reset",
+        method: "POST",
+        body: params,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useGetOtpQuery, useRegisterMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useLazyGetOtpQuery,
+  useRegisterMutation,
+  useLazyForgotPasswordSendOtpQuery,
+  useResetPasswordMutation,
+} = authApi;
+

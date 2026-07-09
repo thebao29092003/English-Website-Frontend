@@ -145,7 +145,7 @@ export default function Navbar() {
             <div className="lg:hidden flex items-center gap-3">
               <button
                 id="nav-mobile-signup-btn"
-                onClick={() => setAuthTab("signup")}
+                onClick={() => handleMobileForm("signup")}
                 className="text-xs font-bold text-white h-8 px-3 rounded-lg bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 transition-all cursor-pointer"
               >
                 Dùng Thử AI
