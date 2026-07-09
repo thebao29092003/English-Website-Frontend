@@ -35,7 +35,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold mb-6 w-fit backdrop-blur-sm transition-all border-violet-500/30 bg-violet-500/10 text-violet-400"
         >
           <IconAnalyze className="w-4.5 h-4.5 text-purple-500 animate-pulse" />
-          <span>✨ NEXT-GEN AI EVALUATION — CÔNG NGHỆ MỚI NHẤT 2026</span>
+          <span>✨ NEXT-GEN AI EVALUATION — CÔNG NGHỆ MỚI 2026</span>
         </motion.div>
 
         {/* Headline */}
@@ -90,7 +90,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
         >
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              99.2%
+              93.32%
             </p>
             <p className="text-xs font-medium font-mono uppercase tracking-wider mt-1 flex items-center justify-center gap-1 text-gray-400">
               <IconShieldCheck stroke={2} color="oklch(62.3% 0.214 259.815)" />{" "}
@@ -99,7 +99,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              500+
+              200+
             </p>
             <p className="text-statistic">
               <IconAward stroke={2} color="oklch(62.7% 0.265 303.9)" />
@@ -108,7 +108,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              1K+
+              100+
             </p>
             <p className="text-statistic">
               {" "}
@@ -118,7 +118,7 @@ export default function Hero({ onOpenAuth }: HeroProps) {
           </div>
           <div className="text-center">
             <p className="font-display text-2xl sm:text-3xl font-black transition-colors text-white">
-              &lt; 6s
+              &lt; 8s
             </p>
             <p className="text-statistic">
               {" "}

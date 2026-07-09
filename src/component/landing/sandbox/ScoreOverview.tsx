@@ -1,4 +1,4 @@
-import type { AnalysisResult } from "../../../types/landingPageType";
+import type { AnalysisResult } from "../../../types/landingPage.type";
 interface ScoreOverviewProps {
   result: AnalysisResult;
 }
@@ -85,6 +85,28 @@ export default function ScoreOverview({ result }: ScoreOverviewProps) {
             />
           </div>
         </div>
+        {/* Metric 5 */}
+        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm col-span-2 md:col-span-1">
+          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
+            Dễ hiểu
+          </span>
+          <div className="flex items-baseline gap-1.5 mb-2">
+            <span className="text-xl font-black text-emerald-400 leading-none">
+              {result.skills.comprehensibility.score}%
+            </span>
+            <span className="text-[10px] font-bold text-emerald-300 font-mono">
+              {result.skills.comprehensibility.grade}
+            </span>
+          </div>
+          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+            <div
+              style={{
+                width: `${result.skills.comprehensibility.score}%`,
+              }}
+              className="h-full bg-emerald-400"
+            />
+          </div>
+        </div>
         {/* Metric 2 */}
         <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
           <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
@@ -102,26 +124,6 @@ export default function ScoreOverview({ result }: ScoreOverviewProps) {
             <div
               style={{ width: `${result.skills.fluency.score}%` }}
               className="h-full bg-violet-400"
-            />
-          </div>
-        </div>
-        {/* Metric 3 */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Từ vựng
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-indigo-400 leading-none">
-              {result.skills.vocabulary.score}%
-            </span>
-            <span className="text-[10px] font-bold text-indigo-300 font-mono">
-              {result.skills.vocabulary.grade}
-            </span>
-          </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div
-              style={{ width: `${result.skills.vocabulary.score}%` }}
-              className="h-full bg-indigo-400"
             />
           </div>
         </div>
@@ -145,25 +147,23 @@ export default function ScoreOverview({ result }: ScoreOverviewProps) {
             />
           </div>
         </div>
-        {/* Metric 5 */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm col-span-2 md:col-span-1">
+        {/* Metric 3 */}
+        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
           <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Dễ hiểu
+            Từ vựng
           </span>
           <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-emerald-400 leading-none">
-              {result.skills.comprehensibility.score}%
+            <span className="text-xl font-black text-indigo-400 leading-none">
+              {result.skills.vocabulary.score}%
             </span>
-            <span className="text-[10px] font-bold text-emerald-300 font-mono">
-              {result.skills.comprehensibility.grade}
+            <span className="text-[10px] font-bold text-indigo-300 font-mono">
+              {result.skills.vocabulary.grade}
             </span>
           </div>
           <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
             <div
-              style={{
-                width: `${result.skills.comprehensibility.score}%`,
-              }}
-              className="h-full bg-emerald-400"
+              style={{ width: `${result.skills.vocabulary.score}%` }}
+              className="h-full bg-indigo-400"
             />
           </div>
         </div>

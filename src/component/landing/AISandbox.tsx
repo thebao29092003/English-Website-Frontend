@@ -1,36 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import type {
   AnalysisResult,
   PronunciationItem,
-} from "../../types/landingPageType";
-import { MOCK_ANALYSIS_RESULT } from "./sandbox/MockData";
+} from "../../types/landingPage.type";
+import { MOCK_ANALYSIS_RESULT } from "./MockData";
 
 // Import modular sub-components from sandbox/
 import LoadingState from "./sandbox/LoadingState";
 import WelcomeState from "./sandbox/WelcomeState";
 import ScoreOverview from "./sandbox/ScoreOverview";
 import PronunciationTab from "./sandbox/PronunciationTab";
+import ConfidenceTab from "./sandbox/ConfidenceTab";
 import GrammarTab from "./sandbox/GrammarTab";
 import VocabularyTab from "./sandbox/VocabularyTab";
 import FluencyTab from "./sandbox/FluencyTab";
+
+type TabId = "pron" | "confidence" | "fluency" | "gram" | "vocab";
+
+interface TabDefinition {
+  id: TabId;
+  label: string;
+}
+
+const TABS: TabDefinition[] = [
+  { id: "pron", label: "Phát Âm" },
+  { id: "confidence", label: "Độ Dễ Hiểu" },
+  { id: "fluency", label: "Trôi Chảy" },
+  { id: "gram", label: "Ngữ Pháp" },
+  { id: "vocab", label: "Từ Vựng" },
+];
 
 export default function AISandbox() {
   const [transcript, setTranscript] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisStatus, setAnalysisStatus] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    "pron" | "gram" | "vocab" | "fluency"
-  >("pron");
+  const [activeTab, setActiveTab] = useState<TabId>("pron");
   const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(
     null,
   );
   const [isTtsPlaying, setIsTtsPlaying] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
 
   const runAnalysis = (overrideTranscript?: string) => {
     const textToAnalyze =
-      overrideTranscript.trim() !== undefined ? overrideTranscript : transcript;
+      overrideTranscript?.trim() !== undefined
+        ? overrideTranscript
+        : transcript;
     if (!textToAnalyze) return;
 
     setIsAnalyzing(true);
@@ -66,41 +91,44 @@ export default function AISandbox() {
     }, 700);
   };
 
-  // Play audio sample using standard Web Speech Synthesis
+  // Play audio sample using Youdao TTS
   const playTTS = (text: string, id: string) => {
-    if (!window.speechSynthesis) return;
-
     // Stop any running speech
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
 
     if (isTtsPlaying === id) {
       setIsTtsPlaying(null);
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
+    const url = `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(text)}`;
+    const audio = new Audio(url);
+    audioRef.current = audio;
 
-    // Try to find a premium English voice
-    const voices = window.speechSynthesis.getVoices();
-    const premiumVoice = voices.find(
-      (v) =>
-        v.lang.startsWith("en") &&
-        (v.name.includes("Google") || v.name.includes("Natural")),
-    );
-    if (premiumVoice) {
-      utterance.voice = premiumVoice;
-    }
-
-    utterance.onend = () => {
-      setIsTtsPlaying(null);
+    audio.onended = () => {
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
     };
-    utterance.onerror = () => {
-      setIsTtsPlaying(null);
+    audio.onerror = () => {
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
     };
 
     setIsTtsPlaying(id);
-    window.speechSynthesis.speak(utterance);
+    audio.play().catch((error) => {
+      console.error("Audio playback error:", error);
+      if (audioRef.current === audio) {
+        setIsTtsPlaying(null);
+        audioRef.current = null;
+      }
+    });
   };
 
   const handleStartDemo = () => {
@@ -159,50 +187,20 @@ export default function AISandbox() {
 
               {/* Tabs selection header */}
               <div className="flex bg-white/2 border-b border-white/5">
-                <button
-                  id="tab-pron"
-                  onClick={() => setActiveTab("pron")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "pron"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Phát Âm
-                </button>
-                <button
-                  id="tab-gram"
-                  onClick={() => setActiveTab("gram")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "gram"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Ngữ Pháp
-                </button>
-                <button
-                  id="tab-vocab"
-                  onClick={() => setActiveTab("vocab")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "vocab"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Từ Vựng
-                </button>
-                <button
-                  id="tab-fluency"
-                  onClick={() => setActiveTab("fluency")}
-                  className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-                    activeTab === "fluency"
-                      ? "border-purple-500 text-white bg-purple-500/5 font-bold"
-                      : "border-transparent text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Trôi Chảy
-                </button>
+                {TABS.map((tab) => (
+                  <button
+                    id={`tab-${tab.id}`}
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex-1 py-4 text-xs sm:text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+                      activeTab === tab.id
+                        ? "border-purple-500 text-white bg-purple-500/5 font-bold"
+                        : "border-transparent text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
               {/* Tab content area */}
@@ -215,6 +213,16 @@ export default function AISandbox() {
                     selectedWord={selectedWord}
                     onSelectWord={setSelectedWord}
                     playTTS={playTTS}
+                  />
+                )}
+
+                {/* CONFIDENCE TAB */}
+                {activeTab === "confidence" && (
+                  <ConfidenceTab
+                    transcript={transcript}
+                    pronunciationFeedback={result.pronunciationFeedback}
+                    selectedWord={selectedWord}
+                    onSelectWord={setSelectedWord}
                   />
                 )}
 
@@ -236,7 +244,10 @@ export default function AISandbox() {
 
                 {/* FLUENCY TIMELINE TAB */}
                 {activeTab === "fluency" && (
-                  <FluencyTab fluencyTimeline={result.fluencyTimeline} />
+                  <FluencyTab
+                    fluencyTimeline={result.fluencyTimeline}
+                    wordsPerMinute={result.wordsPerMinute}
+                  />
                 )}
               </div>
             </motion.div>
