@@ -165,7 +165,7 @@ export default function Navbar() {
                       onClick={() =>
                         setProfileDropdownOpen(!profileDropdownOpen)
                       }
-                      className="transition-transform border border-purple-500/50 rounded-full w-9 h-9 shrink-0 cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md select-none focus:outline-none"
+                      className="transition-transform border border-purple-500/50 rounded-full w-9 h-9 shrink-0 cursor-pointer overflow-hidden flex items-center justify-center bg-linear-to-brrom-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md select-none focus:outline-none"
                     >
                       {currentUser?.email?.substring(0, 2)?.toUpperCase()}
                     </button>
@@ -306,7 +306,7 @@ export default function Navbar() {
               {currentUser ? (
                 <div className="flex flex-col gap-3">
                   <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
+                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
                       {currentUser.email.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="overflow-hidden">

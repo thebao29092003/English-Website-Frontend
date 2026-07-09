@@ -1,18 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../API/hooks/hooks";
-import { selectCurrentUser, logout } from "../API/auth/authSlice";
-import {
-  Mic,
-  Sparkles,
-  BookOpen,
-  BarChart3,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  LogOut,
-  X,
-} from "lucide-react";
-import { showSuccessMessage } from "../utility/notification";
+import { useAppDispatch, useAppSelector } from "../../API/hooks/hooks";
+import { selectCurrentUser, logout } from "../../API/auth/authSlice";
+import { ChevronLeft, ChevronRight, LogOut, X } from "lucide-react";
+import { showSuccessMessage } from "../notification";
+import { MenuItems } from "./MenuItems";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -32,76 +23,26 @@ export default function Sidebar({
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
 
-  const menuItems = [
-    {
-      id: "records",
-      label: "Bảng ghi âm",
-      icon: Mic,
-      path: "/home",
-    },
-    {
-      id: "speaking",
-      label: "Luyện nói AI",
-      icon: Sparkles,
-      path: "/#ai-sandbox-section",
-      isAnchor: true,
-    },
-    {
-      id: "vocabulary",
-      label: "Từ vựng",
-      icon: BookOpen,
-      path: "/vocabulary",
-      disabled: true,
-    },
-    {
-      id: "stats",
-      label: "Thống kê",
-      icon: BarChart3,
-      path: "/statistics",
-      disabled: true,
-    },
-    {
-      id: "settings",
-      label: "Cài đặt",
-      icon: Settings,
-      path: "/settings",
-      disabled: true,
-    },
-  ];
-
   const handleLogout = () => {
-    dispatch(logout());
+    // dispatch(logout());
     showSuccessMessage("Đăng xuất thành công");
     navigate("/");
   };
 
-  const handleNavigation = (item: (typeof menuItems)[0]) => {
+  const handleNavigation = (item: (typeof MenuItems)[0]) => {
     if (item.disabled) return;
     setMobileOpen(false);
-    if (item.isAnchor) {
-      navigate("/");
-      setTimeout(() => {
-        const element = document.getElementById("ai-sandbox-section");
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else {
-      navigate(item.path);
-    }
+    navigate(item.path);
   };
 
   const getUserDisplayName = () => {
     if (!currentUser) return "Học viên EngSteps";
-    if (currentUser.email) {
-      return currentUser.email.split("@")[0];
-    }
-    return "User";
+    return currentUser.toString();
   };
 
   const activeItem =
-    menuItems.find((item) => {
-      if (item.isAnchor) return false;
+    MenuItems.find((item) => {
+      if (item.disabled) return false;
       return location.pathname === item.path;
     })?.id || "records";
 
@@ -160,7 +101,7 @@ export default function Sidebar({
 
           {/* Navigation Links */}
           <nav className="p-3 space-y-1.5 mt-4">
-            {menuItems.map((item) => {
+            {MenuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeItem === item.id;
 
@@ -169,11 +110,8 @@ export default function Sidebar({
                   key={item.id}
                   onClick={() => handleNavigation(item)}
                   disabled={item.disabled}
-                  title={
-                    item.disabled ? `${item.label} (Sắp ra mắt)` : item.label
-                  }
-                  className={`w-full flex items-center gap-3.5 py-3 px-3.5 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer text-left
-                    ${item.disabled ? "opacity-40 cursor-not-allowed" : ""}
+                  className={`w-full flex items-center gap-3.5 py-3 px-3.5 rounded-xl font-medium text-sm transition-all duration-200 text-left
+                    ${item.disabled ? "opacity-40 cursor-default" : ""}
                     ${
                       isActive
                         ? "bg-linear-to-r from-blue-500/10 to-purple-500/10 border-l-3 border-purple-500 text-white shadow-md shadow-purple-500/5 font-semibold"
@@ -183,7 +121,7 @@ export default function Sidebar({
                 >
                   <Icon
                     size={20}
-                    className={isActive ? "text-purple-400" : "text-slate-400"}
+                    className={isActive ? "text-purple-400" : " text-slate-400"}
                   />
                   {!isCollapsed && (
                     <span className="flex-1 truncate">
@@ -209,7 +147,7 @@ export default function Sidebar({
                 title={`${getUserDisplayName()} (${currentUser?.email || "Học viên"})`}
                 className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 cursor-pointer select-none"
               >
-                {getUserDisplayName().substring(0, 2).toUpperCase()}
+                {getUserDisplayName()}
               </div>
               <button
                 onClick={handleLogout}
