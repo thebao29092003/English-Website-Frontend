@@ -3,7 +3,7 @@ import { Alert } from "@heroui/react";
 
 const defaultOptions: ToastOptions = {
   position: "top-right",
-  autoClose: 3000,
+  autoClose: 4500,
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,
@@ -50,11 +50,7 @@ const ToastAlert = ({ status, title, description }: ToastAlertProps) => {
 
 export const showSuccessMessage = (message: string) => {
   toast(
-    <ToastAlert
-      status="success"
-      title="Thành công"
-      description={message}
-    />,
+    <ToastAlert status="success" title="Thành công" description={message} />,
     {
       ...defaultOptions,
       style: {
@@ -73,11 +69,7 @@ export const showSuccessMessage = (message: string) => {
 
 export const showErrorMessage = (message: string) => {
   toast.error(
-    <ToastAlert
-      status="danger"
-      title="Lỗi xảy ra"
-      description={message}
-    />,
+    <ToastAlert status="danger" title="Lỗi xảy ra" description={message} />,
     {
       ...defaultOptions,
       style: {

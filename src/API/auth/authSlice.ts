@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AuthState, LoginResponse, User } from "../types/authApi.type";
+import type { AuthState, User } from "../types/authApi.type";
 import type { RootState } from "../store";
 
 // Kiểm tra xem có token trong localStorage không
