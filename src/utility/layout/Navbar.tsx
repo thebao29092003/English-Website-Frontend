@@ -11,6 +11,8 @@ import { URL_FRONT_END } from "../../API/urlBase";
 import { useAppDispatch, useAppSelector } from "../../API/hooks/hooks";
 import { selectCurrentUser, logout } from "../../API/auth/authSlice";
 import { showSuccessMessage } from "../../utility/notification";
+import { useLogoutMutation } from "../../API/auth/logoutApi";
+import { showConfirmDialog } from "../confirmDialog";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,6 +25,7 @@ export default function Navbar() {
 
   const dispatch = useAppDispatch();
   const currentUser = useAppSelector(selectCurrentUser);
+  const [logoutTrigger] = useLogoutMutation();
 
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -85,9 +88,22 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
-    showSuccessMessage("Đăng xuất thành công");
-    navigate("/");
+    showConfirmDialog({
+      title: "Xác nhận đăng xuất",
+      message: "Bạn có chắc chắn muốn đăng xuất khỏi tài khoản không?",
+      confirmText: "Đăng xuất",
+      cancelText: "Hủy bỏ",
+      onConfirm: async () => {
+        try {
+          await logoutTrigger().unwrap();
+        } catch (error) {
+          console.error("Logout API error:", error);
+        }
+        dispatch(logout());
+        showSuccessMessage("Đăng xuất thành công");
+        navigate("/");
+      },
+    });
   };
 
   return (
@@ -165,9 +181,9 @@ export default function Navbar() {
                       onClick={() =>
                         setProfileDropdownOpen(!profileDropdownOpen)
                       }
-                      className="transition-transform border border-purple-500/50 rounded-full w-9 h-9 shrink-0 cursor-pointer overflow-hidden flex items-center justify-center bg-linear-to-brrom-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md select-none focus:outline-none"
+                      className="transition-transform border border-purple-500/50 rounded-full w-9 h-9 shrink-0 cursor-pointer overflow-hidden flex items-center justify-center bg-linear-to-br from-purple-500 to-indigo-600 text-white font-bold text-sm shadow-md select-none focus:outline-none"
                     >
-                      {currentUser?.email?.substring(0, 2)?.toUpperCase()}
+                      {currentUser?.Email?.substring(0, 2)?.toUpperCase()}
                     </button>
                     {profileDropdownOpen && (
                       <div className="absolute right-0 mt-2 w-56 bg-[#0c0a24] border border-white/10 rounded-xl p-1 shadow-2xl text-white z-50">
@@ -176,7 +192,7 @@ export default function Navbar() {
                             Đang đăng nhập bằng
                           </p>
                           <p className="font-bold text-white text-xs truncate mt-0.5">
-                            {currentUser.email}
+                            {currentUser.Email}
                           </p>
                         </div>
                         <button
@@ -186,16 +202,7 @@ export default function Navbar() {
                           }}
                           className="w-full text-left py-2.5 px-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-all cursor-pointer"
                         >
-                          Bản ghi âm của tôi
-                        </button>
-                        <button
-                          onClick={() => {
-                            navigate("/");
-                            setProfileDropdownOpen(false);
-                          }}
-                          className="w-full text-left py-2.5 px-3 hover:bg-white/5 rounded-lg text-sm text-slate-300 hover:text-white transition-all cursor-pointer"
-                        >
-                          Trang chủ Landing
+                          Hồ sơ
                         </button>
                         <button
                           onClick={() => {
@@ -307,14 +314,14 @@ export default function Navbar() {
                 <div className="flex flex-col gap-3">
                   <div className="p-3.5 rounded-xl bg-white/2 border border-white/5 flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shadow-md border border-purple-500/50 shrink-0 select-none">
-                      {currentUser.email.substring(0, 2).toUpperCase()}
+                      {currentUser.Email.substring(0, 2).toUpperCase()}
                     </div>
                     <div className="overflow-hidden">
                       <p className="text-sm font-bold text-white truncate">
-                        {currentUser.email.split("@")[0]}
+                        {currentUser.Email.split("@")[0]}
                       </p>
                       <p className="text-[10px] font-mono text-slate-500 truncate mt-0.5">
-                        {currentUser.email}
+                        {currentUser.Email}
                       </p>
                     </div>
                   </div>

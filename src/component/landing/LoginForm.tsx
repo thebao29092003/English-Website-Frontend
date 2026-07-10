@@ -53,6 +53,7 @@ export default function LoginForm({
       }).unwrap();
       if (response.success && response.value) {
         const decodedToken = jwtDecode<User>(response.value);
+        console.log("decodedToken", decodedToken);
         dispatch(
           setCredentials({
             user: decodedToken,

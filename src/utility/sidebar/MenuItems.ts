@@ -1,12 +1,30 @@
-import { Mic, Sparkles, BookOpen, BarChart3, Settings } from "lucide-react";
+import {
+  Mic,
+  Sparkles,
+  BookOpen,
+  BarChart3,
+  Settings,
+  Badge,
+  Activity,
+} from "lucide-react";
+
+interface SubMenuItem {
+  id: string;
+  label: string;
+  path: string;
+  disabled?: boolean;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+}
 
 interface MenuItem {
   id: string;
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
-  path: string;
+  path?: string;
   disabled?: boolean;
+  children?: SubMenuItem[];
 }
+
 export const MenuItems: MenuItem[] = [
   {
     id: "records",
@@ -18,7 +36,20 @@ export const MenuItems: MenuItem[] = [
     id: "speaking",
     label: "Luyện nói AI",
     icon: Sparkles,
-    path: "/home",
+    children: [
+      {
+        id: "speaking-topic",
+        label: "Nói theo chủ đề",
+        path: "/home",
+        icon: Badge,
+      },
+      {
+        id: "speaking-ielts",
+        label: "Luyện đề IELTS",
+        path: "/home",
+        icon: Activity,
+      },
+    ],
   },
   {
     id: "vocabulary",

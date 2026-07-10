@@ -10,24 +10,32 @@ import LayoutUser from "./utility/layout/LayoutUser";
 import ErrorPage from "./utility/ErrorPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAppSelector } from "./API/hooks/hooks";
+import { selectCurrentUser } from "./API/auth/authSlice";
+import LayoutUserHome from "./utility/layout/LayoutUserHome";
 
 export default function App() {
+  const currentUser = useAppSelector(selectCurrentUser);
   return (
     <>
       <Routes>
         <Route path="/" element={<LayoutUser />}>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordStep1 />} />
-          <Route path="/reset-password" element={<ForgotPasswordStep2 />} />
+          <Route index element={<LandingPage />} />
+          <Route path="terms" element={<TermsPage />} />
+          <Route path="privacy" element={<PrivacyPage />} />
+          <Route path="contact" element={<ContactPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordStep1 />} />
+          <Route path="reset-password" element={<ForgotPasswordStep2 />} />
         </Route>
-        <Route path="/home" element={<HomePage />} />
+        {currentUser && currentUser.Role === "USER" && (
+          <Route path="home" element={<LayoutUserHome />}>
+            <Route index element={<HomePage />} />
+          </Route>
+        )}
+
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer />
     </>
   );
 }
-
