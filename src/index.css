@@ -7,6 +7,7 @@
 
 /* Feature styles */
 @import "./styles/landing.css";
+@import "./styles/forgotPassword.css";
 
 /* ==========================================================================
    DESIGN TOKENS
@@ -44,3 +45,27 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: #312e81;
 }
+
+/* ==========================================================================
+   HEROUI SKELETON CUSTOM THEME OVERRIDES
+   ========================================================================== */
+/* Set global background for all skeletons to translucent violet-blue */
+.bg-default-300,
+.bg-default-200,
+[data-loading="true"] {
+  background-color: rgba(99, 102, 241, 0.08) !important; /* indigo-500/8 */
+}
+
+/* Custom shimmer gradient sliding between violet and blue */
+[data-loading="true"]::before {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.15) 25%,  /* violet-500/15 */
+    rgba(59, 130, 246, 0.25) 50%,   /* blue-500/25 */
+    rgba(139, 92, 246, 0.15) 75%,  /* violet-500/15 */
+    transparent 100%
+  ) !important;
+}
+
+

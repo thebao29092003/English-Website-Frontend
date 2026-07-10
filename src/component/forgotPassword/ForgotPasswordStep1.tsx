@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   forgotPasswordStep1Schema as step1Schema,
@@ -14,14 +13,13 @@ import {
   FieldError,
   Button,
 } from "@heroui/react";
-import { IconArrowRight, IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowRight } from "@tabler/icons-react";
 import { useLazyForgotPasswordSendOtpQuery } from "../../API/auth/authApi";
 import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
 import ScrollToTop from "../../utility/ScrollToTop";
-
 
 export default function ForgotPasswordStep1() {
   const navigate = useNavigate();
@@ -45,43 +43,34 @@ export default function ForgotPasswordStep1() {
       if (response.success) {
         showSuccessMessage("Mã OTP đã được gửi tới email của bạn.");
         navigate("/reset-password", { state: { email: data.email } });
-      } else {
-        showErrorMessage(response.message || "Gửi mã OTP thất bại");
       }
-    } catch (err: any) {
-      console.warn(
-        "Forgot password API not ready, falling back to mock transition:",
-        err,
-      );
-      showSuccessMessage("Giao diện: Một mã OTP demo đã được gửi.");
-      navigate("/reset-password", { state: { email: data.email } });
+    } catch (err: unknown) {
+      showErrorMessage("Lỗi khi gửi email");
     }
   };
 
   return (
     <div
       id="forgot-password-step1-root"
-      className="w-full min-h-screen overflow-x-hidden bg-[#030014] text-white dark flex flex-col items-center justify-center relative px-4 pt-28 pb-16 animate-fade-in"
+      className="forgot-password-root dark animate-fade-in"
     >
       <ScrollToTop />
 
       {/* Decorative background glows */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="glow-orb top-20 left-1/4 w-96 h-96 bg-purple-500/10 blur-[120px]" />
+      <div className="glow-orb bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 blur-[120px]" />
 
       <div className="max-w-md w-full relative z-10 ">
         {/* Card container */}
-        <div className="relative overflow-hidden rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl bg-[#030014]/85 border border-white/10 text-white w-full">
+        <div className="forgot-password-card">
           {/* Top glowing bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-blue-500 via-purple-500 to-pink-500" />
+          <div className="forgot-password-glow-bar" />
 
           {/* Header */}
           <div className="mb-10 text-center">
-            <h2 className="text-2xl font-black tracking-tight mb-2">
-              Quên Mật Khẩu
-            </h2>
-            <p className="text-sm text-gray-400">
-              Bước 1: Nhập email để nhận mã xác thực OTP đặt lại mật khẩu.
+            <h2 className="forgot-password-title">Quên Mật Khẩu</h2>
+            <p className="forgot-password-subtitle">
+              Bước 1: Nhập email để nhận mã xác thực OTP.
             </p>
           </div>
 
@@ -98,16 +87,14 @@ export default function ForgotPasswordStep1() {
               isInvalid={!!errors.email}
               className="flex flex-col w-full"
             >
-              <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-                Địa chỉ Email
-              </Label>
+              <Label className="form-label">Địa chỉ Email</Label>
               <Input
                 id="forgot-email-input"
                 placeholder="name@company.com"
-                className="w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500"
+                className="form-input"
                 {...register("email")}
               />
-              <FieldError className="text-sm text-rose-500 mt-1 block">
+              <FieldError className="form-error">
                 {errors.email?.message}
               </FieldError>
             </TextField>
@@ -118,9 +105,7 @@ export default function ForgotPasswordStep1() {
               isDisabled={isLoading}
               className="w-full h-12 mt-4 button-primary"
             >
-              {isLoading ? (
-                <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-              ) : null}
+              {isLoading ? <span className="spinner" /> : null}
               Gửi Mã OTP
               <IconArrowRight className="w-4.5 h-4.5" />
             </Button>

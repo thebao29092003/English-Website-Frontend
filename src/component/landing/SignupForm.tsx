@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import {
   useLazyGetOtpQuery,
@@ -20,6 +21,7 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ setAuthOpen }: SignupFormProps) {
+  const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState<Partial<Step1Values & Step2Values>>(
     {},
@@ -85,6 +87,7 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
       if (response.success) {
         showSuccessMessage("Đăng ký tài khoản thành công!");
         setAuthOpen(false);
+        navigate("/home");
       }
     } catch (err: any) {
       showErrorMessage("Đăng ký thất bại");

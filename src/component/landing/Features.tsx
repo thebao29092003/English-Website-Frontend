@@ -16,23 +16,23 @@ export default function Features({ onOpenAuth }: FeaturesProps) {
   return (
     <section
       id="features-section"
-      className="py-20 bg-[#030014] relative overflow-hidden"
+      className="landing-section"
     >
       {/* Background radial glow */}
-      <div className="absolute top-[5%] right-[-5%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute bottom-[5%] left-[-5%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[130px] pointer-events-none" />
-      <div className="absolute top-[40%] left-[20%] w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[110px] pointer-events-none" />
+      <div className="glow-orb top-[5%] right-[-5%] w-[600px] h-[600px] bg-indigo-600/10 blur-[130px]" />
+      <div className="glow-orb bottom-[5%] left-[-5%] w-[600px] h-[600px] bg-purple-600/10 blur-[130px]" />
+      <div className="glow-orb top-[40%] left-[20%] w-[400px] h-[400px] bg-blue-500/5 blur-[110px]" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="landing-container">
         {/* GOALS COMPONENT: What do you want English to do for you */}
         <div className="text-center mb-16">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">
-            <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400 glow-purple">
+          <h2 className="landing-heading">
+            <span className="gradient-text-purple">
               Mục Tiêu
             </span>{" "}
             Tiếng Anh Của Bạn ?
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+          <p className="landing-description">
             EngSteps được tối ưu hóa cho mọi lộ trình cá nhân hóa, giúp bạn đạt
             được bứt phá trong cuộc sống thực tế.
           </p>
@@ -44,7 +44,7 @@ export default function Features({ onOpenAuth }: FeaturesProps) {
               id={`goal-card-${goal.id}`}
               key={goal.id}
               onClick={() => onOpenAuth("login")}
-              className="rounded-3xl cursor-pointer overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 p-6 hover:border-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col group relative"
+              className="rounded-3xl cursor-pointer overflow-hidden glass-card p-6 hover:border-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col group relative"
             >
               <div className="relative h-44 rounded-xl overflow-hidden mb-6 border border-white/5">
                 <img
@@ -76,7 +76,7 @@ export default function Features({ onOpenAuth }: FeaturesProps) {
             <div>
               <h2 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight mt-1 mb-4">
                 Đánh Giá{" "}
-                <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400 glow-purple">
+                <span className="gradient-text-purple">
                   Đa Chiều
                 </span>
               </h2>
@@ -135,10 +135,10 @@ export default function Features({ onOpenAuth }: FeaturesProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                className="backdrop-blur-md bg-white/5 p-8 sm:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden"
+                className="glass-card p-8 sm:p-10 rounded-3xl shadow-2xl relative overflow-hidden"
               >
                 {/* Visual highlights */}
-                <div className="absolute -top-10 -right-10 w-44 h-44 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="glow-orb -top-10 -right-10 w-44 h-44 bg-purple-500/10 blur-3xl" />
 
                 {/* Header detail */}
                 <div className="flex justify-between items-start gap-4 mb-3 pb-5 border-b border-white/10">

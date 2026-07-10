@@ -13,22 +13,22 @@ export default function FAQ() {
   return (
     <section
       id="faq-section"
-      className="py-20 bg-[#030014] relative overflow-hidden"
+      className="landing-section"
     >
       {/* Small ambient glows */}
-      <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="glow-orb top-[20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 blur-[120px]" />
+      <div className="glow-orb bottom-[20%] right-[-10%] w-[500px] h-[500px] bg-violet-600/10 blur-[120px]" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight mb-4 flex items-center justify-center gap-2">
-            <span className="gradient-text bg-linear-to-r from-blue-400 to-purple-400">
+            <span className="gradient-text-purple-no-glow">
               Câu Hỏi
             </span>{" "}
             Thường Gặp
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+          <p className="landing-description">
             Tìm hiểu thêm về cách thức vận hành của AI và các chính sách hỗ trợ
             người dùng của EngSteps.
           </p>
@@ -42,7 +42,7 @@ export default function FAQ() {
               <div
                 id={`faq-item-${faq.id}`}
                 key={faq.id}
-                className="backdrop-blur-md bg-white/5 border border-white/10 hover:bg-white/10 rounded-2xl overflow-hidden transition-all duration-300"
+                className="glass-card hover:bg-white/10 rounded-2xl overflow-hidden transition-all duration-300"
               >
                 {/* Trigger Row */}
                 <button

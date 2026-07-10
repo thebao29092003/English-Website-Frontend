@@ -99,19 +99,17 @@ export default function SignupFormStep2({
         isInvalid={!!errors.otp}
         className="flex flex-col w-full"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
+        <Label className="form-label">
           Nhập Mã OTP (email: <span className="text-purple-400">{email}</span>)
         </Label>
         <Input
           id="signup-otp-input"
           maxLength={6}
           placeholder="OTP"
-          className="w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500"
+          className="form-input"
           {...register("otp")}
         />
-        <FieldError className="text-sm text-rose-500 mt-1 block">
-          {errors.otp?.message}
-        </FieldError>
+        <FieldError className="form-error">{errors.otp?.message}</FieldError>
       </TextField>
 
       {/* Password input */}
@@ -121,26 +119,24 @@ export default function SignupFormStep2({
         isInvalid={!!errors.password}
         className="flex flex-col w-full"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-          Mật khẩu mới
-        </Label>
-        <div className="relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center">
+        <Label className="form-label">Mật khẩu mới</Label>
+        <div className="form-password-wrapper">
           <Input
             id="signup-password-input"
             type={showPasswords ? "text" : "password"}
             placeholder="••••••••"
-            className="w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none"
+            className="form-password-input"
             {...register("password")}
           />
           <button
             type="button"
             onClick={() => setShowPasswords(!showPasswords)}
-            className="text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none"
+            className="form-password-toggle"
           >
             {showPasswords ? <IconEyeOff size={20} /> : <IconEye size={20} />}
           </button>
         </div>
-        <FieldError className="text-sm text-rose-500 mt-1 block">
+        <FieldError className="form-error">
           {errors.password?.message}
         </FieldError>
       </TextField>
@@ -239,26 +235,24 @@ export default function SignupFormStep2({
         isInvalid={!!errors.confirmPassword}
         className="flex flex-col w-full"
       >
-        <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-          Nhập lại Mật khẩu
-        </Label>
-        <div className="relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center">
+        <Label className="form-label">Nhập lại Mật khẩu</Label>
+        <div className="form-password-wrapper">
           <Input
             id="signup-confirm-password-input"
             type={showPasswords ? "text" : "password"}
             placeholder="••••••••"
-            className="w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none"
+            className="form-password-input"
             {...register("confirmPassword")}
           />
           <button
             type="button"
             onClick={() => setShowPasswords(!showPasswords)}
-            className="text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none"
+            className="form-password-toggle"
           >
             {showPasswords ? <IconEyeOff size={20} /> : <IconEye size={20} />}
           </button>
         </div>
-        <FieldError className="text-sm text-rose-500 mt-1 block">
+        <FieldError className="form-error">
           {errors.confirmPassword?.message}
         </FieldError>
       </TextField>
@@ -278,7 +272,7 @@ export default function SignupFormStep2({
           }`}
         >
           {isOtpLoading ? (
-            <span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent" />
+            <span className="spinner h-3.5 w-3.5" />
           ) : (
             <IconRefresh
               className={`w-3.5 h-3.5 ${countdown > 0 ? "" : "animate-spin-slow"}`}
@@ -297,9 +291,7 @@ export default function SignupFormStep2({
           isDisabled={isRegisterLoading}
           className="h-12 button-primary"
         >
-          {isRegisterLoading ? (
-            <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-          ) : null}
+          {isRegisterLoading ? <span className="spinner" /> : null}
           Hoàn Tất Đăng Ký
         </Button>
       </div>

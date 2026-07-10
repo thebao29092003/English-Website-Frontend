@@ -32,7 +32,6 @@ import {
 } from "../../utility/notification";
 import ScrollToTop from "../../utility/ScrollToTop";
 
-
 export default function ForgotPasswordStep2() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,24 +97,18 @@ export default function ForgotPasswordStep2() {
 
     try {
       const response = await resetPassword({
-        username: email,
+        email: email,
         otp: data.otp,
-        password: data.password,
-        repeatPassword: data.confirmPassword,
+        newPassword: data.password,
+        repeatNewPassword: data.confirmPassword,
       }).unwrap();
 
       if (response.success) {
         showSuccessMessage("Đặt lại mật khẩu thành công!");
         navigate("/");
-      } else {
-        showErrorMessage(response.message || "Đặt lại mật khẩu thất bại");
       }
-    } catch (err: any) {
-      console.warn(
-        "Reset password API not ready, falling back to mock transition:",
-        err,
-      );
-      showSuccessMessage("Giao diện: Đặt lại mật khẩu thành công!");
+    } catch (err: unknown) {
+      showErrorMessage("Đặt lại mật khẩu thất bại");
       navigate("/");
     }
   };
@@ -128,17 +121,9 @@ export default function ForgotPasswordStep2() {
         setCountdown(30);
         setOtpSentMessage("Một mã OTP mới đã được gửi tới email của bạn.");
         setTimeout(() => setOtpSentMessage(""), 5000);
-      } else {
-        showErrorMessage(response.message || "Gửi lại OTP thất bại");
       }
-    } catch (err: any) {
-      console.warn(
-        "Resend OTP API not ready, falling back to mock count:",
-        err,
-      );
-      setCountdown(30);
-      setOtpSentMessage("Giao diện: Một mã OTP mới đã được gửi.");
-      setTimeout(() => setOtpSentMessage(""), 5000);
+    } catch (err: unknown) {
+      showErrorMessage("Lỗi khi gửi mã OTP");
     }
   };
 
@@ -166,37 +151,34 @@ export default function ForgotPasswordStep2() {
   return (
     <div
       id="forgot-password-step2-root"
-      className="w-full min-h-screen overflow-x-hidden bg-[#030014] text-white dark flex flex-col items-center justify-center relative px-4 pt-28 pb-16 animate-fade-in"
+      className="forgot-password-root dark animate-fade-in"
     >
       <ScrollToTop />
 
       {/* Decorative background glows */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="glow-orb top-20 left-1/4 w-96 h-96 bg-purple-500/10 blur-[120px]" />
+      <div className="glow-orb bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 blur-[120px]" />
 
       <div className="max-w-md w-full relative z-10">
         {/* Back Button */}
         <button
           onClick={() => navigate("/forgot-password")}
-          className="mb-4 flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group w-fit hover:translate-x-[-2px] transition-transform duration-200 font-mono"
+          className="mb-4 flex items-center gap-2 text-sm text-gray-400 hover:text-white cursor-pointer group w-fit hover:translate-x-[-2px] transition-all duration-200 font-mono"
         >
           <IconArrowLeft className="w-4 h-4" /> Quay lại Bước 1
         </button>
 
         {/* Card container */}
-        <div className="relative overflow-hidden rounded-3xl backdrop-blur-md p-6 sm:p-8 shadow-2xl bg-[#030014]/85 border border-white/10 text-white w-full">
+        <div className="forgot-password-card">
           {/* Top glowing bar */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-linear-to-r from-blue-500 via-purple-500 to-pink-500" />
+          <div className="forgot-password-glow-bar" />
 
           {/* Header */}
           <div className="mb-6 text-center">
-            <h2 className="text-2xl font-black tracking-tight mb-2">
-              Đặt Lại Mật Khẩu
-            </h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="forgot-password-title">Đặt Lại Mật Khẩu</h2>
+            <p className="forgot-password-subtitle">
               Nhập mã OTP được gửi tới{" "}
-              <span className="text-purple-400 font-semibold">{email}</span> và
-              mật khẩu mới của bạn.
+              <span className="text-purple-400 font-semibold">{email}</span>
             </p>
           </div>
 
@@ -221,17 +203,15 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.otp}
               className="flex flex-col w-full"
             >
-              <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-                Nhập Mã OTP
-              </Label>
+              <Label className="form-label">Nhập Mã OTP</Label>
               <Input
                 id="reset-otp-input"
                 maxLength={6}
                 placeholder="OTP"
-                className="w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl px-4 transition-all text-sm outline-none placeholder:text-gray-500"
+                className="form-input"
                 {...register("otp")}
               />
-              <FieldError className="text-sm text-rose-500 mt-1 block">
+              <FieldError className="form-error">
                 {errors.otp?.message}
               </FieldError>
             </TextField>
@@ -243,21 +223,19 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.password}
               className="flex flex-col w-full"
             >
-              <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-                Mật khẩu mới
-              </Label>
-              <div className="relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center">
+              <Label className="form-label">Mật khẩu mới</Label>
+              <div className="form-password-wrapper">
                 <Input
                   id="reset-password-input"
                   type={showPasswords ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none"
+                  className="form-password-input"
                   {...register("password")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPasswords(!showPasswords)}
-                  className="text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none"
+                  className="form-password-toggle"
                 >
                   {showPasswords ? (
                     <IconEyeOff size={20} />
@@ -266,7 +244,7 @@ export default function ForgotPasswordStep2() {
                   )}
                 </button>
               </div>
-              <FieldError className="text-sm text-rose-500 mt-1 block">
+              <FieldError className="form-error">
                 {errors.password?.message}
               </FieldError>
             </TextField>
@@ -365,21 +343,19 @@ export default function ForgotPasswordStep2() {
               isInvalid={!!errors.confirmPassword}
               className="flex flex-col w-full"
             >
-              <Label className="text-sm font-semibold font-mono text-gray-400 mb-1.5 block">
-                Nhập lại Mật khẩu
-              </Label>
-              <div className="relative w-full border border-white/10 hover:border-purple-500/50 bg-white/5 text-white h-11 rounded-xl transition-all flex items-center">
+              <Label className="form-label">Nhập lại Mật khẩu</Label>
+              <div className="form-password-wrapper">
                 <Input
                   id="reset-confirm-password-input"
                   type={showPasswords ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full bg-transparent text-white text-sm px-4 outline-none placeholder:text-gray-500 h-full border-none"
+                  className="form-password-input"
                   {...register("confirmPassword")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPasswords(!showPasswords)}
-                  className="text-gray-500 absolute right-3 hover:text-white transition-colors cursor-pointer focus:outline-none"
+                  className="form-password-toggle"
                 >
                   {showPasswords ? (
                     <IconEyeOff size={20} />
@@ -388,7 +364,7 @@ export default function ForgotPasswordStep2() {
                   )}
                 </button>
               </div>
-              <FieldError className="text-sm text-rose-500 mt-1 block">
+              <FieldError className="form-error">
                 {errors.confirmPassword?.message}
               </FieldError>
             </TextField>
@@ -408,7 +384,7 @@ export default function ForgotPasswordStep2() {
                 }`}
               >
                 {isOtpLoading ? (
-                  <span className="animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent" />
+                  <span className="spinner h-3.5 w-3.5" />
                 ) : (
                   <IconRefresh
                     className={`w-3.5 h-3.5 ${countdown > 0 ? "" : "animate-spin-slow"}`}
@@ -428,9 +404,7 @@ export default function ForgotPasswordStep2() {
                 isDisabled={isResetLoading}
                 className="h-12 button-primary"
               >
-                {isResetLoading ? (
-                  <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                ) : null}
+                {isResetLoading ? <span className="spinner" /> : null}
                 Hoàn Tất Đặt Lại
               </Button>
             </div>

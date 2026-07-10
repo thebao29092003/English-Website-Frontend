@@ -2,10 +2,10 @@ import type { BaseResponse } from "./baseResponse";
 
 // Định nghĩa đối tượng User
 export interface User {
-  userId: string;
-  email: string;
-  role: string;
-  securityStamp: string;
+  UserId: string;
+  Email: string;
+  Role: string;
+  SecurityStamp: string;
 }
 
 // Định nghĩa State lưu trữ trong AuthSlice
@@ -33,9 +33,8 @@ export interface RegisterRequestStep2 {
 export interface RefreshResponse extends BaseResponse<string> {}
 
 export interface ResetPasswordRequest {
-  username: string;
+  email: string;
   otp: string;
-  password: string;
-  repeatPassword: string;
+  newPassword: string;
+  repeatNewPassword: string;
 }
-
