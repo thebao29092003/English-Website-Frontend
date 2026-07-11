@@ -24,9 +24,16 @@ const authSlice = createSlice({
       state.token = token;
 
       // Lưu token và user vào localStorage
-      localStorage.setItem("token", token);
-      // JSON.stringify: chuyển object thành json string
-      localStorage.setItem("user", JSON.stringify(user));
+      if (token) {
+        localStorage.setItem("token", token);
+      } else {
+        localStorage.removeItem("token");
+      }
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("user");
+      }
     },
     logout: (state) => {
       state.user = null;

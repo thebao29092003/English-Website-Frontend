@@ -1,4 +1,5 @@
 export interface RecordingResponse {
+  recodingId: string;
   fileName: string;
   fileSize: number;
   fileType: string;

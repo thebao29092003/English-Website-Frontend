@@ -127,12 +127,12 @@ export default function Sidebar({
       >
         {/* Top Header - Logo and Collapse Toggle */}
         <div>
-          <div className="flex items-center justify-between p-4 h-16 border-b border-white/5">
+          <div className="flex items-center lg:justify-between justify-center p-4 h-16 border-b border-white/5">
             <div
               className="flex items-center gap-3 overflow-hidden cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <div className="w-8 h-8 shrink-0 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="hidden lg:flex w-8 h-8 shrink-0 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg  items-center justify-center shadow-lg shadow-blue-500/20">
                 <span className="font-black text-xs italic text-white">ES</span>
               </div>
               {!isCollapsed && (
@@ -157,7 +157,7 @@ export default function Sidebar({
               onClick={() => setMobileOpen(false)}
               className="lg:hidden text-slate-400 hover:text-white cursor-pointer"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
           </div>
 
@@ -204,7 +204,7 @@ export default function Sidebar({
                       </span>
                     )}
                     {/* Hiển thị mũi tên đóng/mở nếu có menu con */}
-                    {hasChildren && (
+                    {hasChildren && !isCollapsed && (
                       <span className="text-slate-500 transition-all duration-2500">
                         {isSubMenuOpen ? (
                           <ChevronUp size={14} />
@@ -238,16 +238,10 @@ export default function Sidebar({
                                   ? "text-purple-400 font-semibold"
                                   : "text-slate-500 hover:text-slate-200"
                               }
-                  `}
+                                `}
                           >
                             {/* Hiển thị icon riêng của menu con, hoặc chấm tròn nhỏ mặc định */}
-                            {ChildIcon ? (
-                              <ChildIcon size={14} />
-                            ) : (
-                              <div
-                                className={`w-1.5 h-1.5 rounded-full ${isChildActive ? "bg-purple-500" : "bg-slate-700"}`}
-                              />
-                            )}
+                            {ChildIcon ? <ChildIcon size={14} /> : <></>}
                             <span className="flex-1 truncate text-[13px]">
                               {child.label}
                               {child.disabled && (

@@ -1,42 +1,42 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useOutletContext } from "react-router-dom";
-import { Mic, Menu, Loader2 } from "lucide-react";
-import RecordingDetailModal from "../../component/homePage/RecordingDetailModal";
+import { Mic, Menu } from "lucide-react";
 import StatsCards from "../../component/homePage/StatsCards";
 import FilterControls from "../../component/homePage/FilterControls";
 import RecordingsTable from "../../component/homePage/RecordingsTable";
-import type { Recording } from "../../types/homePage.type";
+import type { Recording, FilterState } from "../../types/homePage.type";
+import Pagination from "../../component/homePage/Pagination";
 import {
   showSuccessMessage,
   showErrorMessage,
 } from "../../utility/notification";
 import { useRecordingQuery } from "../../API/homeApi/homeApi";
-import { mapRecordingResponses } from "../../utility/recordingMapper";
 import PageSkeleton from "../../utility/PageSkeleton";
 import HomePageSkeleton from "./HomePageSkeleton";
+import { showConfirmDialog } from "../../utility/confirmDialog";
+import { getOverallScore } from "../../utility/getOverallScore";
 
 export default function HomePage() {
   const { data, isLoading, isError } = useRecordingQuery();
 
-  // Map API response into UI-ready Recording[] whenever data changes
-  const apiRecordings = useMemo<Recording[]>(() => {
-    if (!data?.value) return [];
-    return mapRecordingResponses(data.value);
-  }, [data]);
+  const recordings = data?.value || [];
 
-  const [recordings, setRecordings] = useState<Recording[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [scoreFilter, setScoreFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
-  const [selectedRecord, setSelectedRecord] = useState<Recording | null>(null);
-  const [detailModalOpen, setDetailModalOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: "",
+    scoreFilter: "all",
+    sortBy: "newest",
+  });
 
-  // Sync API data into local recordings state
+  const { searchQuery, scoreFilter, sortBy } = filters;
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  // Reset to page 1 when filters change
   useEffect(() => {
-    if (apiRecordings.length > 0) {
-      setRecordings(apiRecordings);
-    }
-  }, [apiRecordings]);
+    setCurrentPage(1);
+  }, [filters]);
 
   // Sidebar Layout Controller from Shared Outlet Layout
   const { setMobileSidebarOpen } = useOutletContext<{
@@ -61,22 +61,22 @@ export default function HomePage() {
       audioPlayerRef.current.pause();
     }
 
-    if (playingId === rec.id) {
+    if (playingId === rec.recodingId) {
       setPlayingId(null);
       audioPlayerRef.current = null;
       return;
     }
-
-    // Use real audio URL from API if available, otherwise fall back to TTS
-    const url = rec.audioUrl
-      ? rec.audioUrl
-      : `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(rec.transcript)}`;
+    const url = rec.fileUrl;
+    if (url == null) {
+      showErrorMessage("Đoạn âm thanh hiện không có sẵn");
+      return;
+    }
     const audio = new Audio(url);
     audioPlayerRef.current = audio;
-    setPlayingId(rec.id);
+    setPlayingId(rec.recodingId);
 
     audio.onended = () => {
-      if (playingId === rec.id || audioPlayerRef.current === audio) {
+      if (playingId === rec.recodingId || audioPlayerRef.current === audio) {
         setPlayingId(null);
       }
     };
@@ -91,58 +91,66 @@ export default function HomePage() {
     });
   };
 
-  const handleDelete = (id: string) => {
-    if (
-      window.confirm(
-        "Bạn có chắc chắn muốn xóa bản ghi âm này? Hành động này không thể hoàn tác.",
-      )
-    ) {
-      setRecordings((prev) => prev.filter((r) => r.id !== id));
-      showSuccessMessage("Đã xóa bản ghi âm thành công");
-      if (playingId === id) {
-        if (audioPlayerRef.current) audioPlayerRef.current.pause();
-        setPlayingId(null);
-      }
-    }
+  const handleDelete = (fileName: string) => {
+    showConfirmDialog({
+      title: "Xác nhận xóa",
+      message: "Bạn có chắc chắn muốn xóa bản ghi âm này?",
+      confirmText: "Xóa",
+      cancelText: "Hủy bỏ",
+      onConfirm: async () => {
+        try {
+          // TODO: gọi api xóa + refetch data
+          console.log("Xóa file:", fileName);
+          showSuccessMessage("Xóa bản ghi âm thành công");
+        } catch (error) {
+          showErrorMessage("Lỗi khi xóa bản ghi âm");
+        }
+      },
+    });
   };
 
   const handleOpenDetail = (rec: Recording) => {
-    setSelectedRecord(rec);
-    setDetailModalOpen(true);
+    console.log("Xem chi tiết bản ghi âm:", rec.fileName);
   };
 
   // Calculations for quick statistics
   const totalRecords = recordings.length;
   const avgScore = totalRecords
     ? Math.round(
-        recordings.reduce((sum, r) => sum + r.overallScore, 0) / totalRecords,
+        recordings.reduce((sum, r) => sum + getOverallScore(r), 0) /
+          totalRecords,
       )
     : 0;
   const totalDurationSec = recordings.reduce(
-    (sum, r) => sum + r.durationSec,
+    (sum, r) => sum + (r.duration || 0),
     0,
   );
   const totalDurationStr = (() => {
     const mins = Math.floor(totalDurationSec / 60);
-    const secs = totalDurationSec % 60;
+    const secs = Math.round(totalDurationSec % 60);
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   })();
-  const proCount = recordings.filter((r) => r.overallScore >= 80).length;
+  const proCount = recordings.filter((r) => getOverallScore(r) >= 80).length;
 
   // Filter and Sort recordings
   const filteredRecordings = recordings
     .filter((rec) => {
       // Search
       const matchesSearch =
-        rec.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        rec.transcript.toLowerCase().includes(searchQuery.toLowerCase());
+        (rec.fileName || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        (rec.speechToText?.aiTranscript || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+
+      const score = getOverallScore(rec);
 
       // Filter by Score
-      if (scoreFilter === "pro") return matchesSearch && rec.overallScore >= 80;
+      if (scoreFilter === "pro") return matchesSearch && score >= 80;
       if (scoreFilter === "avg")
-        return matchesSearch && rec.overallScore >= 60 && rec.overallScore < 80;
-      if (scoreFilter === "needs_practice")
-        return matchesSearch && rec.overallScore < 60;
+        return matchesSearch && score >= 60 && score < 80;
+      if (scoreFilter === "needs_practice") return matchesSearch && score < 60;
 
       return matchesSearch;
     })
@@ -154,20 +162,25 @@ export default function HomePage() {
         );
       }
       if (sortBy === "score_desc") {
-        return b.overallScore - a.overallScore;
+        return getOverallScore(b) - getOverallScore(a);
       }
       if (sortBy === "score_asc") {
-        return a.overallScore - b.overallScore;
+        return getOverallScore(a) - getOverallScore(b);
       }
       // default: newest
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
-  // Loading state
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredRecordings.length / pageSize);
+  const paginatedRecordings = filteredRecordings.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
 
-  // Error state
+  // Error state notification helper
   if (isError) {
-    showErrorMessage("Không thể tại bản ghi.");
+    showErrorMessage("Không thể tải bản ghi âm từ máy chủ.");
   }
 
   return (
@@ -179,7 +192,7 @@ export default function HomePage() {
       ) : (
         <>
           {/* Top Header Bar */}
-          <header className="h-16 border-b border-white/5 bg-[#030014]/60 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6">
+          <header className="h-16 border-b border-white/5 bg-[#030014]/60 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-7">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileSidebarOpen(true)}
@@ -215,33 +228,26 @@ export default function HomePage() {
             />
 
             {/* Filtering & Searching Controls */}
-            <FilterControls
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              scoreFilter={scoreFilter}
-              setScoreFilter={setScoreFilter}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-            />
+            <FilterControls filters={filters} setFilters={setFilters} />
 
             {/* Recordings list Table Wrapper */}
             <div className="bg-white/2 border border-white/5 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl">
               <RecordingsTable
-                recordings={filteredRecordings}
+                recordings={paginatedRecordings}
                 playingId={playingId}
                 handlePlayPause={handlePlayPause}
                 handleOpenDetail={handleOpenDetail}
                 handleDelete={handleDelete}
               />
+              {totalPages > 1 && (
+                <Pagination
+                  total={totalPages}
+                  page={currentPage}
+                  onChange={setCurrentPage}
+                />
+              )}
             </div>
           </main>
-
-          {/* Recording Detail Modal */}
-          <RecordingDetailModal
-            isOpen={detailModalOpen}
-            onClose={() => setDetailModalOpen(false)}
-            recording={selectedRecord}
-          />
         </>
       )}
     </>
