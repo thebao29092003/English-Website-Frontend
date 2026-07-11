@@ -127,12 +127,12 @@ export default function Sidebar({
       >
         {/* Top Header - Logo and Collapse Toggle */}
         <div>
-          <div className="flex items-center justify-between p-4 h-16 border-b border-white/5">
+          <div className="flex items-center lg:justify-between justify-center p-4 h-16 border-b border-white/5">
             <div
               className="flex items-center gap-3 overflow-hidden cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <div className="w-8 h-8 shrink-0 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="hidden lg:flex w-8 h-8 shrink-0 bg-linear-to-br from-blue-500 to-violet-600 rounded-lg  items-center justify-center shadow-lg shadow-blue-500/20">
                 <span className="font-black text-xs italic text-white">ES</span>
               </div>
               {!isCollapsed && (
@@ -157,7 +157,7 @@ export default function Sidebar({
               onClick={() => setMobileOpen(false)}
               className="lg:hidden text-slate-400 hover:text-white cursor-pointer"
             >
-              <X size={20} />
+              <X size={24} />
             </button>
           </div>
 

@@ -1,14 +1,22 @@
-// Helper to format ISO Date string into DD/MM/YYYY HH:mm
 export const formatDate = (dateStr: string) => {
   if (!dateStr) return "Chưa rõ thời gian";
   try {
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return dateStr;
-    const day = date.getDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const year = date.getFullYear();
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
+    let date = new Date(dateStr);
+    if (isNaN(date.getTime())) {
+      date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+    }
+
+    // Force Vietnam Time (GMT+7) regardless of browser locale
+    const vietnamTime = date.getTime() + 7 * 60 * 60 * 1000;
+    const vietnamDate = new Date(vietnamTime);
+
+    const day = vietnamDate.getUTCDate().toString().padStart(2, "0");
+    const month = (vietnamDate.getUTCMonth() + 1).toString().padStart(2, "0");
+    const year = vietnamDate.getUTCFullYear();
+    const hours = vietnamDate.getUTCHours().toString().padStart(2, "0");
+    const minutes = vietnamDate.getUTCMinutes().toString().padStart(2, "0");
+
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   } catch (e) {
     return dateStr;

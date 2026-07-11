@@ -1,23 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, Filter, ChevronDown } from "lucide-react";
+import type { FilterState } from "../../types/homePage.type";
 
 interface FilterControlsProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  scoreFilter: string;
-  setScoreFilter: (filter: string) => void;
-  sortBy: string;
-  setSortBy: (sort: string) => void;
+  filters: FilterState;
+  setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
 }
 
 export default function FilterControls({
-  searchQuery,
-  setSearchQuery,
-  scoreFilter,
-  setScoreFilter,
-  sortBy,
-  setSortBy,
+  filters,
+  setFilters,
 }: FilterControlsProps) {
+  const { searchQuery, scoreFilter, sortBy } = filters;
   // Dropdown open states
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false);
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
@@ -29,7 +23,10 @@ export default function FilterControls({
   // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
         setFilterDropdownOpen(false);
       }
       if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
@@ -67,7 +64,7 @@ export default function FilterControls({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white/2 border border-white/5 backdrop-blur-md p-4 rounded-2xl relative z-20">
+    <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white/2 border border-white/5 backdrop-blur-md p-2 rounded-2xl relative z-20">
       {/* Search input */}
       <div className="w-full md:w-80 relative flex items-center">
         <Search size={16} className="absolute left-3 text-slate-500" />
@@ -75,7 +72,9 @@ export default function FilterControls({
           type="text"
           placeholder="Tìm kiếm theo tiêu đề..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) =>
+            setFilters((prev) => ({ ...prev, searchQuery: e.target.value }))
+          }
           className="w-full bg-white/5 border border-white/10 hover:border-purple-500/50 rounded-xl h-11 pl-10 pr-4 text-white text-sm placeholder:text-gray-500 outline-none transition-all"
         />
       </div>
@@ -94,27 +93,42 @@ export default function FilterControls({
           </button>
 
           {filterDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl text-white z-30">
+            <div className="absolute right-0 mt-1.5 w-50 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl text-white z-30">
               <button
-                onClick={() => { setScoreFilter("all"); setFilterDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, scoreFilter: "all" }));
+                  setFilterDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all cursor-pointer"
               >
                 Tất cả điểm số
               </button>
               <button
-                onClick={() => { setScoreFilter("pro"); setFilterDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, scoreFilter: "pro" }));
+                  setFilterDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 text-emerald-400 rounded-lg text-sm transition-all font-semibold cursor-pointer"
               >
                 Xuất sắc (≥ 80)
               </button>
               <button
-                onClick={() => { setScoreFilter("avg"); setFilterDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, scoreFilter: "avg" }));
+                  setFilterDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 text-amber-400 rounded-lg text-sm transition-all font-semibold cursor-pointer"
               >
                 Trung bình (60-79)
               </button>
               <button
-                onClick={() => { setScoreFilter("needs_practice"); setFilterDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({
+                    ...prev,
+                    scoreFilter: "needs_practice",
+                  }));
+                  setFilterDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 text-rose-400 rounded-lg text-sm transition-all font-semibold cursor-pointer"
               >
                 Cần cải thiện (&lt; 60)
@@ -134,27 +148,39 @@ export default function FilterControls({
           </button>
 
           {sortDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl text-white z-30">
+            <div className="absolute right-0 mt-1.5 w-46 bg-slate-900 border border-white/10 rounded-xl p-1 shadow-2xl text-white z-30">
               <button
-                onClick={() => { setSortBy("newest"); setSortDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, sortBy: "newest" }));
+                  setSortDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all cursor-pointer"
               >
                 Mới nhất
               </button>
               <button
-                onClick={() => { setSortBy("oldest"); setSortDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, sortBy: "oldest" }));
+                  setSortDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all cursor-pointer"
               >
                 Cũ nhất
               </button>
               <button
-                onClick={() => { setSortBy("score_desc"); setSortDropdownOpen(false); }}
-                className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all font-semibold cursor-pointer"
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, sortBy: "score_desc" }));
+                  setSortDropdownOpen(false);
+                }}
+                className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all cursor-pointer"
               >
                 Điểm cao nhất
               </button>
               <button
-                onClick={() => { setSortBy("score_asc"); setSortDropdownOpen(false); }}
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, sortBy: "score_asc" }));
+                  setSortDropdownOpen(false);
+                }}
                 className="w-full text-left py-2 px-3 hover:bg-white/5 rounded-lg text-sm transition-all cursor-pointer"
               >
                 Điểm thấp nhất

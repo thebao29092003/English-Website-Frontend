@@ -83,7 +83,7 @@ export default function RecordingsTable({
 
             return (
               <tr
-                key={rec.fileName}
+                key={rec.recodingId}
                 className={`border-b border-white/5 transition-colors hover:bg-white/10 ${
                   index % 2 === 0 ? "bg-white/3" : "bg-white/1"
                 }`}
@@ -114,14 +114,14 @@ export default function RecordingsTable({
                 </td>
 
                 {/* Score Chip */}
-                <td className="py-4 px-6 text-sm">
+                <td className="py-4 px-6 text-sm min-w-[175px]">
                   <div
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold border ${getScoreColorClasses(
                       overallScore,
                     )}`}
                   >
                     <span>{overallScore}</span> -{" "}
-                    {getScoreChipLabel(overallScore)}
+                    {getScoreChipLabel(overallScore)}{" "}
                   </div>
                 </td>
 
@@ -142,15 +142,15 @@ export default function RecordingsTable({
                     <button
                       onClick={() => handlePlayPause(rec)}
                       title={
-                        playingId === rec.fileName ? "Tạm dừng" : "Nghe lại"
+                        playingId === rec.recodingId ? "Tạm dừng" : "Nghe lại"
                       }
                       className={`w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer transition-all border ${
-                        playingId === rec.fileName
+                        playingId === rec.recodingId
                           ? "bg-purple-500/20 text-purple-400 border-purple-500/40"
                           : "bg-white/5 text-slate-300 border-white/5 hover:bg-white/10 hover:text-white"
                       }`}
                     >
-                      {playingId === rec.fileName ? (
+                      {playingId === rec.recodingId ? (
                         <Pause size={15} className="animate-pulse" />
                       ) : (
                         <Play size={15} />

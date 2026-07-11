@@ -4,7 +4,8 @@ import { Mic, Menu } from "lucide-react";
 import StatsCards from "../../component/homePage/StatsCards";
 import FilterControls from "../../component/homePage/FilterControls";
 import RecordingsTable from "../../component/homePage/RecordingsTable";
-import type { Recording } from "../../types/homePage.type";
+import type { Recording, FilterState } from "../../types/homePage.type";
+import Pagination from "../../component/homePage/Pagination";
 import {
   showSuccessMessage,
   showErrorMessage,
@@ -20,9 +21,22 @@ export default function HomePage() {
 
   const recordings = data?.value || [];
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [scoreFilter, setScoreFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: "",
+    scoreFilter: "all",
+    sortBy: "newest",
+  });
+
+  const { searchQuery, scoreFilter, sortBy } = filters;
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
 
   // Sidebar Layout Controller from Shared Outlet Layout
   const { setMobileSidebarOpen } = useOutletContext<{
@@ -47,7 +61,7 @@ export default function HomePage() {
       audioPlayerRef.current.pause();
     }
 
-    if (playingId === rec.fileName) {
+    if (playingId === rec.recodingId) {
       setPlayingId(null);
       audioPlayerRef.current = null;
       return;
@@ -59,10 +73,10 @@ export default function HomePage() {
     }
     const audio = new Audio(url);
     audioPlayerRef.current = audio;
-    setPlayingId(rec.fileName);
+    setPlayingId(rec.recodingId);
 
     audio.onended = () => {
-      if (playingId === rec.fileName || audioPlayerRef.current === audio) {
+      if (playingId === rec.recodingId || audioPlayerRef.current === audio) {
         setPlayingId(null);
       }
     };
@@ -98,8 +112,6 @@ export default function HomePage() {
   const handleOpenDetail = (rec: Recording) => {
     console.log("Xem chi tiết bản ghi âm:", rec.fileName);
   };
-
-  // Helper to compute overall score for a recording
 
   // Calculations for quick statistics
   const totalRecords = recordings.length;
@@ -159,6 +171,13 @@ export default function HomePage() {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredRecordings.length / pageSize);
+  const paginatedRecordings = filteredRecordings.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
   // Error state notification helper
   if (isError) {
     showErrorMessage("Không thể tải bản ghi âm từ máy chủ.");
@@ -173,7 +192,7 @@ export default function HomePage() {
       ) : (
         <>
           {/* Top Header Bar */}
-          <header className="h-16 border-b border-white/5 bg-[#030014]/60 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-6">
+          <header className="h-16 border-b border-white/5 bg-[#030014]/60 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-7">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileSidebarOpen(true)}
@@ -209,24 +228,24 @@ export default function HomePage() {
             />
 
             {/* Filtering & Searching Controls */}
-            <FilterControls
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              scoreFilter={scoreFilter}
-              setScoreFilter={setScoreFilter}
-              sortBy={sortBy}
-              setSortBy={setSortBy}
-            />
+            <FilterControls filters={filters} setFilters={setFilters} />
 
             {/* Recordings list Table Wrapper */}
             <div className="bg-white/2 border border-white/5 backdrop-blur-md rounded-2xl overflow-hidden shadow-xl">
               <RecordingsTable
-                recordings={filteredRecordings}
+                recordings={paginatedRecordings}
                 playingId={playingId}
                 handlePlayPause={handlePlayPause}
                 handleOpenDetail={handleOpenDetail}
                 handleDelete={handleDelete}
               />
+              {totalPages > 1 && (
+                <Pagination
+                  total={totalPages}
+                  page={currentPage}
+                  onChange={setCurrentPage}
+                />
+              )}
             </div>
           </main>
         </>

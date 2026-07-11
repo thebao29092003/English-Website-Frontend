@@ -1,6 +1,7 @@
 import { type LucideIcon } from "lucide-react";
 
 export interface Recording {
+  recodingId: string;
   fileName: string;
   fileSize: number;
   fileType: string;
@@ -35,3 +36,10 @@ export interface StatItem {
   iconColor: string;
   valueColor: string;
 }
+
+export interface FilterState {
+  searchQuery: string;
+  scoreFilter: string;
+  sortBy: string;
+}
+
