@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import Hero from "../../component/landing/Hero";
+import Hero from "../../component/landing/Hero";
 import AISandbox from "../../component/landing/AISandbox";
 import Features from "../../component/landing/Features";
 import FAQ from "../../component/landing/FAQ";
@@ -27,7 +27,7 @@ export default function LandingPage() {
       {/* Main Sections */}
       <main>
         {/* Modern dark technology Hero section */}
-        {/* <Hero onOpenAuth={handleOpenAuth} /> */}
+        <Hero onOpenAuth={handleOpenAuth} />
 
         {/* Real-time speaking sandbox assessment panel */}
         <AISandbox />
