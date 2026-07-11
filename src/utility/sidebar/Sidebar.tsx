@@ -204,7 +204,7 @@ export default function Sidebar({
                       </span>
                     )}
                     {/* Hiển thị mũi tên đóng/mở nếu có menu con */}
-                    {hasChildren && (
+                    {hasChildren && !isCollapsed && (
                       <span className="text-slate-500 transition-all duration-2500">
                         {isSubMenuOpen ? (
                           <ChevronUp size={14} />
@@ -238,16 +238,9 @@ export default function Sidebar({
                                   ? "text-purple-400 font-semibold"
                                   : "text-slate-500 hover:text-slate-200"
                               }
-                  `}
+                                `}
                           >
-                            {/* Hiển thị icon riêng của menu con, hoặc chấm tròn nhỏ mặc định */}
-                            {ChildIcon ? (
-                              <ChildIcon size={14} />
-                            ) : (
-                              <div
-                                className={`w-1.5 h-1.5 rounded-full ${isChildActive ? "bg-purple-500" : "bg-slate-700"}`}
-                              />
-                            )}
+                            <ChildIcon size={14} />
                             <span className="flex-1 truncate text-[13px]">
                               {child.label}
                               {child.disabled && (

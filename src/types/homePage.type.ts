@@ -1,17 +1,22 @@
-import type { AnalysisResult } from "./landingPage.type";
 import { type LucideIcon } from "lucide-react";
 
 export interface Recording {
-  id: string;
-  title: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  fileUrl?: string;
+  duration: number;
   createdAt: string;
-  duration: string;
-  durationSec: number;
-  fileSize: string;
-  overallScore: number;
-  transcript: string;
-  audioUrl?: string;
-  analysisResult: AnalysisResult;
+  speechToText: {
+    aiTranscript: string;
+    overallConfidence: number;
+    fluencyScore: number;
+    pronunciationScore: number;
+  };
+  analysis?: {
+    overallGrammarScore: number;
+    overallVocabScore: number;
+  };
 }
 
 export interface StatsCardsProps {
