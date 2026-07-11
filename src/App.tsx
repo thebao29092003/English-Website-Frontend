@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAppSelector } from "./API/hooks/hooks";
 import { selectCurrentUser } from "./API/auth/authSlice";
 import LayoutUserHome from "./utility/layout/LayoutUserHome";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
   const currentUser = useAppSelector(selectCurrentUser);
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="*" element={<ErrorPage />} />
       </Routes>
       <ToastContainer />
+      <Analytics />
     </>
   );
 }
