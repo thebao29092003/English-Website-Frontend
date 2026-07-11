@@ -27,7 +27,7 @@ export default function LandingPage() {
       {/* Main Sections */}
       <main>
         {/* Modern dark technology Hero section */}
-        <Hero onOpenAuth={handleOpenAuth} />
+        {/* <Hero onOpenAuth={handleOpenAuth} /> */}
 
         {/* Real-time speaking sandbox assessment panel */}
         <AISandbox />
