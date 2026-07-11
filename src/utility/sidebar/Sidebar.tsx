@@ -231,7 +231,7 @@ export default function Sidebar({
                               setMobileOpen(false);
                               navigate(child.path);
                             }}
-                            className={`w-full flex items-center gap-3.5 py-2.5 px-3 rounded-lg font-medium  transition-all duration-200 text-left cursor-pointer
+                            className={`w-full flex  items-center gap-3.5 py-2.5 px-3 rounded-lg font-medium  transition-all duration-200 text-left cursor-pointer
                               ${child.disabled ? "opacity-40 cursor-default" : "cursor-pointer"}
                               ${
                                 isChildActive
