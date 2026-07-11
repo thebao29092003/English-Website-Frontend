@@ -240,7 +240,8 @@ export default function Sidebar({
                               }
                                 `}
                           >
-                            <ChildIcon size={14} />
+                            {/* Hiển thị icon riêng của menu con, hoặc chấm tròn nhỏ mặc định */}
+                            {ChildIcon ? <ChildIcon size={14} /> : <></>}
                             <span className="flex-1 truncate text-[13px]">
                               {child.label}
                               {child.disabled && (

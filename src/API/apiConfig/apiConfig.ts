@@ -73,7 +73,7 @@ const baseQueryWithReauth: BaseQueryFn<
         api.dispatch(logout());
         // chuyển về trang chủ
         window.location.replace("/");
-        return;
+        return result;
       }
 
       // nếu refresh token gửi đi (trong cookies) hợp lệ và nhận được accesstoken mới
