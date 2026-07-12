@@ -100,7 +100,7 @@ export default function HomePage() {
       onConfirm: async () => {
         try {
           // TODO: gọi api xóa + refetch data
-          // console.log("Xóa file:", fileName);
+          console.log("Xóa file:", fileName);
           showSuccessMessage("Xóa bản ghi âm thành công");
         } catch (error) {
           showErrorMessage("Lỗi khi xóa bản ghi âm");
@@ -110,7 +110,7 @@ export default function HomePage() {
   };
 
   const handleOpenDetail = (rec: Recording) => {
-    // console.log("Xem chi tiết bản ghi âm:", rec.fileName);
+    console.log("Xem chi tiết bản ghi âm:", rec.fileName);
   };
 
   // Calculations for quick statistics
