@@ -24,7 +24,7 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   // gọi api với request gốc
   let result = await baseQuery(args, api, extraOptions);
-  console.log("result", result);
+  // console.log("result", result);
   return result;
 };
 

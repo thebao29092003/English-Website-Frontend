@@ -48,7 +48,7 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   // gọi api với request gốc
   let result = await baseQuery(args, api, extraOptions);
-  console.log("result", result);
+  // console.log("result", result);
 
   // nếu accesstoken bị lỗi do hết hạn thì sẽ gửi refresht token
   if (result?.error?.status === "FETCH_ERROR" || result?.error?.status == 401) {
@@ -66,7 +66,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
       const refreshData = refreshResult.data as RefreshResponse | undefined;
 
-      console.log("refreshResult", refreshData?.value);
+      // console.log("refreshResult", refreshData?.value);
 
       // nếu không có token mới trả về thì có nghĩa là refresh hết hạn => logout
       if (!refreshData?.value) {
@@ -93,7 +93,7 @@ const baseQueryWithReauth: BaseQueryFn<
         window.location.replace("/");
       }
     } catch (error) {
-      console.log("refreshResult error", error);
+      // console.log("refreshResult error", error);
       api.dispatch(logout());
     }
   }
