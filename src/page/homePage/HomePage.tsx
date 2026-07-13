@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Mic, Menu } from "lucide-react";
 import StatsCards from "../../component/homePage/StatsCards";
 import FilterControls from "../../component/homePage/FilterControls";
@@ -17,6 +17,7 @@ import { showConfirmDialog } from "../../utility/confirmDialog";
 import { getOverallScore } from "../../utility/getOverallScore";
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useRecordingQuery();
 
   const recordings = data?.value || [];
@@ -110,7 +111,7 @@ export default function HomePage() {
   };
 
   const handleOpenDetail = (rec: Recording) => {
-    console.log("Xem chi tiết bản ghi âm:", rec.fileName);
+    navigate(`/home/audio/${rec.recodingId}`);
   };
 
   // Calculations for quick statistics

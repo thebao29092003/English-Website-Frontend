@@ -6,6 +6,7 @@ import ContactPage from "./page/langdingPage/ContactPage";
 import ForgotPasswordStep1 from "./component/forgotPassword/ForgotPasswordStep1";
 import ForgotPasswordStep2 from "./component/forgotPassword/ForgotPasswordStep2";
 import HomePage from "./page/homePage/HomePage";
+import AudioDetailPage from "./page/audioDetailPage/AudioDetailPage";
 import LayoutUser from "./utility/layout/LayoutUser";
 import ErrorPage from "./utility/ErrorPage";
 import { ToastContainer } from "react-toastify";
@@ -31,11 +32,13 @@ export default function App() {
         {currentUser && currentUser.Role === "USER" && (
           <Route path="home" element={<LayoutUserHome />}>
             <Route index element={<HomePage />} />
+            <Route path="audio/:recordingId" element={<AudioDetailPage />} />
           </Route>
         )}
 
         <Route path="*" element={<ErrorPage />} />
       </Routes>
+
       <ToastContainer />
       <Analytics />
     </>
