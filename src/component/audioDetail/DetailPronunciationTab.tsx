@@ -1,6 +1,9 @@
 import { motion } from "motion/react";
 import { MessageSquare, Volume2 } from "lucide-react";
-import type { WordJsonItem, WordPronunciationScoreItem } from "../../API/types/homeApi.type";
+import type {
+  WordJsonItem,
+  WordPronunciationScoreItem,
+} from "../../API/types/audioDetail.type";
 
 interface DetailPronunciationTabProps {
   wordsJson: WordJsonItem[];
@@ -22,21 +25,18 @@ export default function DetailPronunciationTab({
   const getWordStyle = (
     isCurrentlySpoken: boolean,
     isSelected: boolean,
-    feedbackItem?: WordPronunciationScoreItem
+    feedbackItem?: WordPronunciationScoreItem,
   ): string => {
     let baseStyle = "";
-
-    if (!feedbackItem) {
-      baseStyle = "text-gray-300 hover:text-white hover:bg-white/5";
+    const status = feedbackItem?.status;
+    if (status === "Correct" || status === undefined) {
+      baseStyle = "text-white hover:bg-white/5";
+    } else if (status === "Partially Correct") {
+      baseStyle =
+        "bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 font-semibold hover:bg-yellow-500/30";
     } else {
-      const status = feedbackItem.status;
-      if (status === "Correct") {
-        baseStyle = "text-white hover:bg-white/5";
-      } else if (status === "Partially Correct") {
-        baseStyle = "bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 font-semibold hover:bg-yellow-500/30";
-      } else {
-        baseStyle = "bg-red-500/10 border border-red-500/30 text-red-400 font-semibold hover:bg-red-500/20";
-      }
+      baseStyle =
+        "bg-red-500/10 border border-red-500/30 text-red-400 font-semibold hover:bg-red-500/20";
     }
 
     if (isCurrentlySpoken) {
@@ -50,8 +50,12 @@ export default function DetailPronunciationTab({
     return baseStyle;
   };
 
-  const selectedWord = selectedWordIndex !== null ? wordsPronunciationScore[selectedWordIndex] : null;
-  const selectedWordMeta = selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
+  const selectedWord =
+    selectedWordIndex !== null
+      ? wordsPronunciationScore[selectedWordIndex]
+      : null;
+  const selectedWordMeta =
+    selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
 
   return (
     <div className="space-y-6">
@@ -64,7 +68,9 @@ export default function DetailPronunciationTab({
         {/* Word display container */}
         <div className="p-5 bg-black/40 rounded-2xl border border-white/5 flex flex-wrap gap-x-2.5 gap-y-3 leading-relaxed">
           {wordsJson.map((wordObj, idx) => {
-            const feedbackItem = wordsPronunciationScore[idx];
+            const feedbackItem = wordsPronunciationScore
+              ? wordsPronunciationScore[idx]
+              : undefined;
             const isCurrentlySpoken = activeWordIndex === idx;
             const isSelected = selectedWordIndex === idx;
 
@@ -72,12 +78,13 @@ export default function DetailPronunciationTab({
               <span
                 key={idx}
                 onClick={() => {
+                  if (feedbackItem == null) return;
                   onSelectWordIndex(idx);
                 }}
                 className={`text-sm py-0.5 px-2 rounded cursor-pointer transition-all ${getWordStyle(
                   isCurrentlySpoken,
                   isSelected,
-                  feedbackItem
+                  feedbackItem,
                 )}`}
               >
                 {wordObj.text}
@@ -90,7 +97,7 @@ export default function DetailPronunciationTab({
       {/* Selected word pronunciation detail card */}
       {selectedWord && selectedWordMeta ? (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className={`p-5 rounded-2xl border shadow-lg ${
             selectedWord.status === "Incorrect"
@@ -116,7 +123,9 @@ export default function DetailPronunciationTab({
               </span>
             </span>
             <button
-              onClick={() => playTTS(selectedWord.word, `pron-${selectedWord.word}`)}
+              onClick={() =>
+                playTTS(selectedWord.word, `pron-${selectedWord.word}`)
+              }
               className={`py-1 px-3 border rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 selectedWord.status === "Incorrect"
                   ? "bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-300"
@@ -131,13 +140,17 @@ export default function DetailPronunciationTab({
 
           <div className="grid grid-cols-2 gap-4 bg-black/40 p-4 rounded-xl mb-4 border border-white/5">
             <div>
-              <p className="text-xs font-mono text-gray-500 uppercase">Phát âm chuẩn (IPA)</p>
+              <p className="text-xs font-mono text-gray-500 uppercase">
+                Phát âm chuẩn (IPA)
+              </p>
               <p className="text-lg font-black text-emerald-400 tracking-wide font-mono mt-0.5">
                 /{selectedWord.standard_pronunciation}/
               </p>
             </div>
             <div>
-              <p className="text-xs font-mono text-gray-500 uppercase">Bạn đã phát âm</p>
+              <p className="text-xs font-mono text-gray-500 uppercase">
+                Bạn đã phát âm
+              </p>
               <p
                 className={`text-lg font-black tracking-wide font-mono mt-0.5 ${
                   selectedWord.status === "Incorrect"
@@ -169,7 +182,8 @@ export default function DetailPronunciationTab({
               âm vị chuẩn.
             </p>
             <p className="text-xs text-gray-500">
-              * Mẹo: Click nghe phát âm chuẩn và lặp lại chậm rãi để lưỡi làm quen với các âm vị có độ chính xác thấp.
+              * Mẹo: Click nghe phát âm chuẩn và lặp lại chậm rãi để lưỡi làm
+              quen với các âm vị có độ chính xác thấp.
             </p>
           </div>
         </motion.div>

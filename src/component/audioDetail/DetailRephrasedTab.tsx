@@ -1,5 +1,5 @@
 import { Sparkles, MessageSquare, Volume2 } from "lucide-react";
-import type { RephrasedResponseItem } from "../../API/types/homeApi.type";
+import type { RephrasedResponseItem } from "../../API/types/audioDetail.type";
 
 interface DetailRephrasedTabProps {
   rephrasedResponses?: RephrasedResponseItem[];
@@ -40,7 +40,7 @@ export default function DetailRephrasedTab({
                       <Volume2 size={16} />
                     </button>
                   </div>
-                  <p className="text-sm text-white italic leading-relaxed">
+                  <p className="text-base text-white italic leading-relaxed">
                     "{r.improvedText}"
                   </p>
                 </div>

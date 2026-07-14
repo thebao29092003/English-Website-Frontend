@@ -1,48 +1,105 @@
-import type { AudioDetailValue } from "../../API/types/homeApi.type";
+import type { AudioDetailValueResponse } from "../../API/types/audioDetail.type";
 
 interface DetailScoreOverviewProps {
-  value: AudioDetailValue;
+  value: AudioDetailValueResponse;
 }
 
-export default function DetailScoreOverview({ value }: DetailScoreOverviewProps) {
+export default function DetailScoreOverview({
+  value,
+}: DetailScoreOverviewProps) {
   // Normalize scores to 0-100 scale
-  const pronScore = value.pronunciationScore <= 1 
-    ? Math.round(value.pronunciationScore * 100) 
-    : Math.round(value.pronunciationScore);
-  const confidenceScore = value.overallConfidence <= 1
-    ? Math.round(value.overallConfidence * 100)
-    : Math.round(value.overallConfidence);
+  const pronScore = Math.round(value.pronunciationScore * 100);
+  const confidenceScore = Math.round(value.overallConfidence * 100);
   const fluencyScore = Math.round(value.fluencyScore);
   const grammarScore = Math.round(value.overallGrammarScore);
   const vocabScore = Math.round(value.overallVocabScore);
 
-  const scores = [pronScore, confidenceScore, fluencyScore, grammarScore, vocabScore].filter(s => s > 0);
-  const overallScore = scores.length > 0 
-    ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) 
-    : 0;
+  const scores = [
+    pronScore,
+    confidenceScore,
+    fluencyScore,
+    grammarScore,
+    vocabScore,
+  ].filter((s) => s > 0);
+  const overallScore =
+    scores.length > 0
+      ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+      : 0;
 
   // Determine CEFR-like level based on overall score
   let cefrLevel = "A1";
   let levelName = "Cơ bản (Beginner)";
-  let overallInsight = "Bạn bắt đầu hành trình luyện nói. Hãy tiếp tục luyện tập phát âm rõ ràng hơn.";
+  let overallInsight =
+    "Bạn bắt đầu hành trình luyện nói. Hãy tiếp tục luyện tập phát âm rõ ràng hơn.";
 
   if (overallScore >= 85) {
     cefrLevel = "C1";
     levelName = "Lưu loát (Advanced)";
-    overallInsight = "Khả năng nói tuyệt vời! Phát âm chuẩn, trôi chảy tự nhiên và sử dụng từ ngữ phong phú.";
+    overallInsight =
+      "Khả năng nói tuyệt vời! Phát âm chuẩn, trôi chảy tự nhiên và sử dụng từ ngữ phong phú.";
   } else if (overallScore >= 70) {
     cefrLevel = "B2";
     levelName = "Khá (Upper Intermediate)";
-    overallInsight = "Giao tiếp tự tin. Cần chú ý tinh chỉnh một số chi tiết phát âm và ngữ điệu để hoàn hảo hơn.";
+    overallInsight =
+      "Giao tiếp tự tin. Cần chú ý tinh chỉnh một số chi tiết phát âm và trôi chảy để hoàn hảo hơn.";
   } else if (overallScore >= 50) {
     cefrLevel = "B1";
     levelName = "Trung bình (Intermediate)";
-    overallInsight = "Có thể truyền tải ý tưởng cơ bản. Cần cải thiện tính trôi chảy và sửa các lỗi phát âm cụ thể.";
+    overallInsight =
+      "Có thể truyền tải ý tưởng cơ bản. Cần cải thiện tính trôi chảy và sửa các lỗi phát âm cụ thể.";
   } else if (overallScore >= 30) {
     cefrLevel = "A2";
     levelName = "Sơ cấp (Elementary)";
-    overallInsight = "Có cố gắng diễn đạt nhưng tốc độ còn chậm và nhiều lỗi phát âm cơ bản. Hãy luyện tập thêm hàng ngày.";
+    overallInsight =
+      "Có cố gắng diễn đạt nhưng tốc độ còn chậm và nhiều lỗi phát âm cơ bản. Hãy luyện tập thêm hàng ngày.";
   }
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) {
+      return {
+        colorClass: "text-emerald-400",
+        bgClass: "bg-emerald-400",
+      };
+    }
+    if (score >= 50) {
+      return {
+        colorClass: "text-amber-400",
+        bgClass: "bg-amber-400",
+      };
+    }
+    return {
+      colorClass: "text-rose-400",
+      bgClass: "bg-rose-400",
+    };
+  };
+
+  const skillsConfig = [
+    {
+      label: "Phát âm",
+      score: pronScore,
+      ...getScoreColor(pronScore),
+    },
+    {
+      label: "Dễ hiểu",
+      score: confidenceScore,
+      ...getScoreColor(confidenceScore),
+    },
+    {
+      label: "Trôi chảy",
+      score: fluencyScore,
+      ...getScoreColor(fluencyScore),
+    },
+    {
+      label: "Ngữ pháp",
+      score: grammarScore,
+      ...getScoreColor(grammarScore),
+    },
+    {
+      label: "Từ vựng",
+      score: vocabScore,
+      ...getScoreColor(vocabScore),
+    },
+  ];
 
   return (
     <div className="p-6 sm:p-8 bg-linear-to-b from-white/2 to-transparent border-b border-white/5">
@@ -102,80 +159,29 @@ export default function DetailScoreOverview({ value }: DetailScoreOverviewProps)
 
       {/* 5 Skills Score Bars */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8 pt-6 border-t border-white/10">
-        {/* Pronunciation */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Phát âm
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-blue-400 leading-none">
-              {pronScore}%
+        {skillsConfig.map((skill, idx) => (
+          <div
+            key={idx}
+            className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm"
+          >
+            <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
+              {skill.label}
             </span>
+            <div className="flex items-baseline gap-1.5 mb-2">
+              <span
+                className={`text-xl font-black ${skill.colorClass} leading-none`}
+              >
+                {skill.score}%
+              </span>
+            </div>
+            <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+              <div
+                style={{ width: `${skill.score}%` }}
+                className={`h-full ${skill.bgClass}`}
+              />
+            </div>
           </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div style={{ width: `${pronScore}%` }} className="h-full bg-blue-400" />
-          </div>
-        </div>
-
-        {/* Understandability / Confidence */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Dễ hiểu
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-emerald-400 leading-none">
-              {confidenceScore}%
-            </span>
-          </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div style={{ width: `${confidenceScore}%` }} className="h-full bg-emerald-400" />
-          </div>
-        </div>
-
-        {/* Fluency */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Trôi chảy
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-violet-400 leading-none">
-              {fluencyScore}%
-            </span>
-          </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div style={{ width: `${fluencyScore}%` }} className="h-full bg-violet-400" />
-          </div>
-        </div>
-
-        {/* Grammar */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Ngữ pháp
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-purple-400 leading-none">
-              {grammarScore}%
-            </span>
-          </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div style={{ width: `${grammarScore}%` }} className="h-full bg-purple-400" />
-          </div>
-        </div>
-
-        {/* Vocabulary */}
-        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col justify-between shadow-sm">
-          <span className="text-[11px] font-bold text-slate-400 font-sans block mb-1">
-            Từ vựng
-          </span>
-          <div className="flex items-baseline gap-1.5 mb-2">
-            <span className="text-xl font-black text-indigo-400 leading-none">
-              {vocabScore}%
-            </span>
-          </div>
-          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-            <div style={{ width: `${vocabScore}%` }} className="h-full bg-indigo-400" />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

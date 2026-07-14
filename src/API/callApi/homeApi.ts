@@ -1,6 +1,6 @@
 import { apiConfig } from "../apiConfig/apiConfig";
 import type { BaseResponse } from "../types/baseResponse";
-import type { RecordingResponse, AudioDetailValue } from "../types/homeApi.type";
+import type { RecordingResponse } from "../types/homeApi.type";
 
 export const homeApi = apiConfig.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,15 +10,7 @@ export const homeApi = apiConfig.injectEndpoints({
         method: "GET",
       }),
     }),
-    audioDetail: builder.query<BaseResponse<AudioDetailValue>, string>({
-      query: (recordingId) => ({
-        url: "/api/home/audio-detail",
-        method: "GET",
-        params: { recordingId },
-      }),
-    }),
   }),
 });
 
-export const { useRecordingQuery, useAudioDetailQuery } = homeApi;
-
+export const { useRecordingQuery } = homeApi;

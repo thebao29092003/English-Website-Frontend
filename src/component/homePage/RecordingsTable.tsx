@@ -27,14 +27,14 @@ export default function RecordingsTable({
   const getScoreColorClasses = (score: number) => {
     if (score >= 80)
       return "bg-emerald-500/10 border-emerald-500/20 text-emerald-400";
-    if (score >= 60)
+    if (score >= 50)
       return "bg-amber-500/10 border-amber-500/20 text-amber-400";
     return "bg-rose-500/10 border-rose-500/20 text-rose-400";
   };
 
   const getScoreChipLabel = (score: number) => {
     if (score >= 80) return "Xuất sắc";
-    if (score >= 60) return "Trung bình";
+    if (score >= 50) return "Trung bình";
     return "Cần cải thiện";
   };
 

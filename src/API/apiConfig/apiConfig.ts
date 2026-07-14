@@ -25,7 +25,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     //  lấy token từ cái authSlice
     const token = (getState() as RootState).auth?.token;
-    console.log("token in authApi", token);
+    // console.log("token in authApi", token);
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }

@@ -10,7 +10,7 @@ import {
   showSuccessMessage,
   showErrorMessage,
 } from "../../utility/notification";
-import { useRecordingQuery } from "../../API/homeApi/homeApi";
+import { useRecordingQuery } from "../../API/callApi/homeApi";
 import PageSkeleton from "../../utility/PageSkeleton";
 import HomePageSkeleton from "./HomePageSkeleton";
 import { showConfirmDialog } from "../../utility/confirmDialog";

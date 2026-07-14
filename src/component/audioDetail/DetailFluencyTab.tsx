@@ -1,5 +1,5 @@
 import { Flame, CheckCircle2 } from "lucide-react";
-import type { FluencyErrorItem } from "../../API/types/homeApi.type";
+import type { FluencyErrorItem } from "../../API/types/audioDetail.type";
 
 interface DetailFluencyTabProps {
   fluencyScore: number;
@@ -53,7 +53,13 @@ export default function DetailFluencyTab({
           <div className="relative flex items-center justify-center w-full h-28">
             <svg viewBox="0 0 120 70" className="w-48 h-28">
               <defs>
-                <filter id="gauge-glow-detail" x="-20%" y="-20%" width="140%" height="140%">
+                <filter
+                  id="gauge-glow-detail"
+                  x="-20%"
+                  y="-20%"
+                  width="140%"
+                  height="140%"
+                >
                   <feGaussianBlur stdDeviation="3" result="blur" />
                   <feMerge>
                     <feMergeNode in="blur" />
@@ -94,7 +100,11 @@ export default function DetailFluencyTab({
           <div className="mt-4 px-3 py-1 rounded-full text-xs font-bold bg-white/5 border border-white/10 flex items-center gap-1.5">
             <span
               className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                wpm < 110 ? "bg-amber-400" : wpm > 150 ? "bg-rose-400" : "bg-emerald-400"
+                wpm < 110
+                  ? "bg-amber-400"
+                  : wpm > 150
+                    ? "bg-rose-400"
+                    : "bg-emerald-400"
               }`}
             />
             <span className="text-gray-400">Trạng thái: </span>
@@ -104,18 +114,24 @@ export default function DetailFluencyTab({
             <span className="text-violet-400">{fluencyScore}/100</span>
           </div>
 
-          <div className="mt-5 w-full flex items-center justify-between text-xs font-mono text-gray-400 border-t border-white/5 pt-3">
+          <div className="mt-5 w-full flex items-center justify-between text-sm font-mono text-gray-400 border-t border-white/5 pt-3">
             <div className="flex flex-col items-center">
               <span>&lt; 110</span>
-              <span className="text-amber-500/70 font-semibold mt-0.5">Chậm</span>
+              <span className="text-amber-500/70 font-semibold mt-0.5">
+                Chậm
+              </span>
             </div>
             <div className="flex flex-col items-center">
               <span>110 - 150</span>
-              <span className="text-emerald-500/70 font-semibold mt-0.5">Tốt</span>
+              <span className="text-emerald-500/70 font-semibold mt-0.5">
+                Tốt
+              </span>
             </div>
             <div className="flex flex-col items-center">
               <span>&gt; 150</span>
-              <span className="text-rose-500/70 font-semibold mt-0.5">Nhanh</span>
+              <span className="text-rose-500/70 font-semibold mt-0.5">
+                Nhanh
+              </span>
             </div>
           </div>
         </div>
@@ -124,7 +140,7 @@ export default function DetailFluencyTab({
         <div className="md:col-span-7 space-y-4">
           <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
             <Flame className="w-3.5 h-3.5 text-orange-400" />
-            Điểm ngắt quãng & Sự cố trôi chảy (Nhấp để tua đến lỗi):
+            Điểm ngắt quãng (Nhấp để tua đến lỗi):
           </h4>
           <div className="p-4 rounded-xl bg-white/1 border border-white/5 space-y-4 max-h-[300px] overflow-y-auto scrollbar-thin">
             <div className="flex justify-between text-xs text-gray-500 font-mono pb-2 border-b border-white/5">
@@ -146,7 +162,7 @@ export default function DetailFluencyTab({
                   <div className="flex-1 text-gray-300 px-2 text-xs sm:text-sm">
                     <span className="font-bold text-white block mb-0.5">
                       {item.Type === "Speed"
-                        ? "Thay đổi tốc độ nói"
+                        ? "Tốc độ nói"
                         : item.Type === "Hesitation"
                           ? "Ngập ngừng / Hesitation"
                           : "Tạm dừng / Pause"}
@@ -168,7 +184,8 @@ export default function DetailFluencyTab({
               ))
             ) : (
               <div className="text-center py-8 text-emerald-400 text-sm font-semibold flex items-center justify-center gap-1.5">
-                <CheckCircle2 className="w-4.5 h-4.5" /> Trôi chảy tuyệt vời, không phát hiện lỗi ngắt quãng bất thường!
+                <CheckCircle2 className="w-4.5 h-4.5" /> Trôi chảy tuyệt vời,
+                không phát hiện lỗi ngắt quãng bất thường!
               </div>
             )}
           </div>

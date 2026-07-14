@@ -26,6 +26,7 @@
     "react-hook-form": "^7.80.0",
     "react-redux": "^9.3.0",
     "react-router-dom": "^7.18.1",
+    "react-text-to-speech": "^5.1.10",
     "react-toastify": "^11.1.0",
     "tailwindcss": "^4.3.2",
     "yup": "^1.7.1"

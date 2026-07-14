@@ -9,7 +9,7 @@ import {
   RotateCcw,
   HelpCircle,
 } from "lucide-react";
-import { useAudioDetailQuery } from "../../API/homeApi/homeApi";
+import { useAudioDetailQuery } from "../../API/callApi/audioDetailApi";
 import { showErrorMessage } from "../../utility/notification";
 import PageSkeleton from "../../utility/PageSkeleton";
 import { useOutletContext } from "react-router-dom";
@@ -24,6 +24,7 @@ import DetailVocabularyTab from "../../component/audioDetail/DetailVocabularyTab
 import DetailRephrasedTab from "../../component/audioDetail/DetailRephrasedTab";
 import { formatDuration } from "../../utility/formatTimeSize";
 import AudioDetailPageSkeleton from "./AudioDetailPageSkeleton";
+import { usePlayTTS } from "../../utility/usePlayTTS";
 
 type TabId = "pron" | "confidence" | "fluency" | "gram" | "vocab" | "rephrased";
 
@@ -73,8 +74,8 @@ export default function AudioDetailPage() {
   );
   const lastIndexRef = useRef<number | null>(null);
 
-  // Active TTS playback ref
-  const activeTtsRef = useRef<HTMLAudioElement | null>(null);
+  // usePlayTTS hook integration
+  const { playTTS: triggerTTS, stopTTS } = usePlayTTS();
 
   // Clean up audio & TTS on unmount
   useEffect(() => {
@@ -82,18 +83,31 @@ export default function AudioDetailPage() {
       if (audioRef.current) {
         audioRef.current.pause();
       }
-      if (activeTtsRef.current) {
-        activeTtsRef.current.pause();
-      }
+      stopTTS();
     };
   }, []);
 
-  // Keyboard shortcut: Space key to play/pause audio
+  // Keyboard shortcuts: Space key to play/pause audio, ArrowLeft/Right to seek 3s backward/forward
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space") {
         e.preventDefault();
         togglePlay();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        if (audioRef.current) {
+          const newTime = Math.max(0, audioRef.current.currentTime - 3);
+          audioRef.current.currentTime = newTime;
+          setCurrentTime(newTime);
+        }
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        if (audioRef.current) {
+          const duration = audioRef.current.duration || 0;
+          const newTime = Math.min(duration, audioRef.current.currentTime + 3);
+          audioRef.current.currentTime = newTime;
+          setCurrentTime(newTime);
+        }
       }
     };
 
@@ -115,9 +129,7 @@ export default function AudioDetailPage() {
       setIsPlaying(false);
     } else {
       // Pause TTS if playing
-      if (activeTtsRef.current) {
-        activeTtsRef.current.pause();
-      }
+      stopTTS();
       audioRef.current.play().catch((err) => {
         console.error("Playback failed", err);
         showErrorMessage("Không thể phát bản ghi âm");
@@ -210,18 +222,7 @@ export default function AudioDetailPage() {
       audioRef.current.pause();
       setIsPlaying(false);
     }
-
-    // Stop current TTS
-    if (activeTtsRef.current) {
-      activeTtsRef.current.pause();
-    }
-
-    const url = `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(text)}`;
-    const audio = new Audio(url);
-    activeTtsRef.current = audio;
-    audio.play().catch((err) => {
-      console.error("TTS play error", err);
-    });
+    triggerTTS(text);
   };
 
   return (
