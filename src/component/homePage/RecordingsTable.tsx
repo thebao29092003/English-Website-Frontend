@@ -12,7 +12,7 @@ interface RecordingsTableProps {
   playingId: string | null;
   handlePlayPause: (rec: Recording) => void;
   handleOpenDetail: (rec: Recording) => void;
-  handleDelete: (id: string) => void;
+  handleDelete: (recodingId: string) => void;
 }
 
 // Helper to compute overall score for a recording
@@ -168,7 +168,7 @@ export default function RecordingsTable({
 
                     {/* Delete */}
                     <button
-                      onClick={() => handleDelete(rec.fileName)}
+                      onClick={() => handleDelete(rec.recodingId)}
                       title="Xóa bản ghi"
                       className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/5 hover:bg-rose-500/15 hover:border-rose-500/30 hover:text-rose-400 text-slate-400 cursor-pointer transition-all"
                     >

@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
-import { MessageSquare, Volume2 } from "lucide-react";
+import { MessageSquare, Play, Pause } from "lucide-react";
 import type {
   WordJsonItem,
   WordPronunciationScoreItem,
-} from "../../API/types/audioDetail.type";
+} from "../../API/types/audio.type";
 
 interface DetailPronunciationTabProps {
   wordsJson: WordJsonItem[];
@@ -12,6 +12,8 @@ interface DetailPronunciationTabProps {
   selectedWordIndex: number | null;
   onSelectWordIndex: (idx: number | null) => void;
   playTTS: (text: string, id: string) => void;
+  currentPlayingText?: string;
+  stopTTS?: () => void;
 }
 
 export default function DetailPronunciationTab({
@@ -21,7 +23,18 @@ export default function DetailPronunciationTab({
   selectedWordIndex,
   onSelectWordIndex,
   playTTS,
+  currentPlayingText,
+  stopTTS,
 }: DetailPronunciationTabProps) {
+  const selectedWord =
+    selectedWordIndex !== null
+      ? wordsPronunciationScore[selectedWordIndex]
+      : null;
+  const selectedWordMeta =
+    selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
+
+  const isPlaying = currentPlayingText === selectedWord?.word;
+
   const getWordStyle = (
     isCurrentlySpoken: boolean,
     isSelected: boolean,
@@ -50,13 +63,6 @@ export default function DetailPronunciationTab({
     return baseStyle;
   };
 
-  const selectedWord =
-    selectedWordIndex !== null
-      ? wordsPronunciationScore[selectedWordIndex]
-      : null;
-  const selectedWordMeta =
-    selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
-
   return (
     <div className="space-y-6">
       <div>
@@ -67,7 +73,7 @@ export default function DetailPronunciationTab({
 
         {/* Word display container */}
         <div className="p-5 bg-black/40 rounded-2xl border border-white/5 flex flex-wrap gap-x-2.5 gap-y-3 leading-relaxed">
-          {wordsJson.map((wordObj, idx) => {
+          {wordsJson?.map((wordObj, idx) => {
             const feedbackItem = wordsPronunciationScore
               ? wordsPronunciationScore[idx]
               : undefined;
@@ -123,9 +129,13 @@ export default function DetailPronunciationTab({
               </span>
             </span>
             <button
-              onClick={() =>
-                playTTS(selectedWord.word, `pron-${selectedWord.word}`)
-              }
+              onClick={() => {
+                if (isPlaying) {
+                  stopTTS?.();
+                } else {
+                  playTTS(selectedWord.word, `pron-${selectedWord.word}`);
+                }
+              }}
               className={`py-1 px-3 border rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 selectedWord.status === "Incorrect"
                   ? "bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-300"
@@ -134,7 +144,15 @@ export default function DetailPronunciationTab({
                     : "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/20 text-emerald-300"
               }`}
             >
-              <Volume2 className="w-3.5 h-3.5" /> Nghe phát âm mẫu
+              {isPlaying ? (
+                <>
+                  <Pause className="w-3.5 h-3.5" /> Dừng phát
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5" /> Nghe phát âm mẫu
+                </>
+              )}
             </button>
           </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
-import { Mic, Menu } from "lucide-react";
+import { Mic, Menu, Upload } from "lucide-react";
 import StatsCards from "../../component/homePage/StatsCards";
 import FilterControls from "../../component/homePage/FilterControls";
 import RecordingsTable from "../../component/homePage/RecordingsTable";
@@ -10,15 +10,21 @@ import {
   showSuccessMessage,
   showErrorMessage,
 } from "../../utility/notification";
-import { useRecordingQuery } from "../../API/callApi/homeApi";
+import {
+  useRecordingQuery,
+  useAudioDeleteMutation,
+} from "../../API/callApi/audioApi";
 import PageSkeleton from "../../utility/PageSkeleton";
 import HomePageSkeleton from "./HomePageSkeleton";
 import { showConfirmDialog } from "../../utility/confirmDialog";
 import { getOverallScore } from "../../utility/getOverallScore";
+import UploadAudioModal from "../../component/homePage/UploadAudioModal";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useRecordingQuery();
+  const { data, isLoading, isError, refetch } = useRecordingQuery();
+  const [audioDelete] = useAudioDeleteMutation();
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const recordings = data?.value || [];
 
@@ -92,7 +98,7 @@ export default function HomePage() {
     });
   };
 
-  const handleDelete = (fileName: string) => {
+  const handleDelete = (recodingId: string) => {
     showConfirmDialog({
       title: "Xác nhận xóa",
       message: "Bạn có chắc chắn muốn xóa bản ghi âm này?",
@@ -100,9 +106,9 @@ export default function HomePage() {
       cancelText: "Hủy bỏ",
       onConfirm: async () => {
         try {
-          // TODO: gọi api xóa + refetch data
-          console.log("Xóa file:", fileName);
+          await audioDelete(recodingId).unwrap();
           showSuccessMessage("Xóa bản ghi âm thành công");
+          refetch();
         } catch (error) {
           showErrorMessage("Lỗi khi xóa bản ghi âm");
         }
@@ -208,6 +214,13 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsUploadOpen(true)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 hover:shadow-purple-600/35 transition-all duration-200 hover:scale-[1.03] active:scale-95"
+              >
+                <Upload size={14} />
+                Tải lên ghi âm
+              </button>
               <span className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-300">
                 AI Panel
               </span>
@@ -249,6 +262,11 @@ export default function HomePage() {
               )}
             </div>
           </main>
+
+          <UploadAudioModal
+            isOpen={isUploadOpen}
+            onClose={() => setIsUploadOpen(false)}
+          />
         </>
       )}
     </>

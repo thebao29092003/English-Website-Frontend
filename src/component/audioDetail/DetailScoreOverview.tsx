@@ -1,4 +1,4 @@
-import type { AudioDetailValueResponse } from "../../API/types/audioDetail.type";
+import type { AudioDetailValueResponse } from "../../API/types/audio.type";
 
 interface DetailScoreOverviewProps {
   value: AudioDetailValueResponse;

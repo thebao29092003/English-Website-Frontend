@@ -43,3 +43,25 @@ export interface FilterState {
   sortBy: string;
 }
 
+export interface UploadFileState {
+  id: string;
+  file: File;
+  recordingId?: string;
+  status:
+    | "idle"
+    | "uploading"
+    | "submitted"
+    | "fluency_analyzed"
+    | "analysis_completed"
+    | "pronunciation_analyzed"
+    | "failed";
+  progress: number;
+  message?: string;
+  scores?: {
+    fluency?: number;
+    confidence?: number;
+    grammar?: number;
+    vocab?: number;
+    pronunciation?: number;
+  };
+}

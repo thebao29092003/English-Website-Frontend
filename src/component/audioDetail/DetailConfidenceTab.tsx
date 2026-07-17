@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { MessageSquare } from "lucide-react";
-import type { WordJsonItem } from "../../API/types/audioDetail.type";
+import type { WordJsonItem } from "../../API/types/audio.type";
 
 interface DetailConfidenceTabProps {
   wordsJson: WordJsonItem[];
@@ -57,7 +57,7 @@ export default function DetailConfidenceTab({
 
         {/* Interactive transcript words picker */}
         <div className="p-5 bg-black/40 rounded-2xl border border-white/5 flex flex-wrap gap-x-2.5 gap-y-3 leading-relaxed">
-          {wordsJson.map((wordObj, idx) => {
+          {wordsJson?.map((wordObj, idx) => {
             const isCurrentlySpoken = activeWordIndex === idx;
             const isSelected = selectedWordIndex === idx;
 

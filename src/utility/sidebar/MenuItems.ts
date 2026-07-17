@@ -1,12 +1,4 @@
-import {
-  Mic,
-  Sparkles,
-  BookOpen,
-  BarChart3,
-  Settings,
-  Badge,
-  Activity,
-} from "lucide-react";
+import { Mic, BarChart3, Settings } from "lucide-react";
 
 interface SubMenuItem {
   id: string;
@@ -32,32 +24,25 @@ export const MenuItems: MenuItem[] = [
     icon: Mic,
     path: "/home",
   },
-  {
-    id: "speaking",
-    label: "Luyện nói AI",
-    icon: Sparkles,
-    children: [
-      {
-        id: "speaking-topic",
-        label: "Nói theo chủ đề",
-        path: "/home",
-        icon: Badge,
-      },
-      {
-        id: "speaking-ielts",
-        label: "Luyện đề IELTS",
-        path: "/home",
-        icon: Activity,
-      },
-    ],
-  },
-  {
-    id: "vocabulary",
-    label: "Từ vựng",
-    icon: BookOpen,
-    path: "/vocabulary",
-    disabled: true,
-  },
+  // {
+  //   id: "speaking",
+  //   label: "Luyện nói AI",
+  //   icon: Sparkles,
+  //   children: [
+  //     {
+  //       id: "speaking-topic",
+  //       label: "Nói theo chủ đề",
+  //       path: "/home",
+  //       icon: Badge,
+  //     },
+  //     {
+  //       id: "speaking-ielts",
+  //       label: "Luyện đề IELTS",
+  //       path: "/home",
+  //       icon: Activity,
+  //     },
+  //   ],
+  // },
   {
     id: "stats",
     label: "Thống kê",

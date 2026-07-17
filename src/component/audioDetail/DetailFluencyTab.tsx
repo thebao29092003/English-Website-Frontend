@@ -1,5 +1,5 @@
 import { Flame, CheckCircle2 } from "lucide-react";
-import type { FluencyErrorItem } from "../../API/types/audioDetail.type";
+import type { FluencyErrorItem } from "../../API/types/audio.type";
 
 interface DetailFluencyTabProps {
   fluencyScore: number;

@@ -41,7 +41,7 @@ export default function AISandbox() {
   const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(
     null,
   );
-  const { playTTS: triggerTTS, stopTTS } = usePlayTTS();
+  const { playTTS: triggerTTS, stopTTS, currentPlayingText } = usePlayTTS();
 
   useEffect(() => {
     return () => {
@@ -176,6 +176,8 @@ export default function AISandbox() {
                     selectedWord={selectedWord}
                     onSelectWord={setSelectedWord}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 
@@ -194,6 +196,8 @@ export default function AISandbox() {
                   <GrammarTab
                     grammarFeedback={result.grammarFeedback}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 
@@ -202,6 +206,8 @@ export default function AISandbox() {
                   <VocabularyTab
                     vocabularyFeedback={result.vocabularyFeedback}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 

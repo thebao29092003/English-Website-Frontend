@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { MessageSquare, Volume2 } from "lucide-react";
+import { MessageSquare, Play, Pause } from "lucide-react";
 import type { PronunciationItem } from "../../../types/landingPage.type";
 
 interface PronunciationTabProps {
@@ -8,6 +8,8 @@ interface PronunciationTabProps {
   selectedWord: PronunciationItem | null;
   onSelectWord: (word: PronunciationItem | null) => void;
   playTTS: (text: string, id: string) => void;
+  currentPlayingText?: string;
+  stopTTS?: () => void;
 }
 
 export default function PronunciationTab({
@@ -16,7 +18,11 @@ export default function PronunciationTab({
   selectedWord,
   onSelectWord,
   playTTS,
+  currentPlayingText,
+  stopTTS,
 }: PronunciationTabProps) {
+  const isPlaying = currentPlayingText === selectedWord?.word;
+
   const getWordStyle = (
     isSelected: boolean,
     feedbackItem?: PronunciationItem | null,
@@ -120,9 +126,13 @@ export default function PronunciationTab({
             </span>
             <button
               id="pron-speak-sample"
-              onClick={() =>
-                playTTS(selectedWord.word, `pron-${selectedWord.word}`)
-              }
+              onClick={() => {
+                if (isPlaying) {
+                  stopTTS?.();
+                } else {
+                  playTTS(selectedWord.word, `pron-${selectedWord.word}`);
+                }
+              }}
               className={`py-1 px-2.5 border rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 selectedWord.score !== undefined && selectedWord.score < 45
                   ? "bg-red-500/10 hover:bg-red-500/20 border-red-500/20 text-red-300"
@@ -131,7 +141,15 @@ export default function PronunciationTab({
                     : "bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/20 text-emerald-300"
               }`}
             >
-              <Volume2 className="w-3.5 h-3.5" /> Nghe mẫu
+              {isPlaying ? (
+                <>
+                  <Pause className="w-3.5 h-3.5" /> Dừng phát
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5" /> Nghe mẫu
+                </>
+              )}
             </button>
           </div>
 

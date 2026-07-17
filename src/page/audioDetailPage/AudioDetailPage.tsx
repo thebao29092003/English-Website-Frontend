@@ -9,7 +9,7 @@ import {
   RotateCcw,
   HelpCircle,
 } from "lucide-react";
-import { useAudioDetailQuery } from "../../API/callApi/audioDetailApi";
+import { useAudioDetailQuery } from "../../API/callApi/audioApi";
 import { showErrorMessage } from "../../utility/notification";
 import PageSkeleton from "../../utility/PageSkeleton";
 import { useOutletContext } from "react-router-dom";
@@ -75,7 +75,7 @@ export default function AudioDetailPage() {
   const lastIndexRef = useRef<number | null>(null);
 
   // usePlayTTS hook integration
-  const { playTTS: triggerTTS, stopTTS } = usePlayTTS();
+  const { playTTS: triggerTTS, stopTTS, currentPlayingText } = usePlayTTS();
 
   // Clean up audio & TTS on unmount
   useEffect(() => {
@@ -328,6 +328,8 @@ export default function AudioDetailPage() {
                         selectedWordIndex={selectedWordIndex}
                         onSelectWordIndex={setSelectedWordIndex}
                         playTTS={playTTS}
+                        currentPlayingText={currentPlayingText}
+                        stopTTS={stopTTS}
                       />
                     )}
 
@@ -362,6 +364,8 @@ export default function AudioDetailPage() {
                           []
                         }
                         playTTS={playTTS}
+                        currentPlayingText={currentPlayingText}
+                        stopTTS={stopTTS}
                       />
                     )}
 
@@ -372,6 +376,8 @@ export default function AudioDetailPage() {
                             ?.suggestions || []
                         }
                         playTTS={playTTS}
+                        currentPlayingText={currentPlayingText}
+                        stopTTS={stopTTS}
                       />
                     )}
 
@@ -385,6 +391,8 @@ export default function AudioDetailPage() {
                             ?.detailedFeedback
                         }
                         playTTS={playTTS}
+                        currentPlayingText={currentPlayingText}
+                        stopTTS={stopTTS}
                       />
                     )}
                   </div>

@@ -19,7 +19,7 @@ export default function StatsCards({
     },
     {
       icon: Award,
-      label: "Điểm TB",
+      label: "Điểm trung bình",
       value: `${avgScore}`,
       iconBg: "bg-purple-500/10",
       iconBorder: "border-purple-500/20",

@@ -53,5 +53,7 @@ export function usePlayTTS() {
     }
   };
 
-  return { playTTS, stopTTS: stop, speechStatus };
+  const currentPlayingText = speechStatus === "started" ? ttsText : "";
+
+  return { playTTS, stopTTS: stop, speechStatus, currentPlayingText };
 }
