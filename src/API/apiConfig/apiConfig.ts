@@ -95,6 +95,7 @@ const baseQueryWithReauth: BaseQueryFn<
     } catch (error) {
       // console.log("refreshResult error", error);
       api.dispatch(logout());
+      window.location.replace("/");
     }
   }
   return result;

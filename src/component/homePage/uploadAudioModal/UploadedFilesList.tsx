@@ -19,7 +19,7 @@ export default function UploadedFilesList({
 }: UploadedFilesListProps) {
   if (files.length === 0) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-center p-6 text-slate-500">
+      <div className="min-h-[150px] flex flex-col items-center  justify-center text-center p-6 text-slate-500">
         <FileAudio size={40} className="mb-2 opacity-35" />
         <p className="text-sm">Chưa có tệp nào được chọn</p>
       </div>
@@ -27,7 +27,7 @@ export default function UploadedFilesList({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+    <div className="space-y-2 pr-1">
       {files.map((fileState) => {
         const isActive = fileState.id === activeFileId;
         return (

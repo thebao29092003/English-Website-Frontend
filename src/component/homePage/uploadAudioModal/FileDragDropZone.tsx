@@ -40,7 +40,7 @@ export default function FileDragDropZone({
     <div
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
-      className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all duration-200 cursor-pointer relative group flex flex-col items-center justify-center min-h-[140px] mb-4 ${
+      className={`border-2 border-dashed rounded-2xl p-4 text-center transition-all duration-200 cursor-pointer relative group flex flex-col items-center justify-center min-h-[90px] mb-4 ${
         isDragging
           ? "border-purple-500 bg-purple-500/10 scale-[1.02] shadow-[0_0_15px_rgba(168,85,247,0.15)]" // Hiệu ứng khi đang kéo file lơ lửng
           : "border-white/10 hover:border-purple-500/40 bg-white/2 hover:bg-white/5" // Giao diện mặc định lúc bình thường
