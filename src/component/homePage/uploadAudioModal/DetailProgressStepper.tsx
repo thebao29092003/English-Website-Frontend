@@ -60,12 +60,12 @@ export default function DetailProgressStepper({
 
     // Bước 3 & 4: chạy song song sau fluency, dùng scores để xác định hoàn thành
     if (step === "deepseek") {
-      if (file.scores?.grammar !== undefined) return "completed";
+      if (file?.scores?.grammar !== undefined) return "completed";
       if (currentIndex >= 3) return "active";
       return "pending";
     }
     if (step === "pronunciation") {
-      if (file.scores?.pronunciation !== undefined) return "completed";
+      if (file?.scores?.pronunciation !== undefined) return "completed";
       if (currentIndex >= 3) return "active";
       return "pending";
     }
@@ -127,7 +127,7 @@ export default function DetailProgressStepper({
       getDescription: (file: UploadFileState) =>
         file.status === "submitted"
           ? "Đang tính toán nhịp độ & phát hiện ngập ngừng..."
-          : (file.scores?.fluency && file.scores.confidence) !== undefined
+          : (file?.scores?.fluency && file?.scores?.confidence) !== undefined
             ? `Độ trôi chảy: ${file.scores.fluency}%, Độ dễ hiểu: ${(file.scores.confidence * 100).toFixed(2)}%`
             : "Đang chờ...",
     },
