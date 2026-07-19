@@ -1,5 +1,6 @@
 import { Flame, CheckCircle2 } from "lucide-react";
 import type { FluencyErrorItem } from "../../API/types/audio.type";
+import { formatTime } from "../../utility/formatTimeSize";
 
 interface DetailFluencyTabProps {
   fluencyScore: number;
@@ -33,13 +34,6 @@ export default function DetailFluencyTab({
     statusColor = "text-rose-400";
     strokeColor = "#fb7185";
   }
-
-  // Format seconds to MM:SS
-  const formatTime = (secs: number) => {
-    const mins = Math.floor(secs / 60);
-    const remainingSecs = Math.floor(secs % 60);
-    return `${mins.toString().padStart(2, "0")}:${remainingSecs.toString().padStart(2, "0")}`;
-  };
 
   return (
     <div className="space-y-6">

@@ -1,17 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { Mic, Square, Trash2, Radio } from "lucide-react";
 import { showErrorMessage } from "../../../utility/notification";
+import { formatTime } from "../../../utility/formatTimeSize";
+import LiveAudioVisualizer from "./LiveAudioVisualizer";
 
 interface AudioRecorderProps {
   onAudioRecorded: (file: File) => void;
   isUploading: boolean;
   disabled: boolean;
+  onRecordingStateChange: (isRecording: boolean) => void;
 }
 
 export default function AudioRecorder({
   onAudioRecorded,
   isUploading,
   disabled,
+  onRecordingStateChange,
 }: AudioRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -21,16 +25,12 @@ export default function AudioRecorder({
   const chunksRef = useRef<Blob[]>([]);
   const timerIdRef = useRef<number | null>(null);
 
-  // Web Audio API references
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationFrameIdRef = useRef<number | null>(null);
-  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeMediaRecorder, setActiveMediaRecorder] =
+    useState<MediaRecorder | null>(null);
 
   useEffect(() => {
     return () => {
       stopTimer();
-      cleanupAudioAnalyser();
       if (
         mediaRecorderRef.current &&
         mediaRecorderRef.current.state !== "inactive"
@@ -42,20 +42,6 @@ export default function AudioRecorder({
       }
     };
   }, []);
-
-  const cleanupAudioAnalyser = () => {
-    if (animationFrameIdRef.current !== null) {
-      cancelAnimationFrame(animationFrameIdRef.current);
-      animationFrameIdRef.current = null;
-    }
-    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
-      audioContextRef.current
-        .close()
-        .catch((err) => console.error("Error closing AudioContext:", err));
-      audioContextRef.current = null;
-    }
-    analyserRef.current = null;
-  };
 
   const startTimer = () => {
     stopTimer();
@@ -98,56 +84,12 @@ export default function AudioRecorder({
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // Initialize Web Audio API for Real-Time Visualizer
-      try {
-        const AudioContextClass =
-          window.AudioContext || (window as any).webkitAudioContext;
-        const audioContext = new AudioContextClass();
-        audioContextRef.current = audioContext;
-
-        const analyser = audioContext.createAnalyser();
-        analyser.fftSize = 64; // Smaller size for better mapping to 20 bars
-        analyserRef.current = analyser;
-
-        const source = audioContext.createMediaStreamSource(stream);
-        source.connect(analyser);
-
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        const updateVisualization = () => {
-          if (!analyserRef.current) return;
-          analyserRef.current.getByteFrequencyData(dataArray);
-
-          for (let i = 0; i < 20; i++) {
-            const bar = barRefs.current[i];
-            if (bar) {
-              const dataIndex = Math.floor(i * (bufferLength / 20));
-              const value = dataArray[dataIndex] || 0;
-              // Map volume level to height percentage (min 15%, max 100%)
-              const heightPercent = Math.min(
-                100,
-                Math.max(15, (value / 255) * 100),
-              );
-              bar.style.height = `${heightPercent}%`;
-            }
-          }
-
-          animationFrameIdRef.current =
-            requestAnimationFrame(updateVisualization);
-        };
-
-        animationFrameIdRef.current =
-          requestAnimationFrame(updateVisualization);
-      } catch (audioErr) {
-        console.warn("Could not start audio visualizer:", audioErr);
-      }
-
       const mimeType = getSupportedMimeType();
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: mimeType,
       });
       mediaRecorderRef.current = mediaRecorder;
+      setActiveMediaRecorder(mediaRecorder);
 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) {
@@ -156,7 +98,6 @@ export default function AudioRecorder({
       };
 
       mediaRecorder.onstop = () => {
-        cleanupAudioAnalyser();
         const actualMimeType = mediaRecorder.mimeType || "audio/webm";
         let extension = "webm";
         if (actualMimeType.includes("mp4")) extension = "mp4";
@@ -164,11 +105,9 @@ export default function AudioRecorder({
         else if (actualMimeType.includes("wav")) extension = "wav";
 
         const audioBlob = new Blob(chunksRef.current, { type: actualMimeType });
-        const file = new File(
-          [audioBlob],
-          `ghi-am-${Date.now()}.${extension}`,
-          { type: actualMimeType },
-        );
+        const file = new File([audioBlob], `audio-${Date.now()}.${extension}`, {
+          type: actualMimeType,
+        });
 
         onAudioRecorded(file);
 
@@ -180,6 +119,7 @@ export default function AudioRecorder({
 
       mediaRecorder.start();
       setIsRecording(true);
+      onRecordingStateChange(true);
       startTimer();
     } catch (err) {
       console.error("Error accessing microphone:", err);
@@ -192,7 +132,7 @@ export default function AudioRecorder({
   const stopRecording = () => {
     if (!isRecording) return;
     stopTimer();
-    cleanupAudioAnalyser();
+    setActiveMediaRecorder(null);
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== "inactive"
@@ -200,13 +140,15 @@ export default function AudioRecorder({
       mediaRecorderRef.current.stop();
     }
     setIsRecording(false);
+    onRecordingStateChange(false);
   };
 
   const cancelRecording = () => {
     if (!isRecording) return;
     stopTimer();
-    cleanupAudioAnalyser();
+    setActiveMediaRecorder(null);
     setIsRecording(false);
+    onRecordingStateChange(false);
     if (
       mediaRecorderRef.current &&
       mediaRecorderRef.current.state !== "inactive"
@@ -219,12 +161,6 @@ export default function AudioRecorder({
       };
       mediaRecorderRef.current.stop();
     }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   if (isUploading || disabled) return null;
@@ -254,7 +190,7 @@ export default function AudioRecorder({
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="relative flex h-3 w-3">
@@ -271,24 +207,13 @@ export default function AudioRecorder({
           </div>
 
           {/* Real-time Frequency Wave visualizer */}
-          <div className="flex items-end justify-center gap-1 h-8 px-4 py-1.5 bg-black/20 rounded-lg">
-            {[
-              1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-              20,
-            ].map((bar, idx) => {
-              return (
-                <div
-                  key={bar}
-                  ref={(el) => {
-                    barRefs.current[idx] = el;
-                  }}
-                  className="w-1 bg-purple-500 rounded-full"
-                  style={{
-                    height: "15%",
-                  }}
-                />
-              );
-            })}
+          <div className="h-20">
+            {activeMediaRecorder && (
+              <LiveAudioVisualizer
+                mediaRecorder={activeMediaRecorder}
+                height={70}
+              />
+            )}
           </div>
 
           <div className="flex gap-2">

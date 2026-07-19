@@ -19,6 +19,7 @@ import HomePageSkeleton from "./HomePageSkeleton";
 import { showConfirmDialog } from "../../utility/confirmDialog";
 import { getOverallScore } from "../../utility/getOverallScore";
 import UploadAudioModal from "../../component/homePage/UploadAudioModal";
+import { formatTime } from "../../utility/formatTimeSize";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -132,11 +133,7 @@ export default function HomePage() {
     (sum, r) => sum + (r.duration || 0),
     0,
   );
-  const totalDurationStr = (() => {
-    const mins = Math.floor(totalDurationSec / 60);
-    const secs = Math.round(totalDurationSec % 60);
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  })();
+  const totalDurationStr = formatTime(totalDurationSec);
   const proCount = recordings.filter((r) => getOverallScore(r) >= 80).length;
 
   // Filter and Sort recordings
@@ -146,10 +143,10 @@ export default function HomePage() {
       const matchesSearch =
         (rec.fileName || "")
           .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
+          .includes(searchQuery.toLowerCase()?.trim()) ||
         (rec.speechToText?.aiTranscript || "")
           .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+          .includes(searchQuery.toLowerCase()?.trim());
 
       const score = getOverallScore(rec);
 

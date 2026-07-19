@@ -32,6 +32,7 @@ export default function UploadAudioModal({
   const [uploadAudio] = useUploadAudioMutation();
 
   const [isUploading, setIsUploading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
   const [selectedFiles, setSelectedFiles] = useState<UploadFileState[]>([]);
   const [activeFileId, setActiveFileId] = useState<string | null>(null);
@@ -374,16 +375,19 @@ export default function UploadAudioModal({
             )}
           </div>
 
-          <FileDragDropZone
-            isUploading={isUploading}
-            onFilesSelected={handleFilesSelected}
-            selectedCount={selectedFiles.length}
-          />
+          {!isRecording && (
+            <FileDragDropZone
+              isUploading={isUploading}
+              onFilesSelected={handleFilesSelected}
+              selectedCount={selectedFiles.length}
+            />
+          )}
 
           <AudioRecorder
             onAudioRecorded={(file) => handleFilesSelected([file])}
             isUploading={isUploading}
             disabled={selectedFiles.length >= 5}
+            onRecordingStateChange={setIsRecording}
           />
 
           {/* Action buttons */}

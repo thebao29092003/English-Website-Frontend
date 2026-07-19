@@ -31,6 +31,14 @@ export const formatDuration = (secs: number) => {
   return `${mins.toString().padStart(2, "0")}:${remainingSecs.toString().padStart(2, "0")}`;
 };
 
+// Helper to format seconds into MM:SS string
+export const formatTime = (seconds: number) => {
+  if (!seconds) return "00:00";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+};
+
 // Helper to format file size in bytes to human-readable string (KB/MB)
 export const formatFileSize = (bytes: number) => {
   if (!bytes) return "0 KB";
