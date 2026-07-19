@@ -127,7 +127,7 @@ export default function DetailProgressStepper({
       getDescription: (file: UploadFileState) =>
         file.status === "submitted"
           ? "Đang tính toán nhịp độ & phát hiện ngập ngừng..."
-          : (file?.scores?.fluency && file?.scores?.confidence) !== undefined
+          : file.scores?.fluency !== undefined && file.scores?.confidence !== undefined
             ? `Độ trôi chảy: ${file.scores.fluency}%, Độ dễ hiểu: ${(file.scores.confidence * 100).toFixed(2)}%`
             : "Đang chờ...",
     },
