@@ -125,7 +125,7 @@ export default function DetailPronunciationTab({
             >
               Phân tích phát âm từ: "{selectedWord.word}"
               <span className="px-2 py-0.5 rounded bg-white/10 text-xs font-bold font-mono">
-                {Math.round(selectedWord.accuracy * 100)}% chính xác
+                {Math.round(selectedWord.accuracy)}% chính xác
               </span>
             </span>
             <button

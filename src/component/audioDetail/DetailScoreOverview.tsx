@@ -7,12 +7,12 @@ interface DetailScoreOverviewProps {
 export default function DetailScoreOverview({
   value,
 }: DetailScoreOverviewProps) {
-  // Normalize scores to 0-100 scale
-  const pronScore = Math.round(value.pronunciationScore * 100);
-  const confidenceScore = Math.round(value.overallConfidence * 100);
-  const fluencyScore = Math.round(value.fluencyScore);
-  const grammarScore = Math.round(value.overallGrammarScore);
-  const vocabScore = Math.round(value.overallVocabScore);
+  // All scores are on 0-100 scale without decimals
+  const pronScore = Math.round(value.pronunciationScore || 0);
+  const confidenceScore = Math.round(value.overallConfidence || 0);
+  const fluencyScore = Math.round(value.fluencyScore || 0);
+  const grammarScore = Math.round(value.overallGrammarScore || 0);
+  const vocabScore = Math.round(value.overallVocabScore || 0);
 
   const scores = [
     pronScore,

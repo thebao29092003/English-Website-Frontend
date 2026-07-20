@@ -219,7 +219,7 @@ export default function AudioRecorder({
           <div className="flex gap-2">
             <button
               onClick={stopRecording}
-              className="flex-1 py-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-md shadow-red-600/20 cursor-pointer active:scale-95"
+              className="flex-1 py-2 bg-linear-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-semibold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-md shadow-red-600/20 cursor-pointer active:scale-95"
             >
               <Square size={14} /> Dừng và Lưu
             </button>

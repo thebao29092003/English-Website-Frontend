@@ -21,7 +21,7 @@ export default function DetailConfidenceTab({
     confidence: number,
   ): string => {
     let baseStyle = "";
-    const pct = Math.round(confidence * 100);
+    const pct = confidence;
 
     if (pct >= 80) {
       baseStyle = "text-white hover:bg-white/5";
@@ -46,6 +46,7 @@ export default function DetailConfidenceTab({
 
   const selectedWord =
     selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
+  const selectedWordConfidence = selectedWord ? selectedWord.confidence : 0;
 
   return (
     <div className="space-y-6">
@@ -86,9 +87,9 @@ export default function DetailConfidenceTab({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className={`p-5 rounded-2xl border shadow-lg ${
-            Math.round(selectedWord.confidence * 100) < 50
+            selectedWordConfidence < 50
               ? "bg-linear-to-br from-red-950/20 to-indigo-950/20 border-red-500/20"
-              : Math.round(selectedWord.confidence * 100) < 80
+              : selectedWordConfidence < 80
                 ? "bg-linear-to-br from-yellow-950/30 to-indigo-950/20 border-yellow-500/30"
                 : "bg-linear-to-br from-emerald-950/20 to-indigo-950/20 border-emerald-500/20"
           }`}
@@ -96,9 +97,9 @@ export default function DetailConfidenceTab({
           <div className="flex justify-between items-center mb-4">
             <span
               className={`text-sm uppercase tracking-wider font-bold font-mono ${
-                Math.round(selectedWord.confidence * 100) < 50
+                selectedWordConfidence < 50
                   ? "text-red-400"
-                  : Math.round(selectedWord.confidence * 100) < 80
+                  : selectedWordConfidence < 80
                     ? "text-yellow-300"
                     : "text-emerald-400"
               }`}
@@ -123,27 +124,27 @@ export default function DetailConfidenceTab({
                 </span>
                 <span
                   className={`text-sm font-bold ${
-                    Math.round(selectedWord.confidence * 100) < 50
+                    selectedWordConfidence < 50
                       ? "text-red-400"
-                      : Math.round(selectedWord.confidence * 100) < 80
+                      : selectedWordConfidence < 80
                         ? "text-yellow-300"
                         : "text-emerald-400"
                   }`}
                 >
-                  {Math.round(selectedWord.confidence * 100)}%
+                  {selectedWordConfidence}%
                 </span>
               </div>
               <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
-                    Math.round(selectedWord.confidence * 100) < 50
+                    selectedWordConfidence < 50
                       ? "bg-red-500"
-                      : Math.round(selectedWord.confidence * 100) < 80
+                      : selectedWordConfidence < 80
                         ? "bg-yellow-500"
                         : "bg-emerald-400"
                   }`}
                   style={{
-                    width: `${Math.round(selectedWord.confidence * 100)}%`,
+                    width: `${selectedWordConfidence}%`,
                   }}
                 />
               </div>

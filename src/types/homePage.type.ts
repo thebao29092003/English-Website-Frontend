@@ -1,5 +1,3 @@
-import { type LucideIcon } from "lucide-react";
-
 export interface Recording {
   recodingId: string;
   fileName: string;
@@ -18,23 +16,6 @@ export interface Recording {
     overallGrammarScore: number;
     overallVocabScore: number;
   };
-}
-
-export interface StatsCardsProps {
-  totalRecords: number;
-  avgScore: number;
-  totalDurationStr: string;
-  proCount: number;
-}
-
-export interface StatItem {
-  icon: LucideIcon;
-  label: string;
-  value: string | number;
-  iconBg: string;
-  iconBorder: string;
-  iconColor: string;
-  valueColor: string;
 }
 
 export interface FilterState {

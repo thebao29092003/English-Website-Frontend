@@ -413,7 +413,7 @@ export default function UploadAudioModal({
               {selectedFiles.length > 0 && !isUploading && (
                 <button
                   onClick={startUploadAndProcessing}
-                  className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  className="flex-1 py-2.5 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-1.5"
                 >
                   Phân tích ngay
                   <Sparkles size={16} />

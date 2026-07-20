@@ -47,8 +47,8 @@ export const MenuItems: MenuItem[] = [
     id: "stats",
     label: "Thống kê",
     icon: BarChart3,
-    path: "/statistics",
-    disabled: true,
+    path: "/home/statistics",
+    disabled: false,
   },
   {
     id: "settings",

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { Mic, Menu, Upload } from "lucide-react";
-import StatsCards from "../../component/homePage/StatsCards";
+
 import FilterControls from "../../component/homePage/FilterControls";
 import RecordingsTable from "../../component/homePage/RecordingsTable";
 import type { Recording, FilterState } from "../../types/homePage.type";
@@ -19,7 +19,6 @@ import HomePageSkeleton from "./HomePageSkeleton";
 import { showConfirmDialog } from "../../utility/confirmDialog";
 import { getOverallScore } from "../../utility/getOverallScore";
 import UploadAudioModal from "../../component/homePage/UploadAudioModal";
-import { formatTime } from "../../utility/formatTimeSize";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ export default function HomePage() {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 6;
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -121,21 +120,6 @@ export default function HomePage() {
     navigate(`/home/audio/${rec.recodingId}`);
   };
 
-  // Calculations for quick statistics
-  const totalRecords = recordings.length;
-  const avgScore = totalRecords
-    ? Math.round(
-        recordings.reduce((sum, r) => sum + getOverallScore(r), 0) /
-          totalRecords,
-      )
-    : 0;
-  const totalDurationSec = recordings.reduce(
-    (sum, r) => sum + (r.duration || 0),
-    0,
-  );
-  const totalDurationStr = formatTime(totalDurationSec);
-  const proCount = recordings.filter((r) => getOverallScore(r) >= 80).length;
-
   // Filter and Sort recordings
   const filteredRecordings = recordings
     .filter((rec) => {
@@ -213,7 +197,7 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsUploadOpen(true)}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 hover:shadow-purple-600/35 transition-all duration-200 hover:scale-[1.03] active:scale-95"
+                className="px-4 py-2 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 hover:shadow-purple-600/35 transition-all duration-200 hover:scale-[1.03] active:scale-95"
               >
                 <Upload size={14} />
                 Tải lên ghi âm
@@ -229,14 +213,6 @@ export default function HomePage() {
             {/* Ambient Glows */}
             <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
-
-            {/* Quick Statistics Grid */}
-            <StatsCards
-              totalRecords={totalRecords}
-              avgScore={avgScore}
-              totalDurationStr={totalDurationStr}
-              proCount={proCount}
-            />
 
             {/* Filtering & Searching Controls */}
             <FilterControls filters={filters} setFilters={setFilters} />

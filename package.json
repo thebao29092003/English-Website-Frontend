@@ -20,6 +20,7 @@
     "@tailwindcss/vite": "^4.3.2",
     "@vercel/analytics": "^2.0.1",
     "@wavesurfer/react": "^1.0.12",
+    "chart.js": "^4.5.1",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^1.23.0",
     "motion": "^12.42.2",
