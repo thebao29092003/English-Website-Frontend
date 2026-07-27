@@ -24,7 +24,7 @@ ChartJS.register(
   Legend,
 );
 
-interface LineChartDataset {
+export interface LineChartDataset {
   label: string;
   data: number[];
   borderColor: string;
@@ -35,6 +35,11 @@ interface LineChartDataset {
   hidden?: boolean; // Set to true to hide by default
   pointRadius?: number;
   pointHoverRadius?: number;
+  pointBackgroundColor?: string;
+  pointBorderColor?: string;
+  pointBorderWidth?: number;
+  pointHoverBackgroundColor?: string;
+  pointHoverBorderColor?: string;
 }
 
 interface LineChartProps {
@@ -56,15 +61,38 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
+    // Process datasets to ensure points are solid filled and not clipped at 0 or 100
+    const processedDatasets = datasets.map((ds) => ({
+      ...ds,
+      clip: false as const,
+      // Use solid color (ds.borderColor) for point background instead of transparent area backgroundColor
+      pointBackgroundColor: ds.pointBackgroundColor || ds.borderColor,
+      pointBorderColor: ds.pointBorderColor || ds.borderColor,
+      pointBorderWidth: ds.pointBorderWidth ?? 2,
+      pointHoverBackgroundColor: ds.pointHoverBackgroundColor || ds.borderColor,
+      pointHoverBorderColor: ds.pointHoverBorderColor || "#ffffff",
+      pointRadius: ds.pointRadius ?? 4,
+      pointHoverRadius: ds.pointHoverRadius ?? 6,
+    }));
+
     const config: ChartConfiguration<"line"> = {
       type: "line",
       data: {
         labels,
-        datasets,
+        datasets: processedDatasets,
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        clip: false as const, // Prevent clipping elements at canvas edges
+        layout: {
+          padding: {
+            top: 12,
+            bottom: 12,
+            left: 8,
+            right: 12,
+          },
+        },
         interaction: {
           mode: "index",
           intersect: false,
@@ -104,8 +132,6 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
                     label.fontColor = "rgba(203, 213, 225, 0.25)";
                     (label as any).color = "rgba(203, 213, 225, 0.25)";
 
-                    // Hàm này nhận vào chuỗi màu gốc của biểu đồ (HEX, RGB hoặc RGBA)
-                    // và chuyển nó thành màu mờ (opacity = 0.2) cho chấm tròn chỉ màu:
                     const dimHexRgb = (
                       colorStr: string | undefined,
                     ): string => {

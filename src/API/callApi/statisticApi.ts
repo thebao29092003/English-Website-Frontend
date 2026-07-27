@@ -1,6 +1,10 @@
 import { apiConfig } from "../apiConfig/apiConfig";
 import type { BaseResponse } from "../types/baseResponse";
-import type { UserAverageScoreResponse } from "../types/statistic.type";
+import type {
+  UserAverageScoreResponse,
+  DailyScoreParams,
+  DailyScoreResponse,
+} from "../types/statistic.type";
 
 export const statisticApi = apiConfig.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +17,19 @@ export const statisticApi = apiConfig.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getDailyScores: builder.query<
+      BaseResponse<DailyScoreResponse[]>,
+      DailyScoreParams
+    >({
+      query: (params) => ({
+        url: "/api/statistic/daily-scores",
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 });
 
-export const { useGetUserAverageScoreQuery } = statisticApi;
+export const { useGetUserAverageScoreQuery, useGetDailyScoresQuery } =
+  statisticApi;

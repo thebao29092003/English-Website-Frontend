@@ -3,34 +3,20 @@ import LineChart from "../../utility/chart/LineChart";
 
 export type Timeframe = "7days" | "30days" | "3months";
 
+export interface ChartDataFormat {
+  labels: string[];
+  overall: number[];
+  pronunciation: number[];
+  vocab: number[];
+  grammar: number[];
+  fluency: number[];
+  confidence: number[];
+}
+
 interface LineProgressCardProps {
-  data7Days: {
-    labels: string[];
-    overall: number[];
-    pronunciation: number[];
-    vocab: number[];
-    grammar: number[];
-    fluency: number[];
-    confidence: number[];
-  };
-  data30Days: {
-    labels: string[];
-    overall: number[];
-    pronunciation: number[];
-    vocab: number[];
-    grammar: number[];
-    fluency: number[];
-    confidence: number[];
-  };
-  data3Months: {
-    labels: string[];
-    overall: number[];
-    pronunciation: number[];
-    vocab: number[];
-    grammar: number[];
-    fluency: number[];
-    confidence: number[];
-  };
+  data7Days: ChartDataFormat;
+  data30Days: ChartDataFormat;
+  data3Months: ChartDataFormat;
 }
 
 export default function LineProgressCard({
@@ -119,14 +105,16 @@ export default function LineProgressCard({
   return (
     <div className="bg-white/2 border gap-4 border-white/5 backdrop-blur-md rounded-2xl p-6 flex flex-col  shadow-lg relative h-full">
       <div className="flex flex-col  gap-4 ">
-        <div>
-          <h3 className="text-base font-bold uppercase tracking-wider text-white mb-1">
-            Biểu Đồ Tiến Trình Học Tập
-          </h3>
-          <p className="text-sm text-slate-400">
-            Hiển thị mặc định Điểm TB. Hãy click vào các nhãn bên dưới để
-            bật/tắt chi tiết kỹ năng khác.
-          </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-base font-bold uppercase tracking-wider text-white mb-1">
+              Biểu Đồ Tiến Trình Học Tập
+            </h3>
+            <p className="text-sm text-slate-400">
+              Hiển thị mặc định Điểm TB. Hãy click vào các nhãn bên dưới để
+              bật/tắt chi tiết kỹ năng khác.
+            </p>
+          </div>
         </div>
 
         {/* Timeframe selector inline tabs */}
