@@ -3,9 +3,9 @@ import { Mic, Award, Flame, Clock } from "lucide-react";
 interface QuickStatsSummaryProps {
   totalRecordings: number;
   overallScore: number;
-  learningStreak?: number;
-  totalPracticeTime?: string;
-  weeklyRecordingsDiff?: number;
+  learningStreak: number;
+  totalPracticeTime: string;
+  weeklyRecordingsDiff: number;
 }
 
 export default function QuickStatsSummary({
