@@ -3,25 +3,34 @@ import { BarChart3, Menu } from "lucide-react";
 import AverageScoreCircle from "../../component/statistic/AverageScoreCircle";
 import PolarAreaStatsCard from "../../component/statistic/PolarAreaStatsCard";
 import LineProgressCard from "../../component/statistic/LineProgressCard";
-import LearningSuggestions from "../../component/statistic/LearningSuggestions";
 import QuickStatsSummary from "../../component/statistic/QuickStatsSummary";
+import { useGetUserAverageScoreQuery } from "../../API/callApi/statisticApi";
 
 export default function StatisticPage() {
   const { setMobileSidebarOpen } = useOutletContext<{
     setMobileSidebarOpen: (open: boolean) => void;
   }>();
 
+  const { data: userAverageScoreData } = useGetUserAverageScoreQuery();
+  const userStats = userAverageScoreData?.value;
+
   // Total audio recordings
-  const totalRecordings = 48;
+  const totalRecordings = userStats?.totalRecordings ?? 0;
+
+  // Learning streak
+  const learningStreak = userStats?.currentStreak ?? 0;
+
+  // Total practice time in hours calculated from totalDuration (seconds)
+  const totalPracticeTime = ((userStats?.totalDuration ?? 0) / 3600).toFixed(1);
 
   // Latest scores representing the student's current levels
   const currentScores = {
-    overall: 77,
-    pronunciation: 74,
-    vocab: 79,
-    grammar: 73,
-    fluency: 80,
-    coherence: 79,
+    overall: userStats?.overallAverageScore ?? 0,
+    pronunciation: userStats?.averagePronunciationScore ?? 0,
+    vocab: userStats?.averageVocabScore ?? 0,
+    grammar: userStats?.averageGrammarScore ?? 0,
+    fluency: userStats?.averageFluencyScore ?? 0,
+    confidence: userStats?.averageOverallConfidence ?? 0,
   };
 
   // Mock data for 7 Days timeframe
@@ -32,7 +41,7 @@ export default function StatisticPage() {
     vocab: [70, 72, 75, 74, 78, 80, 79],
     grammar: [62, 65, 69, 68, 72, 74, 73],
     fluency: [68, 70, 74, 72, 78, 82, 80],
-    coherence: [65, 71, 74, 71, 75, 79, 79],
+    confidence: [65, 71, 74, 71, 75, 79, 79],
   };
 
   // Mock data for 30 Days timeframe
@@ -52,7 +61,7 @@ export default function StatisticPage() {
     vocab: [62, 66, 68, 72, 74, 76, 79, 80],
     grammar: [55, 60, 62, 65, 67, 70, 72, 74],
     fluency: [64, 68, 70, 74, 76, 80, 81, 82],
-    coherence: [59, 61, 65, 70, 71, 74, 78, 79],
+    confidence: [59, 61, 65, 70, 71, 74, 78, 79],
   };
 
   // Mock data for 3 Months (90 days) timeframe
@@ -76,7 +85,7 @@ export default function StatisticPage() {
     vocab: [55, 57, 60, 62, 65, 68, 71, 74, 76, 77, 79, 80],
     grammar: [48, 50, 52, 55, 58, 60, 64, 67, 69, 71, 73, 74],
     fluency: [52, 55, 58, 61, 63, 67, 71, 74, 76, 79, 81, 82],
-    coherence: [50, 50, 55, 58, 58, 65, 69, 72, 74, 76, 78, 79],
+    confidence: [50, 50, 55, 58, 58, 65, 69, 72, 74, 76, 78, 79],
   };
 
   return (
@@ -104,13 +113,16 @@ export default function StatisticPage() {
       {/* Main Container */}
       <main className="flex-1 p-6 max-w-8xl w-full mx-auto relative overflow-y-auto scrollbar-thin">
         {/* Ambient background glows */}
-        <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-10 right-10 w-125 h-125 bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-10 left-10 w-100 h-100 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Quick Summary Bar */}
         <QuickStatsSummary
           totalRecordings={totalRecordings}
           overallScore={currentScores.overall}
+          learningStreak={learningStreak}
+          totalPracticeTime={totalPracticeTime}
+          weeklyRecordingsDiff={userStats?.weeklyRecordingsDiff ?? 0}
         />
 
         {/* Responsive Grid Layout */}
@@ -127,16 +139,11 @@ export default function StatisticPage() {
 
           {/* Column 2 & 3 (Right - 2/3 Width) - Focus on "Progress & Recommendations" */}
           <div className="lg:col-span-2 flex flex-col gap-6">
-            <div className="flex-1">
-              <LineProgressCard
-                data7Days={data7Days}
-                data30Days={data30Days}
-                data3Months={data3Months}
-              />
-            </div>
-            <div className="h-fit">
-              <LearningSuggestions scores={currentScores} />
-            </div>
+            <LineProgressCard
+              data7Days={data7Days}
+              data30Days={data30Days}
+              data3Months={data3Months}
+            />
           </div>
         </div>
       </main>

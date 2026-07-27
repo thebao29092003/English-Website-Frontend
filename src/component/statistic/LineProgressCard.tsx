@@ -11,7 +11,7 @@ interface LineProgressCardProps {
     vocab: number[];
     grammar: number[];
     fluency: number[];
-    coherence: number[];
+    confidence: number[];
   };
   data30Days: {
     labels: string[];
@@ -20,7 +20,7 @@ interface LineProgressCardProps {
     vocab: number[];
     grammar: number[];
     fluency: number[];
-    coherence: number[];
+    confidence: number[];
   };
   data3Months: {
     labels: string[];
@@ -29,7 +29,7 @@ interface LineProgressCardProps {
     vocab: number[];
     grammar: number[];
     fluency: number[];
-    coherence: number[];
+    confidence: number[];
   };
 }
 
@@ -71,6 +71,28 @@ export default function LineProgressCard({
       pointHoverRadius: 5,
     },
     {
+      label: "Dễ hiểu",
+      data: currentData.confidence,
+      borderColor: "#06b6d4", // cyan-500
+      backgroundColor: "rgba(6, 182, 212, 0.03)",
+      borderWidth: 2,
+      tension: 0.3,
+      hidden: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
+      label: "Trôi chảy",
+      data: currentData.fluency,
+      borderColor: "#ec4899", // pink-500
+      backgroundColor: "rgba(236, 72, 153, 0.03)",
+      borderWidth: 2,
+      tension: 0.3,
+      hidden: true,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+    },
+    {
       label: "Từ vựng",
       data: currentData.vocab,
       borderColor: "#3b82f6", // blue-500
@@ -92,33 +114,11 @@ export default function LineProgressCard({
       pointRadius: 3,
       pointHoverRadius: 5,
     },
-    {
-      label: "Trôi chảy",
-      data: currentData.fluency,
-      borderColor: "#ec4899", // pink-500
-      backgroundColor: "rgba(236, 72, 153, 0.03)",
-      borderWidth: 2,
-      tension: 0.3,
-      hidden: true,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    },
-    {
-      label: "Mạch lạc",
-      data: currentData.coherence,
-      borderColor: "#06b6d4", // cyan-500
-      backgroundColor: "rgba(6, 182, 212, 0.03)",
-      borderWidth: 2,
-      tension: 0.3,
-      hidden: true,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    },
   ];
 
   return (
-    <div className="bg-white/2 border border-white/5 backdrop-blur-md rounded-2xl p-6 flex flex-col justify-between shadow-lg relative h-full">
-      <div className="flex flex-col  gap-4 mb-6">
+    <div className="bg-white/2 border gap-4 border-white/5 backdrop-blur-md rounded-2xl p-6 flex flex-col  shadow-lg relative h-full">
+      <div className="flex flex-col  gap-4 ">
         <div>
           <h3 className="text-base font-bold uppercase tracking-wider text-white mb-1">
             Biểu Đồ Tiến Trình Học Tập
@@ -164,9 +164,7 @@ export default function LineProgressCard({
         </div>
       </div>
 
-      <div className="flex-1 min-h-[300px] flex items-center justify-center">
-        <LineChart labels={currentData.labels} datasets={datasets} />
-      </div>
+      <LineChart labels={currentData.labels} datasets={datasets} />
     </div>
   );
 }

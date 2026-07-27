@@ -5,21 +5,28 @@ interface QuickStatsSummaryProps {
   overallScore: number;
   learningStreak?: number;
   totalPracticeTime?: string;
+  weeklyRecordingsDiff?: number;
 }
 
 export default function QuickStatsSummary({
   totalRecordings,
   overallScore,
-  learningStreak = 12,
-  totalPracticeTime = "3.5",
+  learningStreak,
+  totalPracticeTime,
+  weeklyRecordingsDiff,
 }: QuickStatsSummaryProps) {
+  const formattedDiff =
+    weeklyRecordingsDiff >= 0
+      ? `+${weeklyRecordingsDiff}`
+      : `${weeklyRecordingsDiff}`;
+
   const stats = [
     {
       id: "recordings",
       label: "Tổng Số Bài Thu Âm",
       value: `${totalRecordings}`,
       unit: "bài",
-      badge: "+6 bài tuần này",
+      badge: `${formattedDiff} bài so với tuần trước`,
       badgeColor: "bg-purple-500/10 text-purple-300 border-purple-500/20",
       icon: Mic,
       iconBg: "bg-purple-500/10 border-purple-500/20 text-purple-400",

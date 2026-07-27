@@ -6,7 +6,7 @@ interface PolarAreaStatsCardProps {
     vocab: number;
     grammar: number;
     fluency: number;
-    coherence: number;
+    confidence: number;
   };
 }
 
@@ -14,30 +14,30 @@ export default function PolarAreaStatsCard({
   scores,
 }: PolarAreaStatsCardProps) {
   const chartData = {
-    labels: ["Phát âm", "Từ vựng", "Ngữ pháp", "Trôi chảy", "Mạch lạc"],
+    labels: ["Phát âm", "Dễ hiểu", "Trôi chảy", "Từ vựng", "Ngữ pháp"],
     datasets: [
       {
         label: "Điểm kỹ năng",
         data: [
           scores.pronunciation,
+          scores.confidence,
+          scores.fluency,
           scores.vocab,
           scores.grammar,
-          scores.fluency,
-          scores.coherence,
         ],
         backgroundColor: [
           "rgba(52, 211, 153, 0.25)", // Bright Emerald (Phát âm)
           "rgba(96, 165, 250, 0.25)", // Bright Blue (Từ vựng)
           "rgba(251, 191, 36, 0.25)", // Bright Amber/Yellow (Ngữ pháp)
           "rgba(244, 114, 182, 0.25)", // Bright Pink (Trôi chảy)
-          "rgba(192, 132, 252, 0.25)", // Bright Purple (Mạch lạc)
+          "rgba(192, 132, 252, 0.25)", // Bright Purple (Dễ hiểu)
         ],
         borderColor: [
           "#34d399", // Neon Emerald (Phát âm)
           "#60a5fa", // Neon Blue (Từ vựng)
           "#fbbf24", // Neon Amber (Ngữ pháp)
           "#f472b6", // Neon Pink (Trôi chảy)
-          "#c084fc", // Neon Purple (Mạch lạc)
+          "#c084fc", // Neon Purple (Dễ hiểu)
         ],
         borderWidth: 2,
       },

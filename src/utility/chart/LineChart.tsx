@@ -80,7 +80,7 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
               pointStyle: "circle",
               font: {
                 family: "Inter, sans-serif",
-                size: 11,
+                size: 13,
                 weight: 500,
               },
               padding: 15,
@@ -104,8 +104,11 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
                     label.fontColor = "rgba(203, 213, 225, 0.25)";
                     (label as any).color = "rgba(203, 213, 225, 0.25)";
 
-                    // Dim the colored dot/box
-                    const dimHexRgb = (colorStr: string | undefined): string => {
+                    // Hàm này nhận vào chuỗi màu gốc của biểu đồ (HEX, RGB hoặc RGBA)
+                    // và chuyển nó thành màu mờ (opacity = 0.2) cho chấm tròn chỉ màu:
+                    const dimHexRgb = (
+                      colorStr: string | undefined,
+                    ): string => {
                       if (!colorStr) return "rgba(255, 255, 255, 0.15)";
                       if (colorStr.startsWith("#")) {
                         const r = parseInt(colorStr.slice(1, 3), 16);
@@ -115,7 +118,10 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
                       }
                       if (colorStr.startsWith("rgb")) {
                         if (colorStr.startsWith("rgba")) {
-                          return colorStr.replace(/,?\s*[\d.]+\s*\)$/, ", 0.2)");
+                          return colorStr.replace(
+                            /,?\s*[\d.]+\s*\)$/,
+                            ", 0.2)",
+                          );
                         }
                         return colorStr
                           .replace("rgb", "rgba")
@@ -155,7 +161,7 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
             },
             bodyFont: {
               family: "Inter, sans-serif",
-              size: 12,
+              size: 13,
             },
             boxPadding: 6,
             callbacks: {
@@ -176,7 +182,7 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
               color: "#cbd5e1", // bright slate-300
               font: {
                 family: "Inter, sans-serif",
-                size: 13,
+                size: 14,
               },
             },
           },
@@ -190,7 +196,7 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
               color: "#cbd5e1", // bright slate-300
               font: {
                 family: "Inter, sans-serif",
-                size: 13,
+                size: 14,
               },
               stepSize: 20,
             },
@@ -210,7 +216,7 @@ export default function LineChart({ labels, datasets }: LineChartProps) {
   }, [labels, datasets]);
 
   return (
-    <div className="relative w-full h-[320px]">
+    <div className="relative w-full h-120">
       <canvas ref={canvasRef} />
     </div>
   );
