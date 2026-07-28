@@ -240,7 +240,7 @@ export default function AudioDetailPage() {
           <header className="h-16 border-b border-white/5 bg-[#030014]/60 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-7">
             <div className="flex items-center gap-3">
               <button
-                onClick={() => navigate("/home")}
+                onClick={() => navigate(-1)}
                 className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white cursor-pointer transition-all flex items-center justify-center"
                 title="Quay lại"
               >

@@ -9,6 +9,7 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import {
   type SignupStep1Values as Step1Values,
   type SignupStep2Values as Step2Values,
@@ -23,9 +24,11 @@ interface SignupFormProps {
 export default function SignupForm({ setAuthOpen }: SignupFormProps) {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState<Partial<Step1Values & Step2Values>>(
-    {},
-  );
+  const [formData, setFormData] = useState<{
+    email?: string;
+    agree?: boolean;
+  }>({});
+
   const [countdown, setCountdown] = useState(0);
   const [otpSentMessage, setOtpSentMessage] = useState("");
 
@@ -60,6 +63,7 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
         setTimeout(() => setOtpSentMessage(""), 5000);
       }
     } catch (err: any) {
+      if (isRateLimitError(err)) return;
       if (err?.data?.message === "Account already exists.") {
         showErrorMessage("Tài khoản đã tồn tại.");
       } else {
@@ -90,7 +94,9 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
         navigate("/home");
       }
     } catch (err: any) {
-      showErrorMessage("Đăng ký thất bại");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Đăng ký thất bại");
+      }
     }
   };
 
@@ -105,7 +111,9 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
         setTimeout(() => setOtpSentMessage(""), 5000);
       }
     } catch (err: any) {
-      showErrorMessage("Gửi lại OTP thất bại");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Gửi lại OTP thất bại");
+      }
     }
   };
 

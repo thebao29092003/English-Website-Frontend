@@ -19,6 +19,7 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function ForgotPasswordStep1() {
@@ -45,7 +46,9 @@ export default function ForgotPasswordStep1() {
         navigate("/reset-password", { state: { email: data.email } });
       }
     } catch (err: unknown) {
-      showErrorMessage("Lỗi khi gửi email");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Lỗi khi gửi email");
+      }
     }
   };
 

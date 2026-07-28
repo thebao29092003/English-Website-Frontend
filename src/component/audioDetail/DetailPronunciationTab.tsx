@@ -30,8 +30,10 @@ export default function DetailPronunciationTab({
     selectedWordIndex !== null
       ? wordsPronunciationScore[selectedWordIndex]
       : null;
+  console.log("selectedWord", selectedWord);
   const selectedWordMeta =
     selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
+  console.log("selectedWordMeta", selectedWordMeta);
 
   const isPlaying = currentPlayingText === selectedWord?.word;
 
@@ -125,7 +127,7 @@ export default function DetailPronunciationTab({
             >
               Phân tích phát âm từ: "{selectedWord.word}"
               <span className="px-2 py-0.5 rounded bg-white/10 text-xs font-bold font-mono">
-                {Math.round(selectedWord.accuracy)}% chính xác
+                {Math.round(selectedWord.accuracy * 100)}/100
               </span>
             </span>
             <button

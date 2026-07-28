@@ -13,6 +13,7 @@ import { logout } from "../auth/authSlice";
 import { setCredentials } from "../auth/authSlice";
 import type { RefreshResponse } from "../types/authApi.type";
 import type { RootState } from "../store";
+import { checkAndShowRateLimitError } from "./handleRateLimitError";
 
 // cấu hình api có xét header có cần cơ chế refresh token
 const baseQuery = fetchBaseQuery({
@@ -98,6 +99,10 @@ const baseQueryWithReauth: BaseQueryFn<
       window.location.replace("/");
     }
   }
+
+  // kiểm tra và hiển thị thông báo lỗi 429 rate limit cho các API xác thực
+  checkAndShowRateLimitError(result);
+
   return result;
 };
 

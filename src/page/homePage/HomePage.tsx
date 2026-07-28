@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import {
+  useOutletContext,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Mic, Menu, Upload } from "lucide-react";
 
 import FilterControls from "../../component/homePage/FilterControls";
@@ -22,28 +26,66 @@ import UploadAudioModal from "../../component/homePage/UploadAudioModal";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { data, isLoading, isError, refetch } = useRecordingQuery();
   const [audioDelete] = useAudioDeleteMutation();
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const recordings = data?.value || [];
 
-  const [filters, setFilters] = useState<FilterState>({
-    searchQuery: "",
-    scoreFilter: "all",
-    sortBy: "newest",
-  });
-
-  const { searchQuery, scoreFilter, sortBy } = filters;
-
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
+  // Read filter and pagination state from URL search params to preserve state on SPA navigation
+  const searchQuery = searchParams.get("search") || "";
+  const scoreFilter = searchParams.get("score") || "all";
+  const sortBy = searchParams.get("sort") || "newest";
+  const currentPage = parseInt(searchParams.get("page") || "1");
   const pageSize = 6;
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
+  const filters: FilterState = {
+    searchQuery,
+    scoreFilter,
+    sortBy,
+  };
+
+  const setFilters = (updater: React.SetStateAction<FilterState>) => {
+    // Dòng này giúp hàm setFilters tự viết của bạn hoạt động y hệt như hàm setState mặc định của
+    // React — chấp nhận cả việc truyền Object trực tiếp lẫn truyền callback prev => ....
+    const nextFilters =
+      typeof updater === "function" ? updater(filters) : updater;
+    const newParams = new URLSearchParams(searchParams);
+
+    if (nextFilters.searchQuery) {
+      newParams.set("search", nextFilters.searchQuery);
+    } else {
+      newParams.delete("search"); // Nếu thanh tìm kiếm rỗng, xóa "?search=" để URL sạch đẹp
+    }
+
+    if (nextFilters.scoreFilter && nextFilters.scoreFilter !== "all") {
+      newParams.set("score", nextFilters.scoreFilter);
+    } else {
+      newParams.delete("score"); // Nếu lọc "Tất cả" (all), không cần hiển thị "?score=all"
+    }
+
+    if (nextFilters.sortBy && nextFilters.sortBy !== "newest") {
+      newParams.set("sort", nextFilters.sortBy);
+    } else {
+      newParams.delete("sort"); // Nếu sắp xếp "Mới nhất" (newest), xóa "?sort=newest"
+    }
+
+    // quan trọng để khi param thay đổi nếu kết quả chỉ có 1 page mà ban đầu user đang ở page 3
+    // thì nếu không có dòng dưới thì sẽ ra kết quả rỗng trong khi đó nó có kết quả
+    newParams.delete("page");
+    setSearchParams(newParams, { replace: true });
+  };
+
+  const setCurrentPage = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (page > 1) {
+      newParams.set("page", page.toString());
+    } else {
+      newParams.delete("page");
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   // Sidebar Layout Controller from Shared Outlet Layout
   const { setMobileSidebarOpen } = useOutletContext<{

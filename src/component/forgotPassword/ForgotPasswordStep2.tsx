@@ -30,6 +30,7 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function ForgotPasswordStep2() {
@@ -108,8 +109,10 @@ export default function ForgotPasswordStep2() {
         navigate("/");
       }
     } catch (err: unknown) {
-      showErrorMessage("Đặt lại mật khẩu thất bại");
-      navigate("/");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Đặt lại mật khẩu thất bại");
+        navigate("/");
+      }
     }
   };
 
@@ -123,7 +126,9 @@ export default function ForgotPasswordStep2() {
         setTimeout(() => setOtpSentMessage(""), 5000);
       }
     } catch (err: unknown) {
-      showErrorMessage("Lỗi khi gửi mã OTP");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Lỗi khi gửi mã OTP");
+      }
     }
   };
 

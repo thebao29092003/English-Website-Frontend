@@ -21,7 +21,7 @@ export default function DetailConfidenceTab({
     confidence: number,
   ): string => {
     let baseStyle = "";
-    const pct = confidence;
+    const pct = confidence * 100;
 
     if (pct >= 80) {
       baseStyle = "text-white hover:bg-white/5";
@@ -46,7 +46,9 @@ export default function DetailConfidenceTab({
 
   const selectedWord =
     selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
-  const selectedWordConfidence = selectedWord ? selectedWord.confidence : 0;
+  const selectedWordConfidence = selectedWord
+    ? Math.round(selectedWord.confidence * 100)
+    : 0;
 
   return (
     <div className="space-y-6">
@@ -131,7 +133,7 @@ export default function DetailConfidenceTab({
                         : "text-emerald-400"
                   }`}
                 >
-                  {selectedWordConfidence}%
+                  {selectedWordConfidence}/100
                 </span>
               </div>
               <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">

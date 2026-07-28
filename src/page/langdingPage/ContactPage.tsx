@@ -19,6 +19,7 @@ import {
   showSuccessMessage,
   showErrorMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 
 const contactSchema = yup.object().shape({
   name: yup
@@ -85,7 +86,9 @@ export default function ContactPage() {
         showErrorMessage(response.message || "Gửi thông tin thất bại!");
       }
     } catch (error: any) {
-      showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+      if (!isRateLimitError(error)) {
+        showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+      }
     }
   };
 
