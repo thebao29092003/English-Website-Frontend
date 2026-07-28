@@ -67,7 +67,7 @@ export default function LoginForm({
       }
     } catch (error: any) {
       if (!isRateLimitError(error)) {
-        showErrorMessage(`Đăng nhập thất bại: ${error}`);
+        showErrorMessage(`Đăng nhập thất bại: ${error.message}`);
       }
     }
   };
