@@ -1,2 +1,2 @@
-export const URL_DOT_NET = "https://localhost:7025";
-export const URL_FRONT_END = "https://localhost:5173";
+export const URL_DOT_NET = import.meta.env.VITE_API_URL;
+export const URL_FRONT_END = import.meta.env.VITE_FRONTEND_URL;

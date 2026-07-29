@@ -4,4 +4,5 @@ export interface CreateContactRequest {
   phoneNumber: string;
   occupation: string;
   content: string;
+  turnstileToken?: string;
 }

@@ -11,7 +11,6 @@ import {
 } from "@heroui/react";
 import {
   IconArrowLeft,
-  IconRefresh,
   IconEye,
   IconEyeOff,
   IconCircleCheck,
@@ -24,22 +23,16 @@ import {
 interface SignupFormStep2Props {
   email: string;
   otpSentMessage: string;
-  countdown: number;
-  isOtpLoading: boolean;
   isRegisterLoading: boolean;
   onBack: () => void;
-  onResendOtp: () => void;
   onSubmit: (data: Step2Values) => void;
 }
 
 export default function SignupFormStep2({
   email,
   otpSentMessage,
-  countdown,
-  isOtpLoading,
   isRegisterLoading,
   onBack,
-  onResendOtp,
   onSubmit,
 }: SignupFormStep2Props) {
   const [showPasswords, setShowPasswords] = useState(false);
@@ -257,44 +250,16 @@ export default function SignupFormStep2({
         </FieldError>
       </TextField>
 
-      {/* Two buttons action row */}
-      <div className="flex justify-between">
-        {/* Resend OTP button */}
-        <Button
-          type="button"
-          id="signup-resend-otp"
-          onClick={onResendOtp}
-          isDisabled={countdown > 0 || isOtpLoading}
-          className={`h-12 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1.5 transition-all ${
-            countdown > 0 || isOtpLoading
-              ? "bg-white/2 border-white/5 text-gray-500 cursor-not-allowed"
-              : "bg-white/5 border-white/10 hover:bg-white/10 text-white cursor-pointer"
-          }`}
-        >
-          {isOtpLoading ? (
-            <span className="spinner h-3.5 w-3.5" />
-          ) : (
-            <IconRefresh
-              className={`w-3.5 h-3.5 ${countdown > 0 ? "" : "animate-spin-slow"}`}
-            />
-          )}
-          {isOtpLoading
-            ? "Đang gửi..."
-            : countdown > 0
-              ? `Gửi lại (${countdown}s)`
-              : "Gửi lại OTP"}
-        </Button>
-        {/* Final Register Button */}
-        <Button
-          id="signup-submit-btn"
-          type="submit"
-          isDisabled={isRegisterLoading}
-          className="h-12 button-primary"
-        >
-          {isRegisterLoading ? <span className="spinner" /> : null}
-          Hoàn Tất Đăng Ký
-        </Button>
-      </div>
+      {/* Submit Button */}
+      <Button
+        id="signup-submit-btn"
+        type="submit"
+        isDisabled={isRegisterLoading}
+        className="w-full h-12 button-primary"
+      >
+        {isRegisterLoading ? <span className="spinner" /> : null}
+        Hoàn Tất Đăng Ký
+      </Button>
     </Form>
   );
 }

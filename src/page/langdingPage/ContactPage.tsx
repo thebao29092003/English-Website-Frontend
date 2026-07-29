@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Mail, Clock, Send, CheckCircle2 } from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { TURNSTILE_SITE_KEY } from "../../config/turnstileConfig";
 import {
   Form,
   TextField,
@@ -48,6 +50,9 @@ type ContactValues = yup.InferType<typeof contactSchema>;
 
 export default function ContactPage() {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [captchaError, setCaptchaError] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
   const [createContact, { isLoading }] = useCreateContactMutation();
 
   const {
@@ -67,6 +72,12 @@ export default function ContactPage() {
   });
 
   const onSubmit = async (data: ContactValues) => {
+    if (!turnstileToken) {
+      setCaptchaError("Vui lòng xác minh Captcha trước khi gửi!");
+      return;
+    }
+    setCaptchaError("");
+
     try {
       const response = await createContact({
         fullName: data.name,
@@ -74,6 +85,7 @@ export default function ContactPage() {
         phoneNumber: data.phone,
         occupation: data.occupation,
         content: data.message,
+        turnstileToken,
       }).unwrap();
 
       if (response.success) {
@@ -82,10 +94,16 @@ export default function ContactPage() {
         );
         setIsSuccess(true);
         reset();
+        setTurnstileToken("");
+        turnstileRef.current?.reset();
       } else {
         showErrorMessage(response.message || "Gửi thông tin thất bại!");
+        turnstileRef.current?.reset();
+        setTurnstileToken("");
       }
     } catch (error: any) {
+      turnstileRef.current?.reset();
+      setTurnstileToken("");
       if (!isRateLimitError(error)) {
         showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau!");
       }
@@ -333,12 +351,35 @@ export default function ContactPage() {
                       </FieldError>
                     </TextField>
 
+                    {/* Cloudflare Turnstile CAPTCHA */}
+                    <div className="flex flex-col items-center justify-center my-6">
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={TURNSTILE_SITE_KEY}
+                        options={{
+                          theme: "dark",
+                          size: "normal",
+                        }}
+                        onSuccess={(token) => {
+                          setTurnstileToken(token);
+                          setCaptchaError("");
+                        }}
+                        onExpire={() => setTurnstileToken("")}
+                        onError={() => setTurnstileToken("")}
+                      />
+                      {captchaError && (
+                        <p className="text-xs text-rose-500 font-mono mt-1">
+                          {captchaError}
+                        </p>
+                      )}
+                    </div>
+
                     {/* Submit button */}
                     <Button
                       id="contact-submit-btn"
                       type="submit"
                       isDisabled={isLoading}
-                      className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer font-sans"
+                      className="w-full h-12 mt-8 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer font-sans"
                     >
                       {isLoading ? (
                         <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />

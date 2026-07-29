@@ -17,12 +17,16 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
       }),
     }),
 
-    getOtp: builder.query<BaseResponse<null>, string>({
-      query: (email) => ({
+    getOtp: builder.query<
+      BaseResponse<null>,
+      { email: string; turnstileToken: string }
+    >({
+      query: ({ email, turnstileToken }) => ({
         url: "/api/auth/register/send-otp",
         method: "GET",
         params: {
           email,
+          turnstileToken,
         },
       }),
     }),
@@ -35,12 +39,16 @@ export const authApi = apiConfigNoHeader.injectEndpoints({
       }),
     }),
 
-    forgotPasswordSendOtp: builder.query<BaseResponse<null>, string>({
-      query: (email) => ({
+    forgotPasswordSendOtp: builder.query<
+      BaseResponse<null>,
+      { email: string; turnstileToken: string }
+    >({
+      query: ({ email, turnstileToken }) => ({
         url: "/api/forget-password/send-otp",
         method: "GET",
         params: {
           email,
+          turnstileToken,
         },
       }),
     }),
@@ -62,4 +70,3 @@ export const {
   useLazyForgotPasswordSendOtpQuery,
   useResetPasswordMutation,
 } = authApi;
-
