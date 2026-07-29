@@ -23,7 +23,7 @@ interface SignupFormProps {
 
 export default function SignupForm({ setAuthOpen }: SignupFormProps) {
   const navigate = useNavigate();
-  const [step, setStep] = useState<1 | 2>(2);
+  const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState<{
     email?: string;
     agree?: boolean;
