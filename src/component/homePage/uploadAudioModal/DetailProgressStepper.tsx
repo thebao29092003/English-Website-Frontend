@@ -30,6 +30,8 @@ export default function DetailProgressStepper({
     );
   }
 
+  // console.log("activeFile", activeFile);
+
   const getStepStatus = (
     file: UploadFileState,
     step: "upload" | "fluency" | "deepseek" | "pronunciation",
@@ -127,7 +129,8 @@ export default function DetailProgressStepper({
       getDescription: (file: UploadFileState) =>
         file.status === "submitted"
           ? "Đang tính toán nhịp độ & phát hiện ngập ngừng..."
-          : file.scores?.fluency !== undefined && file.scores?.confidence !== undefined
+          : file.scores?.fluency !== undefined &&
+              file.scores?.confidence !== undefined
             ? `Độ trôi chảy: ${Math.round(file.scores.fluency)}%, Độ dễ hiểu: ${Math.round(file.scores.confidence)}%`
             : "Đang chờ...",
     },

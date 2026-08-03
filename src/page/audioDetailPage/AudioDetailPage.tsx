@@ -360,7 +360,7 @@ export default function AudioDetailPage() {
                     {activeTab === "gram" && (
                       <DetailGrammarTab
                         grammarErrors={
-                          value.analysisContentJson.grammarAnalysis?.errors ||
+                          value.analysisContentJson?.grammarAnalysis?.errors ||
                           []
                         }
                         playTTS={playTTS}
@@ -372,7 +372,7 @@ export default function AudioDetailPage() {
                     {activeTab === "vocab" && (
                       <DetailVocabularyTab
                         vocabularySuggestions={
-                          value.analysisContentJson.vocabularyAnalysis
+                          value.analysisContentJson?.vocabularyAnalysis
                             ?.suggestions || []
                         }
                         playTTS={playTTS}
@@ -384,10 +384,10 @@ export default function AudioDetailPage() {
                     {activeTab === "rephrased" && (
                       <DetailRephrasedTab
                         rephrasedResponses={
-                          value.analysisContentJson.rephrasedResponses
+                          value.analysisContentJson?.rephrasedResponses
                         }
                         toeicFeedback={
-                          value.analysisContentJson.toeicEvaluation
+                          value.analysisContentJson?.toeicEvaluation
                             ?.detailedFeedback
                         }
                         playTTS={playTTS}

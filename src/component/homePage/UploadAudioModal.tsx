@@ -59,13 +59,15 @@ export default function UploadAudioModal({
     return false;
   });
 
-  // Clean up SignalR connection and state when the modal closes or unmounts,
-  // but only if there is no active background processing.
+  // Reset state and disconnect SignalR when the modal closes
   useEffect(() => {
-    if (!isOpen && !hasActiveProcessing) {
+    if (!isOpen) {
+      setSelectedFiles([]);
+      setActiveFileId(null);
+      setIsUploading(false);
       disconnectSignalR();
     }
-  }, [isOpen, hasActiveProcessing]);
+  }, [isOpen]);
 
   // Clean up SignalR connection when the component unmounts
   useEffect(() => {
@@ -156,7 +158,7 @@ export default function UploadAudioModal({
     let token = currentToken;
     if (token && isTokenExpired(token)) {
       try {
-        console.log("Token expired, refreshing token for SignalR...");
+        // console.log("Token expired, refreshing token for SignalR...");
         const response = await fetch(`${URL_DOT_NET}/api/auth/refresh-token`, {
           method: "POST",
           credentials: "include",
@@ -403,12 +405,14 @@ export default function UploadAudioModal({
             </div>
 
             <div className="w-full flex gap-4">
-              <button
-                onClick={onClose}
-                className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer font-bold text-sm disabled:opacity-50"
-              >
-                {isUploading ? "Chạy ẩn & Thoát" : "Thoát"}
-              </button>
+              {!hasActiveProcessing && (
+                <button
+                  onClick={onClose}
+                  className="flex-1 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer font-bold text-sm disabled:opacity-50"
+                >
+                  Thoát
+                </button>
+              )}
 
               {selectedFiles.length > 0 && !isUploading && (
                 <button

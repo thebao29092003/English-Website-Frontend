@@ -75,9 +75,8 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
       }).unwrap();
 
       if (response.success) {
-        showSuccessMessage("Đăng ký tài khoản thành công!");
+        showSuccessMessage("Đăng ký tài khoản thành công! Vui lòng đăng nhập.");
         setAuthOpen(false);
-        navigate("/home");
       }
     } catch (err: any) {
       if (!isRateLimitError(err)) {
