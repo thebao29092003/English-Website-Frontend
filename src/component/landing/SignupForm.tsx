@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import {
   useLazyGetOtpQuery,
@@ -22,7 +21,6 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ setAuthOpen }: SignupFormProps) {
-  const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
   const [formData, setFormData] = useState<{
     email?: string;
