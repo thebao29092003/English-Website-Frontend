@@ -1,10 +1,17 @@
 export const formatDate = (dateStr: string) => {
   if (!dateStr) return "Chưa rõ thời gian";
   try {
-    let date = new Date(dateStr);
+    // Bỏ phần mili giây sau dấu chấm (ví dụ: .6267044) để parse chuẩn xác và đơn giản hơn
+    const mainPart = dateStr.split(".")[0];
+    let cleanDateStr = mainPart.replace(" ", "T");
+
+    if (!cleanDateStr.endsWith("Z")) {
+      cleanDateStr += "Z";
+    }
+
+    let date = new Date(cleanDateStr);
     if (isNaN(date.getTime())) {
-      date = new Date(dateStr);
-      if (isNaN(date.getTime())) return dateStr;
+      return dateStr;
     }
 
     // Force Vietnam Time (GMT+7) regardless of browser locale
