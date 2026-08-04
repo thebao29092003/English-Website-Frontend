@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import type {
   AnalysisResult,
   PronunciationItem,
 } from "../../types/landingPage.type";
 import { MOCK_ANALYSIS_RESULT } from "./MockData";
+import { usePlayTTS } from "../../utility/usePlayTTS";
 
 // Import modular sub-components from sandbox/
 import LoadingState from "./sandbox/LoadingState";
@@ -40,14 +41,11 @@ export default function AISandbox() {
   const [selectedWord, setSelectedWord] = useState<PronunciationItem | null>(
     null,
   );
-  const [isTtsPlaying, setIsTtsPlaying] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { playTTS: triggerTTS, stopTTS, currentPlayingText } = usePlayTTS();
 
   useEffect(() => {
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      stopTTS();
     };
   }, []);
 
@@ -91,44 +89,9 @@ export default function AISandbox() {
     }, 700);
   };
 
-  // Play audio sample using Youdao TTS
-  const playTTS = (text: string, id: string) => {
-    // Stop any running speech
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current = null;
-    }
-
-    if (isTtsPlaying === id) {
-      setIsTtsPlaying(null);
-      return;
-    }
-
-    const url = `https://dict.youdao.com/dictvoice?type=0&audio=${encodeURIComponent(text)}`;
-    const audio = new Audio(url);
-    audioRef.current = audio;
-
-    audio.onended = () => {
-      if (audioRef.current === audio) {
-        setIsTtsPlaying(null);
-        audioRef.current = null;
-      }
-    };
-    audio.onerror = () => {
-      if (audioRef.current === audio) {
-        setIsTtsPlaying(null);
-        audioRef.current = null;
-      }
-    };
-
-    setIsTtsPlaying(id);
-    audio.play().catch((error) => {
-      console.error("Audio playback error:", error);
-      if (audioRef.current === audio) {
-        setIsTtsPlaying(null);
-        audioRef.current = null;
-      }
-    });
+  // Play audio sample using usePlayTTS
+  const playTTS = (text: string, _id: string) => {
+    triggerTTS(text);
   };
 
   const handleStartDemo = () => {
@@ -213,6 +176,8 @@ export default function AISandbox() {
                     selectedWord={selectedWord}
                     onSelectWord={setSelectedWord}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 
@@ -231,6 +196,8 @@ export default function AISandbox() {
                   <GrammarTab
                     grammarFeedback={result.grammarFeedback}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 
@@ -239,6 +206,8 @@ export default function AISandbox() {
                   <VocabularyTab
                     vocabularyFeedback={result.vocabularyFeedback}
                     playTTS={playTTS}
+                    currentPlayingText={currentPlayingText}
+                    stopTTS={stopTTS}
                   />
                 )}
 

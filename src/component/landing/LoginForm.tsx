@@ -20,6 +20,7 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import { loginSchema, type LoginValues } from "./schema/langdingSchema";
 
 export default function LoginForm({
@@ -64,8 +65,10 @@ export default function LoginForm({
         setAuthOpen(false);
         navigate("/home");
       }
-    } catch (error) {
-      showErrorMessage("Đăng nhập thất bại");
+    } catch (error: any) {
+      if (!isRateLimitError(error)) {
+        showErrorMessage(`Đăng nhập thất bại: ${error.message}`);
+      }
     }
   };
 

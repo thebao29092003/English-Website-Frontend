@@ -6,6 +6,7 @@ import {
   type FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { URL_DOT_NET } from "../urlBase";
+import { checkAndShowRateLimitError } from "./handleRateLimitError";
 
 // cấu hình api ko cần header ko cần cơ chế refresh token
 
@@ -24,7 +25,10 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   // gọi api với request gốc
   let result = await baseQuery(args, api, extraOptions);
-  // console.log("result", result);
+
+  // kiểm tra và hiển thị thông báo lỗi 429 rate limit
+  checkAndShowRateLimitError(result);
+
   return result;
 };
 

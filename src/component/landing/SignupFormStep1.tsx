@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -9,6 +10,8 @@ import {
   Button,
 } from "@heroui/react";
 import { IconArrowRight, IconAlertCircle } from "@tabler/icons-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { TURNSTILE_SITE_KEY } from "../../config/turnstileConfig";
 import {
   signupStep1Schema as step1Schema,
   type SignupStep1Values as Step1Values,
@@ -18,7 +21,7 @@ interface SignupFormStep1Props {
   emailDefault?: string;
   agreeDefault?: boolean;
   isLoading: boolean;
-  onSubmit: (data: Step1Values) => void;
+  onSubmit: (data: Step1Values, turnstileToken: string) => void;
 }
 
 export default function SignupFormStep1({
@@ -27,6 +30,10 @@ export default function SignupFormStep1({
   isLoading,
   onSubmit,
 }: SignupFormStep1Props) {
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [captchaError, setCaptchaError] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
+
   const {
     register,
     handleSubmit,
@@ -40,10 +47,19 @@ export default function SignupFormStep1({
     },
   });
 
+  const handleFormSubmit = (data: Step1Values) => {
+    if (!turnstileToken) {
+      setCaptchaError("Vui lòng xác minh Captcha trước khi tiếp tục!");
+      return;
+    }
+    setCaptchaError("");
+    onSubmit(data, turnstileToken);
+  };
+
   return (
     <Form
       validationBehavior="aria"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
       className="space-y-6 w-full"
     >
       {/* Email input */}
@@ -107,12 +123,36 @@ export default function SignupFormStep1({
         )}
       </div>
 
+      {/* Cloudflare Turnstile CAPTCHA */}
+      <div className="flex flex-col items-center justify-center my-2">
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={TURNSTILE_SITE_KEY}
+          options={{
+            theme: "dark",
+            size: "normal",
+          }}
+          onSuccess={(token) => {
+            setTurnstileToken(token);
+            setCaptchaError("");
+          }}
+          onExpire={() => setTurnstileToken("")}
+          onError={() => setTurnstileToken("")}
+        />
+        {captchaError && (
+          <p className="text-xs text-rose-500 font-mono mt-1 flex items-center gap-1">
+            <IconAlertCircle className="w-3.5 h-3.5 shrink-0" />
+            {captchaError}
+          </p>
+        )}
+      </div>
+
       {/* Step 1 Button */}
       <Button
         id="signup-next-btn"
         type="submit"
         isDisabled={isLoading}
-        className="w-full h-12 mt-4 button-primary"
+        className="w-full h-12 mt-8 button-primary"
       >
         {isLoading ? <span className="spinner" /> : null}
         Tiếp tục nhận mã OTP

@@ -4,6 +4,10 @@ import type { FilterState } from "../../types/homePage.type";
 
 interface FilterControlsProps {
   filters: FilterState;
+
+  /*FilterState: Interface quy định cấu trúc bộ lọc của bạn (gồm searchQuery, scoreFilter, sortBy).
+  React.SetStateAction<FilterState>: Quy định rằng đầu vào của hàm này có thể là một Object FilterState trực tiếp HOẶC là một hàm callback nhận vào FilterState cũ và trả về FilterState mới (như đã giải thích ở Mục 1).
+  React.Dispatch<...>: Định nghĩa đây là một hàm thực hiện hành động gửi đi (dispatch) để cập nhật trạng thái. */
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
 }
 
@@ -44,7 +48,7 @@ export default function FilterControls({
       case "avg":
         return "Trung bình";
       case "needs_practice":
-        return "Cần tập thêm";
+        return "Cần cải thiện";
       default:
         return "Tất cả điểm";
     }

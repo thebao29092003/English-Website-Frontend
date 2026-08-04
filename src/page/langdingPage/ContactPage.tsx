@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  ArrowLeft,
-  Mail,
-  Phone,
-  Clock,
-  Send,
-  CheckCircle2,
-} from "lucide-react";
+import { Mail, Clock, Send, CheckCircle2 } from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { TURNSTILE_SITE_KEY } from "../../config/turnstileConfig";
 import {
   Form,
   TextField,
@@ -21,6 +16,12 @@ import {
 import { IconBrandFacebook } from "@tabler/icons-react";
 import ScrollToTop from "../../utility/ScrollToTop";
 import { motion } from "motion/react";
+import { useCreateContactMutation } from "../../API/callApi/contactApi";
+import {
+  showSuccessMessage,
+  showErrorMessage,
+} from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 
 const contactSchema = yup.object().shape({
   name: yup
@@ -35,8 +36,8 @@ const contactSchema = yup.object().shape({
     .string()
     .required("Vui lòng nhập số điện thoại")
     .matches(
-      /^[0-9+ ]{9,12}$/,
-      "Số điện thoại không hợp lệ (từ 9 đến 12 chữ số)",
+      /(?:^\+84|^84|^0)[35789]\d{8}$/,
+      "Số điện thoại Việt Nam không hợp lệ",
     ),
   occupation: yup.string().required("Vui lòng nhập nghề nghiệp"),
   message: yup
@@ -48,12 +49,11 @@ const contactSchema = yup.object().shape({
 type ContactValues = yup.InferType<typeof contactSchema>;
 
 export default function ContactPage() {
-  const [loading, setLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const handleBackToHome = () => {
-    window.location.href = "/";
-  };
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [captchaError, setCaptchaError] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
+  const [createContact, { isLoading }] = useCreateContactMutation();
 
   const {
     register,
@@ -71,16 +71,43 @@ export default function ContactPage() {
     },
   });
 
-  // CHƯA CÓ API + BẢNG TRONG DATABASE ĐỂ LƯU DATA NÀY
-  const onSubmit = (_data: ContactValues) => {
-    setLoading(true);
+  const onSubmit = async (data: ContactValues) => {
+    if (!turnstileToken) {
+      setCaptchaError("Vui lòng xác minh Captcha trước khi gửi!");
+      return;
+    }
+    setCaptchaError("");
 
-    // Simulate API call for contact submission
-    setTimeout(() => {
-      setLoading(false);
-      setIsSuccess(true);
-      reset();
-    }, 1500);
+    try {
+      const response = await createContact({
+        fullName: data.name,
+        email: data.email,
+        phoneNumber: data.phone,
+        occupation: data.occupation,
+        content: data.message,
+        turnstileToken,
+      }).unwrap();
+
+      if (response.success) {
+        showSuccessMessage(
+          response.message || "Gửi thông tin liên hệ thành công!",
+        );
+        setIsSuccess(true);
+        reset();
+        setTurnstileToken("");
+        turnstileRef.current?.reset();
+      } else {
+        showErrorMessage(response.message || "Gửi thông tin thất bại!");
+        turnstileRef.current?.reset();
+        setTurnstileToken("");
+      }
+    } catch (error: any) {
+      turnstileRef.current?.reset();
+      setTurnstileToken("");
+      if (!isRateLimitError(error)) {
+        showErrorMessage("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+      }
+    }
   };
 
   return (
@@ -93,16 +120,7 @@ export default function ContactPage() {
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-          {/* Back Button */}
-          <button
-            onClick={handleBackToHome}
-            className="mb-8 flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group w-fit hover:translate-x-[-2px] transition-transform duration-200"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Quay lại trang chủ
-          </button>
-
+        <div className="max-w-6xl mx-auto mt-10 px-4 sm:px-6 relative z-10">
           {/* Document Header */}
           <div className="border-b border-white/10 pb-8 mb-8">
             <h1 className="font-display text-4xl py-3 sm:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white via-slate-200 to-gray-500">
@@ -141,22 +159,6 @@ export default function ContactPage() {
                         className="text-gray-400 hover:text-blue-400 transition-colors mt-0.5 block text-xs sm:text-sm"
                       >
                         engsteps01@gmail.com
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Phone */}
-                  <div className="flex gap-4 items-start text-gray-300">
-                    <div className="p-2.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                      <Phone className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-white">Số điện thoại</p>
-                      <a
-                        href="tel:0377253857"
-                        className="text-gray-400 hover:text-emerald-400 transition-colors mt-0.5 block text-xs sm:text-sm"
-                      >
-                        0377253857
                       </a>
                     </div>
                   </div>
@@ -349,14 +351,37 @@ export default function ContactPage() {
                       </FieldError>
                     </TextField>
 
+                    {/* Cloudflare Turnstile CAPTCHA */}
+                    <div className="flex flex-col items-center justify-center my-6">
+                      <Turnstile
+                        ref={turnstileRef}
+                        siteKey={TURNSTILE_SITE_KEY}
+                        options={{
+                          theme: "dark",
+                          size: "normal",
+                        }}
+                        onSuccess={(token) => {
+                          setTurnstileToken(token);
+                          setCaptchaError("");
+                        }}
+                        onExpire={() => setTurnstileToken("")}
+                        onError={() => setTurnstileToken("")}
+                      />
+                      {captchaError && (
+                        <p className="text-xs text-rose-500 font-mono mt-1">
+                          {captchaError}
+                        </p>
+                      )}
+                    </div>
+
                     {/* Submit button */}
                     <Button
                       id="contact-submit-btn"
                       type="submit"
-                      isDisabled={loading}
-                      className="w-full h-12 mt-4 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer font-sans"
+                      isDisabled={isLoading}
+                      className="w-full h-12 mt-8 rounded-xl bg-linear-to-r from-blue-500 via-indigo-500 to-purple-600 hover:from-blue-600 hover:via-indigo-600 hover:to-purple-700 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 active:scale-98 transition-all cursor-pointer font-sans"
                     >
-                      {loading ? (
+                      {isLoading ? (
                         <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
                       ) : (
                         <Send className="w-4 h-4" />

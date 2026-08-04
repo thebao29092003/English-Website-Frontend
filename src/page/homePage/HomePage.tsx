@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useOutletContext } from "react-router-dom";
-import { Mic, Menu } from "lucide-react";
-import StatsCards from "../../component/homePage/StatsCards";
+import {
+  useOutletContext,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { Mic, Menu, Upload } from "lucide-react";
+
 import FilterControls from "../../component/homePage/FilterControls";
 import RecordingsTable from "../../component/homePage/RecordingsTable";
 import type { Recording, FilterState } from "../../types/homePage.type";
@@ -10,33 +14,78 @@ import {
   showSuccessMessage,
   showErrorMessage,
 } from "../../utility/notification";
-import { useRecordingQuery } from "../../API/homeApi/homeApi";
+import {
+  useRecordingQuery,
+  useAudioDeleteMutation,
+} from "../../API/callApi/audioApi";
 import PageSkeleton from "../../utility/PageSkeleton";
 import HomePageSkeleton from "./HomePageSkeleton";
 import { showConfirmDialog } from "../../utility/confirmDialog";
 import { getOverallScore } from "../../utility/getOverallScore";
+import UploadAudioModal from "../../component/homePage/UploadAudioModal";
 
 export default function HomePage() {
-  const { data, isLoading, isError } = useRecordingQuery();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { data, isLoading, isError, refetch } = useRecordingQuery();
+  const [audioDelete] = useAudioDeleteMutation();
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const recordings = data?.value || [];
 
-  const [filters, setFilters] = useState<FilterState>({
-    searchQuery: "",
-    scoreFilter: "all",
-    sortBy: "newest",
-  });
+  // Read filter and pagination state from URL search params to preserve state on SPA navigation
+  const searchQuery = searchParams.get("search") || "";
+  const scoreFilter = searchParams.get("score") || "all";
+  const sortBy = searchParams.get("sort") || "newest";
+  const currentPage = parseInt(searchParams.get("page") || "1");
+  const pageSize = 6;
 
-  const { searchQuery, scoreFilter, sortBy } = filters;
+  const filters: FilterState = {
+    searchQuery,
+    scoreFilter,
+    sortBy,
+  };
 
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const setFilters = (updater: React.SetStateAction<FilterState>) => {
+    // Dòng này giúp hàm setFilters tự viết của bạn hoạt động y hệt như hàm setState mặc định của
+    // React — chấp nhận cả việc truyền Object trực tiếp lẫn truyền callback prev => ....
+    const nextFilters =
+      typeof updater === "function" ? updater(filters) : updater;
+    const newParams = new URLSearchParams(searchParams);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
+    if (nextFilters.searchQuery) {
+      newParams.set("search", nextFilters.searchQuery);
+    } else {
+      newParams.delete("search"); // Nếu thanh tìm kiếm rỗng, xóa "?search=" để URL sạch đẹp
+    }
+
+    if (nextFilters.scoreFilter && nextFilters.scoreFilter !== "all") {
+      newParams.set("score", nextFilters.scoreFilter);
+    } else {
+      newParams.delete("score"); // Nếu lọc "Tất cả" (all), không cần hiển thị "?score=all"
+    }
+
+    if (nextFilters.sortBy && nextFilters.sortBy !== "newest") {
+      newParams.set("sort", nextFilters.sortBy);
+    } else {
+      newParams.delete("sort"); // Nếu sắp xếp "Mới nhất" (newest), xóa "?sort=newest"
+    }
+
+    // quan trọng để khi param thay đổi nếu kết quả chỉ có 1 page mà ban đầu user đang ở page 3
+    // thì nếu không có dòng dưới thì sẽ ra kết quả rỗng trong khi đó nó có kết quả
+    newParams.delete("page");
+    setSearchParams(newParams, { replace: true });
+  };
+
+  const setCurrentPage = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (page > 1) {
+      newParams.set("page", page.toString());
+    } else {
+      newParams.delete("page");
+    }
+    setSearchParams(newParams, { replace: true });
+  };
 
   // Sidebar Layout Controller from Shared Outlet Layout
   const { setMobileSidebarOpen } = useOutletContext<{
@@ -91,7 +140,7 @@ export default function HomePage() {
     });
   };
 
-  const handleDelete = (fileName: string) => {
+  const handleDelete = (recodingId: string) => {
     showConfirmDialog({
       title: "Xác nhận xóa",
       message: "Bạn có chắc chắn muốn xóa bản ghi âm này?",
@@ -99,9 +148,9 @@ export default function HomePage() {
       cancelText: "Hủy bỏ",
       onConfirm: async () => {
         try {
-          // TODO: gọi api xóa + refetch data
-          console.log("Xóa file:", fileName);
+          await audioDelete(recodingId).unwrap();
           showSuccessMessage("Xóa bản ghi âm thành công");
+          refetch();
         } catch (error) {
           showErrorMessage("Lỗi khi xóa bản ghi âm");
         }
@@ -110,27 +159,8 @@ export default function HomePage() {
   };
 
   const handleOpenDetail = (rec: Recording) => {
-    console.log("Xem chi tiết bản ghi âm:", rec.fileName);
+    navigate(`/home/audio/${rec.recodingId}`);
   };
-
-  // Calculations for quick statistics
-  const totalRecords = recordings.length;
-  const avgScore = totalRecords
-    ? Math.round(
-        recordings.reduce((sum, r) => sum + getOverallScore(r), 0) /
-          totalRecords,
-      )
-    : 0;
-  const totalDurationSec = recordings.reduce(
-    (sum, r) => sum + (r.duration || 0),
-    0,
-  );
-  const totalDurationStr = (() => {
-    const mins = Math.floor(totalDurationSec / 60);
-    const secs = Math.round(totalDurationSec % 60);
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  })();
-  const proCount = recordings.filter((r) => getOverallScore(r) >= 80).length;
 
   // Filter and Sort recordings
   const filteredRecordings = recordings
@@ -139,10 +169,10 @@ export default function HomePage() {
       const matchesSearch =
         (rec.fileName || "")
           .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
+          .includes(searchQuery.toLowerCase()?.trim()) ||
         (rec.speechToText?.aiTranscript || "")
           .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+          .includes(searchQuery.toLowerCase()?.trim());
 
       const score = getOverallScore(rec);
 
@@ -207,6 +237,13 @@ export default function HomePage() {
             </div>
 
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsUploadOpen(true)}
+                className="px-4 py-2 rounded-xl bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 hover:shadow-purple-600/35 transition-all duration-200 hover:scale-[1.03] active:scale-95"
+              >
+                <Upload size={14} />
+                Tải lên ghi âm
+              </button>
               <span className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-300">
                 AI Panel
               </span>
@@ -218,14 +255,6 @@ export default function HomePage() {
             {/* Ambient Glows */}
             <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
-
-            {/* Quick Statistics Grid */}
-            <StatsCards
-              totalRecords={totalRecords}
-              avgScore={avgScore}
-              totalDurationStr={totalDurationStr}
-              proCount={proCount}
-            />
 
             {/* Filtering & Searching Controls */}
             <FilterControls filters={filters} setFilters={setFilters} />
@@ -248,6 +277,11 @@ export default function HomePage() {
               )}
             </div>
           </main>
+
+          <UploadAudioModal
+            isOpen={isUploadOpen}
+            onClose={() => setIsUploadOpen(false)}
+          />
         </>
       )}
     </>

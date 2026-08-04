@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   useLazyGetOtpQuery,
@@ -9,6 +8,7 @@ import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import {
   type SignupStep1Values as Step1Values,
   type SignupStep2Values as Step2Values,
@@ -21,45 +21,33 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ setAuthOpen }: SignupFormProps) {
-  const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2>(1);
-  const [formData, setFormData] = useState<Partial<Step1Values & Step2Values>>(
-    {},
-  );
-  const [countdown, setCountdown] = useState(0);
+  const [formData, setFormData] = useState<{
+    email?: string;
+    agree?: boolean;
+  }>({});
+
   const [otpSentMessage, setOtpSentMessage] = useState("");
 
   const [getOtp, { isFetching: isOtpLoading }] = useLazyGetOtpQuery();
   const [registerUser, { isLoading: isRegisterLoading }] =
     useRegisterMutation();
 
-  // Countdown timer logic for Resend OTP (30s cooling)
-  useEffect(() => {
-    if (countdown === 0) return;
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [countdown]);
-
   // Handle Step 1 Submit (Verify Email & request OTP)
-  const onStep1Submit = async (data: Step1Values) => {
+  const onStep1Submit = async (data: Step1Values, turnstileToken: string) => {
     try {
-      const response = await getOtp(data.email).unwrap();
+      const response = await getOtp({
+        email: data.email,
+        turnstileToken,
+      }).unwrap();
       if (response.success) {
         setFormData({ email: data.email, agree: data.agree });
         setOtpSentMessage("Một mã OTP đã được gửi tới email của bạn.");
         setStep(2);
-        setCountdown(30);
         setTimeout(() => setOtpSentMessage(""), 5000);
       }
     } catch (err: any) {
+      if (isRateLimitError(err)) return;
       if (err?.data?.message === "Account already exists.") {
         showErrorMessage("Tài khoản đã tồn tại.");
       } else {
@@ -85,27 +73,13 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
       }).unwrap();
 
       if (response.success) {
-        showSuccessMessage("Đăng ký tài khoản thành công!");
+        showSuccessMessage("Đăng ký tài khoản thành công! Vui lòng đăng nhập.");
         setAuthOpen(false);
-        navigate("/home");
       }
     } catch (err: any) {
-      showErrorMessage("Đăng ký thất bại");
-    }
-  };
-
-  // Handle Resend OTP Click
-  const handleResendOtp = async () => {
-    if (countdown > 0 || isOtpLoading || !formData.email) return;
-    try {
-      const response = await getOtp(formData.email).unwrap();
-      if (response.success) {
-        setCountdown(30);
-        setOtpSentMessage("Một mã OTP mới đã được gửi tới email của bạn.");
-        setTimeout(() => setOtpSentMessage(""), 5000);
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Đăng ký thất bại");
       }
-    } catch (err: any) {
-      showErrorMessage("Gửi lại OTP thất bại");
     }
   };
 
@@ -138,11 +112,8 @@ export default function SignupForm({ setAuthOpen }: SignupFormProps) {
             <SignupFormStep2
               email={formData.email || ""}
               otpSentMessage={otpSentMessage}
-              countdown={countdown}
-              isOtpLoading={isOtpLoading}
               isRegisterLoading={isRegisterLoading}
               onBack={() => setStep(1)}
-              onResendOtp={handleResendOtp}
               onSubmit={onStep2Submit}
             />
           </motion.div>

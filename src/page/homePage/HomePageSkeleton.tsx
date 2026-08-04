@@ -3,25 +3,6 @@ import { Skeleton } from "@heroui/react";
 export default function HomePageSkeleton() {
   return (
     <div className="space-y-4">
-      {/* Stats Cards Skeleton */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div
-            key={index}
-            className="glass-panel p-3 rounded-2xl flex items-center gap-3 bg-white/2 border border-white/5 backdrop-blur-md shadow-md"
-          >
-            {/* Icon placeholder */}
-            <Skeleton className="w-9 h-9 rounded-xl shrink-0" />
-            <div className="space-y-1.5 flex-1">
-              {/* Label placeholder */}
-              <Skeleton className="h-3 w-16 rounded-md" />
-              {/* Value placeholder */}
-              <Skeleton className="h-5 w-12 rounded-md" />
-            </div>
-          </div>
-        ))}
-      </div>
-
       {/* Filter Controls Skeleton */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-2xl bg-white/2 border border-white/5 backdrop-blur-md">
         {/* Search input placeholder */}

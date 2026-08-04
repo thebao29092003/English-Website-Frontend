@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import {
   forgotPasswordStep1Schema as step1Schema,
@@ -13,16 +14,23 @@ import {
   FieldError,
   Button,
 } from "@heroui/react";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconAlertCircle } from "@tabler/icons-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { TURNSTILE_SITE_KEY } from "../../config/turnstileConfig";
 import { useLazyForgotPasswordSendOtpQuery } from "../../API/auth/authApi";
 import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function ForgotPasswordStep1() {
   const navigate = useNavigate();
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [captchaError, setCaptchaError] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance | undefined>(undefined);
+
   const [sendOtp, { isFetching: isLoading }] =
     useLazyForgotPasswordSendOtpQuery();
 
@@ -38,14 +46,27 @@ export default function ForgotPasswordStep1() {
   });
 
   const onSubmit = async (data: Step1Values) => {
+    if (!turnstileToken) {
+      setCaptchaError("Vui lòng xác minh Captcha trước khi gửi!");
+      return;
+    }
+    setCaptchaError("");
+
     try {
-      const response = await sendOtp(data.email).unwrap();
+      const response = await sendOtp({
+        email: data.email,
+        turnstileToken,
+      }).unwrap();
       if (response.success) {
         showSuccessMessage("Mã OTP đã được gửi tới email của bạn.");
         navigate("/reset-password", { state: { email: data.email } });
       }
     } catch (err: unknown) {
-      showErrorMessage("Lỗi khi gửi email");
+      turnstileRef.current?.reset();
+      setTurnstileToken("");
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Lỗi khi gửi email");
+      }
     }
   };
 
@@ -99,11 +120,35 @@ export default function ForgotPasswordStep1() {
               </FieldError>
             </TextField>
 
+            {/* Cloudflare Turnstile CAPTCHA */}
+            <div className="flex flex-col items-center justify-center my-4">
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={TURNSTILE_SITE_KEY}
+                options={{
+                  theme: "dark",
+                  size: "normal",
+                }}
+                onSuccess={(token) => {
+                  setTurnstileToken(token);
+                  setCaptchaError("");
+                }}
+                onExpire={() => setTurnstileToken("")}
+                onError={() => setTurnstileToken("")}
+              />
+              {captchaError && (
+                <p className="text-xs text-rose-500 font-mono mt-1 flex items-center gap-1">
+                  <IconAlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  {captchaError}
+                </p>
+              )}
+            </div>
+
             <Button
               id="forgot-submit-btn"
               type="submit"
               isDisabled={isLoading}
-              className="w-full h-12 mt-4 button-primary"
+              className="w-full h-12 mt-6 button-primary"
             >
               {isLoading ? <span className="spinner" /> : null}
               Gửi Mã OTP

@@ -16,20 +16,17 @@ import {
 } from "@heroui/react";
 import {
   IconArrowLeft,
-  IconRefresh,
   IconEye,
   IconEyeOff,
   IconCircleCheck,
   IconAlertCircle,
 } from "@tabler/icons-react";
-import {
-  useLazyForgotPasswordSendOtpQuery,
-  useResetPasswordMutation,
-} from "../../API/auth/authApi";
+import { useResetPasswordMutation } from "../../API/auth/authApi";
 import {
   showErrorMessage,
   showSuccessMessage,
 } from "../../utility/notification";
+import { isRateLimitError } from "../../API/apiConfig/handleRateLimitError";
 import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function ForgotPasswordStep2() {
@@ -37,12 +34,9 @@ export default function ForgotPasswordStep2() {
   const location = useLocation();
   const email = location.state?.email || "";
 
-  const [countdown, setCountdown] = useState(30);
-  const [otpSentMessage, setOtpSentMessage] = useState("");
+  const [otpSentMessage] = useState("");
   const [showPasswords, setShowPasswords] = useState(false);
 
-  const [sendOtp, { isFetching: isOtpLoading }] =
-    useLazyForgotPasswordSendOtpQuery();
   const [resetPassword, { isLoading: isResetLoading }] =
     useResetPasswordMutation();
 
@@ -79,16 +73,6 @@ export default function ForgotPasswordStep2() {
     number: /[0-9]/.test(passwordValue),
   };
 
-  // Countdown timer logic for Resend OTP (30s)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (countdown > 0) {
-        setCountdown((prev) => prev - 1);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [countdown]);
-
   const onSubmit = async (data: Step2Values) => {
     if (!email) {
       showErrorMessage("Không có địa chỉ email. Vui lòng quay lại bước 1.");
@@ -108,22 +92,10 @@ export default function ForgotPasswordStep2() {
         navigate("/");
       }
     } catch (err: unknown) {
-      showErrorMessage("Đặt lại mật khẩu thất bại");
-      navigate("/");
-    }
-  };
-
-  const handleResendOtp = async () => {
-    if (countdown > 0 || isOtpLoading || !email) return;
-    try {
-      const response = await sendOtp(email).unwrap();
-      if (response.success) {
-        setCountdown(30);
-        setOtpSentMessage("Một mã OTP mới đã được gửi tới email của bạn.");
-        setTimeout(() => setOtpSentMessage(""), 5000);
+      if (!isRateLimitError(err)) {
+        showErrorMessage("Đặt lại mật khẩu thất bại");
+        navigate("/");
       }
-    } catch (err: unknown) {
-      showErrorMessage("Lỗi khi gửi mã OTP");
     }
   };
 
@@ -369,45 +341,16 @@ export default function ForgotPasswordStep2() {
               </FieldError>
             </TextField>
 
-            {/* Actions row */}
-            <div className="flex justify-between gap-2">
-              {/* Resend OTP button */}
-              <Button
-                type="button"
-                id="reset-resend-otp"
-                onClick={handleResendOtp}
-                isDisabled={countdown > 0 || isOtpLoading}
-                className={`h-12 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1.5 transition-all ${
-                  countdown > 0 || isOtpLoading
-                    ? "bg-white/2 border-white/5 text-gray-500 cursor-not-allowed"
-                    : "bg-white/5 border-white/10 hover:bg-white/10 text-white cursor-pointer"
-                }`}
-              >
-                {isOtpLoading ? (
-                  <span className="spinner h-3.5 w-3.5" />
-                ) : (
-                  <IconRefresh
-                    className={`w-3.5 h-3.5 ${countdown > 0 ? "" : "animate-spin-slow"}`}
-                  />
-                )}
-                {isOtpLoading
-                  ? "Đang gửi..."
-                  : countdown > 0
-                    ? `Gửi lại (${countdown}s)`
-                    : "Gửi lại OTP"}
-              </Button>
-
-              {/* Reset Password button */}
-              <Button
-                id="reset-submit-btn"
-                type="submit"
-                isDisabled={isResetLoading}
-                className="h-12 button-primary"
-              >
-                {isResetLoading ? <span className="spinner" /> : null}
-                Hoàn Tất Đặt Lại
-              </Button>
-            </div>
+            {/* Reset Password button */}
+            <Button
+              id="reset-submit-btn"
+              type="submit"
+              isDisabled={isResetLoading}
+              className="w-full h-12 button-primary"
+            >
+              {isResetLoading ? <span className="spinner" /> : null}
+              Hoàn Tất Đặt Lại
+            </Button>
           </Form>
         </div>
       </div>

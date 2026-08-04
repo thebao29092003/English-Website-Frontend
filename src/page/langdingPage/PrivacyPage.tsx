@@ -1,12 +1,6 @@
-import { ArrowLeft } from "lucide-react";
-
 import ScrollToTop from "../../utility/ScrollToTop";
 
 export default function PrivacyPage() {
-  const handleBackToHome = () => {
-    window.location.href = "/";
-  };
-
   return (
     <div
       id="privacy-page-root"
@@ -18,16 +12,7 @@ export default function PrivacyPage() {
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          {/* Back Button */}
-          <button
-            onClick={handleBackToHome}
-            className="mb-8 flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors cursor-pointer group w-fit"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Quay lại trang chủ
-          </button>
-
+        <div className="max-w-4xl mx-auto mt-10 px-4 sm:px-6 relative z-10">
           {/* Document Header */}
           <div className="border-b border-white/10 pb-8 mb-8">
             <h1 className="font-display text-4xl py-3 sm:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white via-slate-200 to-gray-400">
