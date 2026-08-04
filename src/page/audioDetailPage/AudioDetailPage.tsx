@@ -288,7 +288,7 @@ export default function AudioDetailPage() {
                 onEnded={handleAudioEnded}
               />
 
-              <main className="flex-1 p-6 max-w-[95%] w-full mx-auto space-y-6 relative">
+              <main className="flex-1 p-6 mb-14 md:mb-0 max-w-[95%] w-full mx-auto space-y-6 relative">
                 {/* Ambient Background Glows */}
                 <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none" />
                 <div className="absolute bottom-10 left-10 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] pointer-events-none" />
