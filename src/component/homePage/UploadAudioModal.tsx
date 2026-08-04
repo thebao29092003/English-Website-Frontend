@@ -358,13 +358,13 @@ export default function UploadAudioModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/65 backdrop-blur-md">
-      <div className="relative w-full max-w-6xl bg-[#090526]/90 border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col md:flex-row h-[90vh] md:h-[85vh] overflow-y-scroll md:overflow-y-hidden overflow-x-hidden scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+      <div className="relative w-full max-w-6xl bg-[#090526]/90 border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col md:flex-row h-[90vh] md:h-[85vh] overflow-y-auto md:overflow-y-hidden overflow-x-hidden scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
         {/* Glow ambient effects */}
         <div className="absolute -top-40 -left-40 w-96 h-96 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
         <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
 
         {/* Left column: Drag area and file list */}
-        <div className="flex-1 p-6 flex flex-col border-b md:border-b-0 md:border-r border-white/5 md:min-h-full">
+        <div className="w-full md:flex-1 p-6 flex flex-col border-b md:border-b-0 md:border-r border-white/5 h-auto md:h-full shrink-0 md:shrink">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display text-lg font-bold text-white flex items-center gap-2">
               <Upload size={18} className="text-purple-400" />
@@ -393,8 +393,8 @@ export default function UploadAudioModal({
           />
 
           {/* Action buttons */}
-          <div className="mt-4 pt-4 min-h-full border-t border-white/5 flex flex-col overflow-y-scroll scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent gap-3">
-            <div className="min-h-[50%]">
+          <div className="mt-4 pt-4 flex-1 flex flex-col justify-between border-t border-white/5 min-h-0 md:overflow-hidden gap-3">
+            <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent pr-1">
               <UploadedFilesList
                 files={selectedFiles}
                 activeFileId={activeFileId}
@@ -404,7 +404,7 @@ export default function UploadAudioModal({
               />
             </div>
 
-            <div className="w-full flex gap-4">
+            <div className="w-full flex gap-4 mt-auto">
               {!hasActiveProcessing && (
                 <button
                   onClick={onClose}
@@ -428,7 +428,7 @@ export default function UploadAudioModal({
         </div>
 
         {/* Right column: Selected file processing status detail */}
-        <div className="w-full md:w-[420px] p-6 bg-black/30 flex flex-col  md:min-h-full">
+        <div className="w-full md:w-[420px] p-6 bg-black/30 flex flex-col h-auto md:h-full shrink-0">
           <h4 className="font-display text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">
             TIẾN TRÌNH CHI TIẾT
           </h4>
