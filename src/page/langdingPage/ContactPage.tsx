@@ -171,12 +171,12 @@ export default function ContactPage() {
                     <div>
                       <p className="font-semibold text-white">Giờ làm việc</p>
                       <p className="text-gray-400 mt-0.5 text-xs sm:text-sm">
-                        Thứ 2 - Thứ Bảy: 08:00 - 17:30
+                        Thứ 2 - Thứ 7 (08:00 - 17:30)
                       </p>
                     </div>
                   </div>
                 </div>
-
+                {/* 
                 <div className="border-t border-white/5 pt-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
                     Kết nối với chúng tôi
@@ -191,7 +191,7 @@ export default function ContactPage() {
                       <IconBrandFacebook className="w-5 h-5" />
                     </a>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 
