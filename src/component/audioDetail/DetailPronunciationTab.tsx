@@ -30,10 +30,10 @@ export default function DetailPronunciationTab({
     selectedWordIndex !== null
       ? wordsPronunciationScore[selectedWordIndex]
       : null;
-  console.log("selectedWord", selectedWord);
+  // console.log("selectedWord", selectedWord);
   const selectedWordMeta =
     selectedWordIndex !== null ? wordsJson[selectedWordIndex] : null;
-  console.log("selectedWordMeta", selectedWordMeta);
+  // console.log("selectedWordMeta", selectedWordMeta);
 
   const isPlaying = currentPlayingText === selectedWord?.word;
 

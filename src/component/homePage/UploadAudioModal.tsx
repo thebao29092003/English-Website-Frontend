@@ -168,7 +168,7 @@ export default function UploadAudioModal({
 
           token = refreshData?.value;
           dispatch(setCredentials({ user: currentUser, token }));
-          console.log("Token refreshed successfully for SignalR.");
+          // console.log("Token refreshed successfully for SignalR.");
         }
       } catch (err) {
         dispatch(logout());
@@ -180,9 +180,9 @@ export default function UploadAudioModal({
 
   const connectSignalR = async () => {
     if (connectionRef.current) {
-      console.log(
-        "SignalR Connection already exists, skipping initialization.",
-      );
+      // console.log(
+      //   "SignalR Connection already exists, skipping initialization.",
+      // );
       return;
     }
     // 1. Establish SignalR connection
@@ -210,7 +210,7 @@ export default function UploadAudioModal({
             pronunciationScore?: number;
           };
         }) => {
-          console.log("SignalR Event Received:", payload);
+          // console.log("SignalR Event Received:", payload);
 
           setSelectedFiles((currentFiles) =>
             currentFiles.map((file) => {
@@ -280,9 +280,9 @@ export default function UploadAudioModal({
       );
 
       await conn.start();
-      console.log(
-        `SignalR Connection established. User ${currentUser?.UserId} auto-joined group.`,
-      );
+      // console.log(
+      //   `SignalR Connection established. User ${currentUser?.UserId} auto-joined group.`,
+      // );
       connectionRef.current = conn;
     } catch (err) {
       console.error("SignalR Connection failed to start:", err);
